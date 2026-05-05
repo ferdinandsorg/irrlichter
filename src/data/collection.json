@@ -1,0 +1,71 @@
+[
+  {
+    "id": "moornebel-001",
+    "title_de": "Nebelstudie am Moorsteg",
+    "title_en": "Fog study at the boardwalk",
+    "date": "2026-04-14",
+    "type": "image",
+    "tags": ["nebel", "morgen", "landschaft"],
+    "summary_de": "Morgendliche Lichtschichten zwischen Steg und offener Wasserflaeche.",
+    "summary_en": "Morning light layers between the boardwalk and open water.",
+    "media": {
+      "src": "/assets/images/sample-bog-01.jpg",
+      "alt_de": "Morgennebel ueber Moorgras",
+      "alt_en": "Morning fog over bog grass"
+    },
+    "location": "Moorkante Nord",
+    "coordinates": "53.501, 8.702",
+    "status": "published"
+  },
+  {
+    "id": "wasserstimme-002",
+    "title_de": "Wasserstimme im Randbereich",
+    "title_en": "Water voice at the edge zone",
+    "date": "2026-04-16",
+    "type": "audio",
+    "tags": ["klang", "wasser", "feldaufnahme", "wind"],
+    "summary_de": "Kurze Feldaufnahme mit Windboeen, Tropfen und ruhigem Wasserlauf.",
+    "summary_en": "Short field recording with gusts, drops, and slow moving water.",
+    "media": {
+      "src": "/assets/audio/sample-water-voice.mp3",
+      "alt_de": "Audioaufnahme aus dem Moor",
+      "alt_en": "Audio recording from the bog"
+    },
+    "location": "Kleine Bruchzone",
+    "status": "published"
+  },
+  {
+    "id": "protokoll-003",
+    "title_de": "Logbuchnotiz: Schichttiefe nach Regen",
+    "title_en": "Logbook note: Layer depth after rain",
+    "date": "2026-04-19",
+    "type": "text",
+    "tags": ["logbuch", "beobachtung", "feuchte"],
+    "summary_de": "Notiz zur Veraenderung von Torfschichten und Oberflaechenfeuchte nach Niederschlag.",
+    "summary_en": "Note on shifting peat layers and surface moisture after rainfall.",
+    "media": {
+      "src": "",
+      "alt_de": "Textbeitrag",
+      "alt_en": "Text entry"
+    },
+    "status": "published"
+  },
+  {
+    "id": "bewegung-004",
+    "title_de": "Schwingung im Schilfsaum",
+    "title_en": "Reed belt movement",
+    "date": "2026-04-25",
+    "type": "video",
+    "tags": ["wind", "schilf", "bewegung", "video"],
+    "summary_de": "Kurze Studie zu Windmustern und Wiederholungen im Schilfsaum.",
+    "summary_en": "Short study of wind patterns and repetition in the reed belt.",
+    "media": {
+      "src": "/assets/video/sample-reed.mp4",
+      "poster": "/assets/images/sample-bog-02.jpg",
+      "alt_de": "Schilf bewegt sich im Wind",
+      "alt_en": "Reeds moving in the wind"
+    },
+    "location": "Suedsaum",
+    "status": "draft"
+  }
+]

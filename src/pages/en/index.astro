@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CollectionFilters from "../../components/CollectionFilters.astro";
+import CollectionGrid from "../../components/CollectionGrid.astro";
+import collection from "../../data/collection.json";
+
+const types = [...new Set(collection.map((item) => item.type))];
+const tags = [...new Set(collection.flatMap((item) => item.tags))].sort();
+---
+
+<BaseLayout
+  title="Irrlichter | Home"
+  description="Irrlichter is a living archive for bog art, environmental observation, and field notes."
+  lang="en"
+  currentPath="/en/"
+>
+  <section class="hero">
+    <h1>Irrlichter</h1>
+    <p>
+      Irrlichter gathers traces from the bog: images, sound fragments, short texts, and
+      movement studies. The archive stays intentionally lightweight to support long-term
+      maintenance with low energy use.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="collection-heading">
+    <h2 id="collection-heading">Collection</h2>
+    <CollectionFilters types={types} tags={tags} lang="en" />
+    <CollectionGrid items={collection} lang="en" />
+  </section>
+
+  <script>
+    const typeSelect = document.querySelector("[data-filter-type]");
+    const tagSelect = document.querySelector("[data-filter-tag]");
+    const cards = Array.from(document.querySelectorAll("[data-collection-grid] .card"));
+
+    const applyFilters = () => {
+      const selectedType = typeSelect?.value ?? "all";
+      const selectedTag = tagSelect?.value ?? "all";
+
+      cards.forEach((card) => {
+        const cardType = card.getAttribute("data-type");
+        const cardTags = (card.getAttribute("data-tags") || "").split(",");
+        const typeMatch = selectedType === "all" || cardType === selectedType;
+        const tagMatch = selectedTag === "all" || cardTags.includes(selectedTag);
+        card.classList.toggle("hidden-by-filter", !(typeMatch && tagMatch));
+      });
+    };
+
+    typeSelect?.addEventListener("change", applyFilters);
+    tagSelect?.addEventListener("change", applyFilters);
+  </script>
+</BaseLayout>

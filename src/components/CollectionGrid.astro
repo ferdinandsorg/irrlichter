@@ -1,0 +1,84 @@
+---
+type CollectionItem = {
+  id: string;
+  date: string;
+  type: "image" | "video" | "audio" | "text";
+  tags: string[];
+  status?: string;
+  location?: string;
+  title_de: string;
+  title_en: string;
+  summary_de: string;
+  summary_en: string;
+  media: {
+    src: string;
+    alt_de: string;
+    alt_en: string;
+    poster?: string;
+  };
+};
+
+interface Props {
+  items: CollectionItem[];
+  lang: "de" | "en";
+}
+
+const { items, lang } = Astro.props;
+---
+
+<div class="collection-grid" data-collection-grid>
+  {
+    items.map((item) => {
+      const title = lang === "de" ? item.title_de : item.title_en;
+      const summary = lang === "de" ? item.summary_de : item.summary_en;
+      const alt = lang === "de" ? item.media.alt_de : item.media.alt_en;
+      const tags = item.tags.join(",");
+
+      return (
+        <article class="card" data-type={item.type} data-tags={tags}>
+          <div class="media-wrap">
+            {
+              item.type === "image" && (
+                <img
+                  src={item.media.src}
+                  srcset={`${item.media.src} 960w`}
+                  sizes="(max-width: 720px) 100vw, 320px"
+                  alt={alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )
+            }
+            {
+              item.type === "video" && (
+                <video controls preload="metadata" poster={item.media.poster}>
+                  <source src={item.media.src} type="video/mp4" />
+                  {alt}
+                </video>
+              )
+            }
+            {
+              item.type === "audio" && (
+                <div class="card-body">
+                  <p class="meta">{alt}</p>
+                  <audio controls preload="metadata">
+                    <source src={item.media.src} type="audio/mpeg" />
+                  </audio>
+                </div>
+              )
+            }
+            {item.type === "text" && <div class="card-body"><p>{summary}</p></div>}
+          </div>
+          <div class="card-body">
+            <h3>{title}</h3>
+            <p class="meta">{item.date} · {item.type}</p>
+            <p>{summary}</p>
+            <div class="tags">
+              {item.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </div>
+        </article>
+      );
+    })
+  }
+</div>

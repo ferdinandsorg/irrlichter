@@ -1,0 +1,43 @@
+---
+type EventItem = {
+  id: string;
+  date: string;
+  title_de: string;
+  title_en: string;
+  location_de: string;
+  location_en: string;
+  description_de: string;
+  description_en: string;
+  link?: string;
+};
+
+interface Props {
+  events: EventItem[];
+  lang: "de" | "en";
+}
+
+const { events, lang } = Astro.props;
+---
+
+<ul class="event-list">
+  {
+    events.map((event) => (
+      <li>
+        <h3>{lang === "de" ? event.title_de : event.title_en}</h3>
+        <p class="meta">
+          <time datetime={event.date}>{event.date}</time> · {lang === "de" ? event.location_de : event.location_en}
+        </p>
+        <p>{lang === "de" ? event.description_de : event.description_en}</p>
+        {
+          event.link && (
+            <p>
+              <a href={event.link}>
+                {lang === "de" ? "Weitere Informationen" : "More information"}
+              </a>
+            </p>
+          )
+        }
+      </li>
+    ))
+  }
+</ul>
