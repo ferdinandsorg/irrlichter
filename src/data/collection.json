@@ -67,5 +67,23 @@
     },
     "location": "Suedsaum",
     "status": "draft"
+  },
+  {
+    "id": "bewegung-004",
+    "title_de": "Schwingung im Schilfsaum",
+    "title_en": "Reed belt movement",
+    "date": "2026-04-25",
+    "type": "video",
+    "tags": ["wind", "schilf", "bewegung", "video"],
+    "summary_de": "Kurze Studie zu Windmustern und Wiederholungen im Schilfsaum.",
+    "summary_en": "Short study of wind patterns and repetition in the reed belt.",
+    "media": {
+      "src": "/assets/video/sample-reed.mp4",
+      "poster": "/assets/images/sample-bog-02.jpg",
+      "alt_de": "Schilf bewegt sich im Wind",
+      "alt_en": "Reeds moving in the wind"
+    },
+    "location": "Suedsaum",
+    "status": "draft"
   }
 ]
