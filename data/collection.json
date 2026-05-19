@@ -1,0 +1,159 @@
+[
+  {
+    "id": "moornebel-001",
+    "title": "Nebelstudie am Moorsteg",
+    "date": "2026-04-14",
+    "type": "image",
+    "tags": ["nebel", "morgen", "landschaft"],
+    "summary": "Morgendliche Lichtschichten zwischen Steg und offener Wasserflaeche.",
+    "media": {
+      "src": "assets/images/sample-bog-01.jpg",
+      "alt": "Morgennebel ueber Moorgras"
+    },
+    "location": "Moorkante Nord",
+    "coordinates": "53.501, 8.702",
+    "status": "published"
+  },
+  {
+    "id": "wasserstimme-002",
+    "title": "Wasserstimme im Randbereich",
+    "date": "2026-04-16",
+    "type": "audio",
+    "tags": ["klang", "wasser", "feldaufnahme", "wind"],
+    "summary": "Kurze Feldaufnahme mit Windboeen, Tropfen und ruhigem Wasserlauf.",
+    "media": {
+      "src": "assets/audio/Bog_Bean_Soundscape.mp3",
+      "alt": "Audioaufnahme aus dem Moor"
+    },
+    "location": "Kleine Bruchzone",
+    "status": "published"
+  },
+  {
+    "id": "protokoll-003",
+    "title": "Logbuchnotiz: Schichttiefe nach Regen",
+    "date": "2026-04-19",
+    "type": "text",
+    "tags": ["logbuch", "beobachtung", "feuchte"],
+    "summary": "Notiz zur Veraenderung von Torfschichten und Oberflaechenfeuchte nach Niederschlag.",
+    "media": {
+      "src": "",
+      "alt": "Textbeitrag"
+    },
+    "status": "published"
+  },
+  {
+    "id": "bewegung-004",
+    "title": "Schwingung im Schilfsaum",
+    "date": "2026-04-25",
+    "type": "video",
+    "tags": ["wind", "schilf", "bewegung", "video"],
+    "summary": "Kurze Studie zu Windmustern und Wiederholungen im Schilfsaum.",
+    "media": {
+      "src": "assets/video/sample-reed.mp4",
+      "alt": "Schilf bewegt sich im Wind",
+      "poster": "assets/images/sample-bog-02.jpg"
+    },
+    "location": "Suedsaum",
+    "status": "draft"
+  },
+  {
+    "id": "licht-marken-005",
+    "title": "Marken im Nebel",
+    "date": "2026-05-02",
+    "type": "image",
+    "tags": ["licht", "nebel", "markierung"],
+    "summary": "Zwei einfache Lichtzeichen als Orientierung im dichten Nebel — Referenz fuer spaetere Feldarbeit.",
+    "media": {
+      "src": "assets/images/light-front.svg",
+      "alt": "Stilisiertes Lichtsymbol, Vorderansicht"
+    },
+    "location": "Steg Ost",
+    "status": "published"
+  },
+  {
+    "id": "licht-rueck-006",
+    "title": "Rueckseite der Markierung",
+    "date": "2026-05-02",
+    "type": "image",
+    "tags": ["licht", "grafik"],
+    "summary": "Variante der Markierung.",
+    "media": {
+      "src": "assets/images/light-back.svg",
+      "alt": "Stilisiertes Lichtsymbol, Rueckansicht"
+    },
+    "status": "published"
+  },
+  {
+    "id": "daemmerung-007",
+    "title": "Daemmerung: Farbverlauf ueber offener Flache",
+    "date": "2026-05-05",
+    "type": "text",
+    "tags": ["daemmerung", "farbe", "logbuch"],
+    "summary": "Kurz notiert: Der Uebergang von kuehlem Blau zu warmem Grau dauerte heute nur wenige Minuten. Die feuchte Luft verstaerkte die Saettigung; gleichzeitig fiel der Kontrast zwischen Wasser und Himmel fast weg. Fuer eine spaetere Serie interessant, wie wenig Kontur noetig ist, um die Flaeche als offen lesbar zu halten.",
+    "media": { "src": "", "alt": "Textbeitrag" },
+    "location": "Grosse Wasserflaeche",
+    "status": "published"
+  },
+  {
+    "id": "nachtlinie-008",
+    "title": "Nachtlinie",
+    "date": "2026-05-06",
+    "type": "text",
+    "tags": ["nacht", "minimal"],
+    "summary": "Eine Linie, kaum mehr.",
+    "media": { "src": "", "alt": "Textbeitrag" },
+    "status": "draft"
+  },
+  {
+    "id": "grundton-009",
+    "title": "Grundton unter der Bruecke",
+    "date": "2026-05-07",
+    "type": "audio",
+    "tags": ["klang", "bruecke", "resonanz"],
+    "summary": "Sehr ruhiger Resonanzkoerper; kaum Wind, viel Holz.",
+    "media": {
+      "src": "assets/audio/Bog_Bean_Soundscape.mp3",
+      "alt": "Resonanz und feine Umgebungsgeraeusche"
+    },
+    "location": "Alte Holzbruecke",
+    "status": "published"
+  },
+  {
+    "id": "kurve-010",
+    "title": "Kurve im Schilf (Studie)",
+    "date": "2026-05-08",
+    "type": "video",
+    "tags": ["schilf", "bewegung", "kurve"],
+    "summary": "Langsame Kamerafahrt entlang einer Schilfkante; Fokus auf wiederkehrende Muster.",
+    "media": {
+      "src": "assets/video/sample-reed.mp4",
+      "alt": "Schilf, langsamer Schwenk",
+      "poster": "assets/images/light-front.svg"
+    },
+    "status": "published"
+  },
+  {
+    "id": "inventar-011",
+    "title": "Inventar: Sensoren und Notizblock",
+    "date": "2026-05-09",
+    "type": "text",
+    "tags": ["inventar", "technik", "beobachtung"],
+    "summary": "Liste der mitgefuehrten Geraete (Feuchte, Temperatur, einfaches Log) plus kurze Einschaetzung der Messgenauigkeit im feuchten Gras. Als Mock-Eintrag fuer laengere Textbloecke und Tag-Vielfalt.",
+    "media": { "src": "", "alt": "Textbeitrag" },
+    "location": "Basislager Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "spiegel-012",
+    "title": "Spiegelung (Platzhalter)",
+    "date": "2026-05-10",
+    "type": "video",
+    "tags": ["wasser", "spiegelung", "video"],
+    "summary": "Mock: Videoquelle kann spaeter ersetzt werden.",
+    "media": {
+      "src": "",
+      "alt": "Noch kein Videomaterial"
+    },
+    "status": "draft"
+  }
+]
