@@ -1,9 +1,18 @@
 name: Deploy to Hetzner FTP
 
-# Auto-deploy on push is paused — upload manually via scripts/deploy-ftp.sh.
-# Re-enable by restoring the push trigger below.
+# Auto-deploy on push is paused — run manually from the Actions tab.
+# Store FTP_HOST, FTP_USER, FTP_PASSWORD in GitHub Secrets (never in this file).
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Deploy-Ziel
+        required: true
+        default: beta
+        type: choice
+        options:
+          - beta
+          - production
 
 jobs:
   deploy:
@@ -19,6 +28,6 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
+          FTP_REMOTE_DIR: ${{ inputs.target == 'beta' && '/public_html/beta' || (secrets.FTP_REMOTE_DIR || '/public_html') }}
           INCLUDE_ADMIN: "0"
         run: bash scripts/deploy-ftp.sh
