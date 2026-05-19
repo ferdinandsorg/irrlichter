@@ -49,46 +49,18 @@
     "tags": ["wind", "schilf", "bewegung", "video"],
     "summary": "Kurze Studie zu Windmustern und Wiederholungen im Schilfsaum.",
     "media": {
-      "src": "assets/video/sample-reed.mp4",
-      "alt": "Schilf bewegt sich im Wind",
-      "poster": "assets/images/sample-bog-02.jpg"
+      "src": "assets/video/260508_Grounding_ub_technobirdimitation.mp4",
+      "alt": "Schilf bewegt sich im Wind"
     },
     "location": "Suedsaum",
     "status": "draft"
   },
   {
-    "id": "licht-marken-005",
-    "title": "Marken im Nebel",
-    "date": "2026-05-02",
-    "type": "image",
-    "tags": ["licht", "nebel", "markierung"],
-    "summary": "Zwei einfache Lichtzeichen als Orientierung im dichten Nebel — Referenz fuer spaetere Feldarbeit.",
-    "media": {
-      "src": "assets/images/light-front.svg",
-      "alt": "Stilisiertes Lichtsymbol, Vorderansicht"
-    },
-    "location": "Steg Ost",
-    "status": "published"
-  },
-  {
-    "id": "licht-rueck-006",
-    "title": "Rueckseite der Markierung",
-    "date": "2026-05-02",
-    "type": "image",
-    "tags": ["licht", "grafik"],
-    "summary": "Variante der Markierung.",
-    "media": {
-      "src": "assets/images/light-back.svg",
-      "alt": "Stilisiertes Lichtsymbol, Rueckansicht"
-    },
-    "status": "published"
-  },
-  {
     "id": "daemmerung-007",
-    "title": "Daemmerung: Farbverlauf ueber offener Flache",
+    "title": "Dämmerung: Farbverlauf ueber offener Flache",
     "date": "2026-05-05",
     "type": "text",
-    "tags": ["daemmerung", "farbe", "logbuch"],
+    "tags": ["Dämmerung", "farbe", "logbuch"],
     "summary": "Kurz notiert: Der Uebergang von kuehlem Blau zu warmem Grau dauerte heute nur wenige Minuten. Die feuchte Luft verstaerkte die Saettigung; gleichzeitig fiel der Kontrast zwischen Wasser und Himmel fast weg. Fuer eine spaetere Serie interessant, wie wenig Kontur noetig ist, um die Flaeche als offen lesbar zu halten.",
     "media": { "src": "", "alt": "Textbeitrag" },
     "location": "Grosse Wasserflaeche",
@@ -127,8 +99,7 @@
     "summary": "Langsame Kamerafahrt entlang einer Schilfkante; Fokus auf wiederkehrende Muster.",
     "media": {
       "src": "assets/video/sample-reed.mp4",
-      "alt": "Schilf, langsamer Schwenk",
-      "poster": "assets/images/light-front.svg"
+      "alt": "Schilf, langsamer Schwenk"
     },
     "status": "published"
   },
@@ -138,7 +109,7 @@
     "date": "2026-05-09",
     "type": "text",
     "tags": ["inventar", "technik", "beobachtung"],
-    "summary": "Liste der mitgefuehrten Geraete (Feuchte, Temperatur, einfaches Log) plus kurze Einschaetzung der Messgenauigkeit im feuchten Gras. Als Mock-Eintrag fuer laengere Textbloecke und Tag-Vielfalt.",
+    "summary": "Liste der mitgefuehrten Geräte (Feuchte, Temperatur, einfaches Log) plus kurze Einschätzung der Messgenauigkeit im feuchten Gras. Als Mock-Eintrag fuer laengere Textbloecke und Tag-Vielfalt.",
     "media": { "src": "", "alt": "Textbeitrag" },
     "location": "Basislager Moorbauer",
     "status": "published"
@@ -155,5 +126,116 @@
       "alt": "Noch kein Videomaterial"
     },
     "status": "draft"
+  },
+  {
+    "id": "grounding-notiz-260513",
+    "title": "Grounding: Vision und Leitgedanken",
+    "date": "2026-05-13",
+    "type": "image",
+    "tags": ["grounding", "logbuch", "notiz", "moor", "planung"],
+    "summary": "Handschriftliche Notiz (Foto): Vision und Leitgedanken zum Moor — Vielfalt, weiche ortsspezifische Infrastruktur, Neugier und Staunen; Botschaften zu nassem Moor, Material und Perspektiven. Sicherheit: Moorbauer, Menschen, Orga; Unsicherheit: Zeit, Zugaenglichkeit, Rahmen fuer andere.",
+    "media": {
+      "src": "assets/images/260513_Grounding_fr_note.jpg",
+      "alt": "Handschriftliche Grounding-Notiz zu Vision, Sicherheit und Unsicherheit"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "grounding-skizze-260508",
+    "title": "Grounding: Skizze mobile Struktur",
+    "date": "2026-05-08",
+    "type": "image",
+    "tags": ["grounding", "skizze", "konstruktion", "material", "aufbau"],
+    "summary": "Bleistiftskizzen auf Packpapier: klappbare Struktur mit Stangen und Kreuzverbindungen, Massstab ca. 2 m. Materialliste: Metal rods, Bolzen, Holzstangen, Plane, durchsichtige Spindeln. Aufnahme iPhone SE.",
+    "media": {
+      "src": "assets/images/260508_Grounding_fb_4215.jpeg",
+      "alt": "Skizze einer mobilen Struktur mit Materialliste Baumarkt"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "reading-fragment-260519",
+    "title": "Lesefragment: Notizen als Spuren",
+    "date": "2026-05-19",
+    "type": "image",
+    "tags": ["lesen", "zitat", "notizen", "fragment", "grounding"],
+    "summary": "Auszug (Jaruntowski): Notizen als persoenliche, verletzliche Spuren — Wahrheit im Prozess, nie abschliessend; Schreiben als Suche. Handschriftlicher Dank an Franzi; Stilhinweis Fragments.",
+    "media": {
+      "src": "assets/images/260519_reading_fb.png",
+      "alt": "Zitat ueber Notizen als Spuren mit handschriftlicher Randnotiz"
+    },
+    "status": "published"
+  },
+  {
+    "id": "grounding-technobird-260508",
+    "title": "Grounding: Techno-Vogel (Soundscape)",
+    "date": "2026-05-08",
+    "type": "audio",
+    "tags": ["grounding", "klang", "feldaufnahme", "vogel", "technobird"],
+    "summary": "Feldaufnahme Soundscape (ca. 40 s): Techno-Vogel-Imitation aus der Grounding-Session.",
+    "media": {
+      "src": "assets/audio/260508_Grounding_sw_technobird.m4a",
+      "alt": "Audio: Techno-Vogel-Imitation, Grounding"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "aufbau-fb-260424",
+    "title": "Aufbau vor Ort (Feldaufnahme)",
+    "date": "2026-04-24",
+    "type": "video",
+    "tags": ["aufbau", "video", "feldaufnahme", "installation"],
+    "summary": "Kurze vertikale Feldaufnahme vom Aufbau der Installation (ca. 10 s, 1080x1920).",
+    "media": {
+      "src": "assets/video/260424_Aufbau_fb.mp4",
+      "alt": "Video: Aufbau der Installation vor Ort"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "aufbau-sw-260424",
+    "title": "Aufbau (Schwarz-Weiss)",
+    "date": "2026-04-24",
+    "type": "video",
+    "tags": ["aufbau", "video", "schwarzweiss", "installation"],
+    "summary": "Schwarz-weiss-Aufnahme vom Aufbau (ca. 6 s, 1920x1080).",
+    "media": {
+      "src": "assets/video/260424_Aufbau_sw_999.MP4",
+      "alt": "Video: Aufbau in Schwarz-Weiss"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "grounding-fb-4189-260508",
+    "title": "Grounding: Feldaufnahme",
+    "date": "2026-05-08",
+    "type": "video",
+    "tags": ["grounding", "video", "feldaufnahme"],
+    "summary": "Feldaufnahme aus der Grounding-Session (ca. 18 s, vertikal 1080x1920).",
+    "media": {
+      "src": "assets/video/260508_Grounding_fb_4189.mp4",
+      "alt": "Video: Grounding vor Ort"
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+  {
+    "id": "grounding-technobird-video-260508",
+    "title": "Grounding: Techno-Vogel-Imitation",
+    "date": "2026-05-08",
+    "type": "video",
+    "tags": ["grounding", "video", "technobird", "imitation", "vogel"],
+    "summary": "Video zur Techno-Vogel-Imitation (ca. 8 s, 848x480), Grounding ub.",
+    "media": {
+      "src": "assets/video/260508_Grounding_ub_technobirdimitation.mp4",
+      "alt": "Video: Techno-Vogel-Imitation"
+    },
+    "location": "Moorbauer",
+    "status": "published"
   }
 ]

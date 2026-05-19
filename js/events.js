@@ -54,7 +54,7 @@
 
     if (!Array.isArray(events) || events.length === 0) {
       list.appendChild(el("li", { class: "loading-note" }, [
-        "Keine Events vorhanden."
+        "Keine Termine vorhanden."
       ]));
       return;
     }
@@ -85,7 +85,7 @@
       .then(render)
       .catch(function (err) {
         showError(
-          "Events konnten nicht geladen werden (" + err.message + "). " +
+          "Termine konnten nicht geladen werden (" + err.message + "). " +
           "Bitte ueber einen Web-Server oeffnen (z. B. python3 -m http.server)."
         );
       });

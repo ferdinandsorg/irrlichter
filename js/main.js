@@ -54,13 +54,55 @@
     });
   }
 
+  function isHomePage() {
+    if (!document.body || !document.body.classList.contains("page-home")) {
+      return false;
+    }
+    var path = (window.location.pathname || "").split("/").filter(Boolean);
+    var leaf = (path.length ? path[path.length - 1] : "index").replace(
+      /\.html$/i,
+      ""
+    );
+    return !leaf || leaf === "index";
+  }
+
+  function removeIrrlichtLightsIfNotHome() {
+    if (isHomePage()) return;
+    var el = document.getElementById("irrlicht-lights");
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
+  }
+
+  function homeIntroScrollOffset() {
+    var intro = document.querySelector(".home-intro");
+    if (intro) {
+      return intro.offsetHeight;
+    }
+    return window.innerHeight || document.documentElement.clientHeight || 0;
+  }
+
   function scrollProgress() {
     var el = document.scrollingElement || document.documentElement;
+    var scrollTop = el.scrollTop;
     var max = el.scrollHeight - el.clientHeight;
+
+    if (isHomePage()) {
+      var introEnd = homeIntroScrollOffset();
+      if (scrollTop <= introEnd) {
+        return 0;
+      }
+      var range = max - introEnd;
+      if (range <= 0) {
+        return 1;
+      }
+      return Math.min(1, Math.max(0, (scrollTop - introEnd) / range));
+    }
+
     if (max <= 0) {
       return 0;
     }
-    return Math.min(1, Math.max(0, el.scrollTop / max));
+    return Math.min(1, Math.max(0, scrollTop / max));
   }
 
   function applyScrollAmbient() {
@@ -74,6 +116,9 @@
     }
     root.style.setProperty("--scroll-shift", String(t));
     updateTextMode();
+    document.dispatchEvent(
+      new CustomEvent("irrlichter:scroll-ambient", { detail: { t: t } })
+    );
     scrollRaf = null;
   }
 
@@ -111,6 +156,7 @@
   }
 
   function initIrrlichtLights() {
+    if (!isHomePage()) return;
     if (document.getElementById("irrlicht-lights")) return;
     if (
       window.matchMedia &&
@@ -159,8 +205,8 @@
         "s cubic-bezier(0.22, 1, 0.36, 1)";
 
       window.requestAnimationFrame(function () {
-        back.style.opacity = String(randomBetween(0.32, 0.52));
-        front.style.opacity = String(randomBetween(0.55, 0.9));
+        back.style.opacity = String(randomBetween(0.88, 1));
+        front.style.opacity = String(randomBetween(0.92, 1));
       });
 
       window.setTimeout(function flareOut() {
@@ -181,6 +227,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    removeIrrlichtLightsIfNotHome();
     markActiveNav();
     initScrollAmbient();
     updateTextMode();

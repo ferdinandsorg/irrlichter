@@ -11,17 +11,36 @@
 
   function setExpanded(card, expanded) {
     if (!card) return;
+    var hasControlBar = card.classList.contains("info-card--has-toolbar");
+    var controlMeta = card.querySelector("[data-control-bar-meta]");
     var details = card.querySelector(".info-card__details");
+
     card.classList.toggle("info-card--expanded", expanded);
     document.body.classList.toggle("info-card-expanded", expanded);
-    if (details) {
+
+    if (hasControlBar && controlMeta) {
+      if (expanded) {
+        controlMeta.removeAttribute("hidden");
+      } else {
+        controlMeta.setAttribute("hidden", "");
+      }
+      if (details) {
+        details.setAttribute("hidden", "");
+      }
+    } else if (details) {
       if (expanded) {
         details.removeAttribute("hidden");
       } else {
         details.setAttribute("hidden", "");
       }
     }
+
     card.setAttribute("aria-expanded", expanded ? "true" : "false");
+    document.dispatchEvent(
+      new CustomEvent("irrlichter:info-card-expanded", {
+        detail: { expanded: expanded }
+      })
+    );
   }
 
   function toggleExpanded(card) {

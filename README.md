@@ -22,8 +22,8 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 ```
 /
 ├── index.html          Startseite (Hero + Sammlung mit Filter)
-├── info.html           Info-Seite
-├── events.html         Eventliste
+├── das-projekt.html    Das Projekt
+├── mitmachen.html      Mitmach-Termine
 ├── admin.html          Browser-Editor fuer die JSON-Dateien
 ├── css/
 │   └── style.css
@@ -72,11 +72,11 @@ Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 1. FTP-Client oeffnen und mit dem Server verbinden
 2. Zielordner waehlen (haeufig `public_html/` oder `www/`)
 3. Folgendes hochladen:
-   - `index.html`, `info.html`, `events.html`
+   - `index.html`, `das-projekt.html`, `mitmachen.html`
    - optional `admin.html` (siehe Hinweis unten)
    - `css/`, `js/`, `data/`, `assets/`
 4. Nicht hochladen: `.git/`, `scripts/`, `README.md`, `.cursor/`, `.vscode/`
-5. Seite im Browser pruefen: `/`, `/info.html`, `/events.html`
+5. Seite im Browser pruefen: `/`, `/das-projekt.html`, `/mitmachen.html`
 
 ### Variante B: Mit `scripts/deploy-ftp.sh`
 
@@ -128,7 +128,7 @@ dem Server hochladen.
 Ablauf:
 
 1. `admin.html` oeffnen (lokal ueber den dev-Server oder live auf dem Server)
-2. Datensatz waehlen: **Sammlung** oder **Events**
+2. Datensatz waehlen: **Sammlung** oder **Mitmachen**
 3. Daten laden:
    - „Vom Server laden" - liest die aktuelle `collection.json` bzw.
      `events.json` ueber `fetch`
@@ -168,7 +168,7 @@ Optionale Felder:
 - `coordinates` (z. B. `"53.501, 8.702"`)
 - `status` (`published` oder `draft`)
 
-### Events (`data/events.json`)
+### Mitmachen (`data/events.json`)
 
 Pflichtfelder pro Eintrag:
 
@@ -192,5 +192,5 @@ Optional:
 ## Hinweis zu JavaScript
 
 Da Inhalte client-seitig aus JSON geladen werden, benoetigt die Seite aktives
-JavaScript, um Sammlung und Events anzuzeigen. Header, Footer, Navigation und
-Info-Texte funktionieren auch ohne JavaScript.
+JavaScript, um Sammlung und Mitmach-Termine anzuzeigen. Header, Footer, Navigation und
+Projekt-Texte funktionieren auch ohne JavaScript.

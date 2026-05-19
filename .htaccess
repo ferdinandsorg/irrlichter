@@ -1,9 +1,15 @@
 # Irrlichter — „schöne“ URLs ohne .html (Apache, mod_rewrite)
-# Beispiel: /events und /events.html liefern beides die Datei events.html (interner Rewrite).
+# Beispiel: /mitmachen und /mitmachen.html liefern beides die Datei mitmachen.html (interner Rewrite).
 # Voraussetzung: AllowOverride FileInfo (oder All) fuer dieses Verzeichnis.
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Alte URLs → neue Seiten
+  RewriteRule ^events\.html$ mitmachen.html [R=301,L]
+  RewriteRule ^events/?$ mitmachen.html [R=301,L]
+  RewriteRule ^info\.html$ das-projekt.html [R=301,L]
+  RewriteRule ^info/?$ das-projekt.html [R=301,L]
 
   # Bereits existierende Datei oder Verzeichnis nicht anfassen
   RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -15,5 +21,5 @@
   RewriteRule ^(.+?)/?$ $1.html [L,QSA]
 </IfModule>
 
-# Optional: weitere Kurz-URLs (Beispiel) — auskommentiert, bis die Zieldatei passt:
-# RewriteRule ^veranstaltungen/?$ events.html [L]
+# Optional: weitere Kurz-URLs (Beispiel):
+# RewriteRule ^veranstaltungen/?$ mitmachen.html [L]

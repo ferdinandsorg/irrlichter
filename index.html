@@ -16,16 +16,16 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="page-home">
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
         <nav class="nav-links" aria-label="Hauptnavigation">
           <a href="index.html" data-nav="index">Sammlung</a>
           <span class="nav-sep" aria-hidden="true">/</span>
-          <a href="events.html" data-nav="events">Veranstaltungen</a>
+          <a href="mitmachen.html" data-nav="mitmachen">Mitmachen</a>
           <span class="nav-sep" aria-hidden="true">/</span>
-          <a href="info.html" data-nav="info">Über uns</a>
+          <a href="das-projekt.html" data-nav="das-projekt">Das Projekt</a>
         </nav>
       </div>
     </header>
@@ -53,13 +53,27 @@
               >
             </p>
           </div>
+          <a
+            href="#sammlung"
+            class="info-card__collection-cta"
+            data-scroll-to-collection
+            >Zur Sammlung
+            <span
+              class="material-symbols-sharp info-card__collection-cta-icon"
+              aria-hidden="true"
+              >south</span
+            ></a
+          >
           <form
             class="collection-toolbar"
             aria-label="Sammlungsfilter"
             data-filters
+            data-collection-toolbar
+            hidden
+            aria-hidden="true"
           >
-            <div class="collection-toolbar__cell">
-              <div class="collection-toolbar__inner">
+            <div class="collection-toolbar__cell collection-toolbar__cell--select">
+              <label class="collection-toolbar__inner" for="filter-type">
                 <span
                   class="collection-toolbar__control collection-toolbar__control--grow"
                 >
@@ -76,10 +90,10 @@
                     >expand_more</span
                   >
                 </span>
-              </div>
+              </label>
             </div>
-            <div class="collection-toolbar__cell">
-              <div class="collection-toolbar__inner">
+            <div class="collection-toolbar__cell collection-toolbar__cell--select">
+              <label class="collection-toolbar__inner" for="filter-tag">
                 <span
                   class="collection-toolbar__control collection-toolbar__control--grow"
                 >
@@ -92,7 +106,7 @@
                     >expand_more</span
                   >
                 </span>
-              </div>
+              </label>
             </div>
             <div class="collection-toolbar__cell collection-toolbar__cell--search">
               <div class="collection-toolbar__inner">
@@ -118,33 +132,58 @@
             </div>
           </form>
         </div>
-        <div class="info-card__details" id="info-card-details" hidden>
-          <dl class="info-card__detail-list">
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Ort</dt>
-                <dd>Moorbauer</dd>
-              </div>
-            </div>
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Koordinaten</dt>
-                <dd>N 53° 46' 1.815498 E 12° 46' 59.96226</dd>
-              </div>
-            </div>
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Wetter</dt>
-                <dd>Bewölkt, 16°</dd>
-              </div>
-            </div>
-          </dl>
+        <div
+          class="control-bar__meta"
+          data-control-bar-meta
+          hidden
+          aria-live="polite"
+        >
+          <div class="control-bar__meta-left">
+            <span class="control-bar__location" data-site-location>Moorbauer</span>
+            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+          </div>
+          <div
+            class="control-bar__status control-bar__status--open"
+            data-site-status
+          >
+            <span
+              class="control-bar__status-dot"
+              data-site-status-dot
+              aria-hidden="true"
+            ></span>
+            <span class="control-bar__status-text">
+              <span class="control-bar__status-name" data-site-status-name>Pfadwerkstatt</span>
+              <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
+            </span>
+          </div>
         </div>
       </div>
     </aside>
     <main id="content">
+      <section class="home-intro" aria-label="Einführung">
+        <div class="home-intro__inner">
+          <p class="home-intro__para home-intro__para--1">
+            Moor bedeutet für viele Menschen verschiedenste Dinge: Arbeit, Geschichte,
+            Kohlenstoff, Unsicherheit, Staunen, Matsch, Frustration, Zeit, Offenheit,
+            Arten, Mut, Identität.
+          </p>
+          <p class="home-intro__para home-intro__para--2">
+            Es fehlt ein Raum, wo ein unmittelbarer Austausch zwischen all diesen
+            Perspektiven stattfinden kann. Das ist unser Ziel. Wir bringen vielfältige
+            Perspektiven aus dem Moor zusammen.
+          </p>
+          <p class="home-intro__para home-intro__para--3">
+            Mitten in Mecklenburg-Vorpommern, in der Ausflugsgaststätte „Moorbauer“,
+            sammeln, verstehen, suchen wir: Was ist ein Moor? Und wer sind wir im Moor?
+          </p>
+        </div>
+      </section>
       <div class="inner">
-        <section class="section section--collection" aria-label="Sammlung">
+        <section
+          id="sammlung"
+          class="section section--collection"
+          aria-label="Sammlung"
+        >
           <div
             class="collection-grid"
             data-collection-grid
@@ -158,10 +197,18 @@
     </main>
     <footer class="site-footer">
       <div class="inner">
-        <small>Projekt Irrlichter &middot; moorbasiertes Kunst- und Umweltarchiv</small>
+        <small>&copy; Irrlichter 2026</small>
+        <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
+        <nav class="site-footer__nav" aria-label="Rechtliches">
+          <a href="impressum.html">Impressum</a>
+          <span class="site-footer__sep" aria-hidden="true">&middot;</span>
+          <a href="datenschutz.html">Datenschutz</a>
+        </nav>
       </div>
     </footer>
-    <script src="js/main.js?v=3" defer></script>
+    <script src="js/main.js?v=5" defer></script>
+    <script src="js/home-intro.js" defer></script>
+    <script src="js/site-status.js" defer></script>
     <script src="js/logo-card.js" defer></script>
     <script src="js/collection.js" defer></script>
   </body>
