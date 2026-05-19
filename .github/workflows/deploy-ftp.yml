@@ -28,6 +28,6 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ inputs.target == 'beta' && '/public_html/beta' || (secrets.FTP_REMOTE_DIR || '/public_html') }}
+          FTP_REMOTE_DIR: ${{ inputs.target == 'beta' && 'beta' || (secrets.FTP_REMOTE_DIR || '.') }}
           INCLUDE_ADMIN: "0"
         run: bash scripts/deploy-ftp.sh

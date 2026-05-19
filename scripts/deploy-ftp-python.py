@@ -77,7 +77,7 @@ def main() -> None:
     host = env("FTP_HOST")
     user = env("FTP_USER")
     password = env("FTP_PASSWORD")
-    remote_dir = os.environ.get("FTP_REMOTE_DIR", "/public_html/beta").strip()
+    remote_dir = os.environ.get("FTP_REMOTE_DIR", "beta").strip()
     include_admin = os.environ.get("INCLUDE_ADMIN", "0") == "1"
 
     ftp = FTP_TLS()

@@ -12,11 +12,11 @@ set -euo pipefail
 # FTP_HOST       required (example: ftp.example.org)
 # FTP_USER       required
 # FTP_PASSWORD   required
-# FTP_REMOTE_DIR optional (default: /public_html)
+# FTP_REMOTE_DIR optional (default: . — Hetzner-FTP liegt oft schon in public_html)
 # SOURCE_DIR     optional (default: project root, the parent of this script)
 # INCLUDE_ADMIN  optional (default: 1; set to 0 to skip admin.html / js/admin.js)
 
-FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-/public_html}"
+FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_DIR="${SOURCE_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 INCLUDE_ADMIN="${INCLUDE_ADMIN:-1}"
