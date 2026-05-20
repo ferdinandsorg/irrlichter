@@ -1,8 +1,11 @@
 name: Deploy to Hetzner FTP
 
-# Auto-deploy on push is paused — run manually from the Actions tab.
-# Store FTP_HOST, FTP_USER, FTP_PASSWORD in GitHub Secrets (never in this file).
+# Push to main → automatisch nach beta/ auf irrlichter.net
+# Manuell: Actions → Run workflow (beta oder production)
+# Secrets: FTP_HOST, FTP_USER, FTP_PASSWORD (optional: FTP_REMOTE_DIR für production)
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       target:
@@ -28,6 +31,6 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ inputs.target == 'beta' && 'beta' || (secrets.FTP_REMOTE_DIR || '.') }}
+          FTP_REMOTE_DIR: ${{ github.event_name == 'push' && 'beta' || (inputs.target == 'beta' && 'beta' || (secrets.FTP_REMOTE_DIR || '.')) }}
           INCLUDE_ADMIN: "0"
         run: bash scripts/deploy-ftp.sh
