@@ -5,7 +5,7 @@ set -euo pipefail
 # Uploads the project root directly (no build step needed).
 # Requires: lftp
 #
-# Extensionless URLs: .htaccess (Apache mod_rewrite) is uploaded with the site.
+# Extensionless URLs: .htaccess, robots.txt, sitemap.xml are uploaded with the site.
 # For nginx or other stacks, configure an equivalent rewrite (see .htaccess comments).
 #
 # Environment variables:
@@ -14,7 +14,7 @@ set -euo pipefail
 # FTP_PASSWORD   required
 # FTP_REMOTE_DIR optional (default: . — Hetzner-FTP liegt oft schon in public_html)
 # SOURCE_DIR     optional (default: project root, the parent of this script)
-# INCLUDE_ADMIN  optional (default: 1; set to 0 to skip admin.html / js/admin.js)
+# INCLUDE_ADMIN  optional (default: 1; set to 0 to skip admin/ / js/admin.js)
 
 FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -52,9 +52,9 @@ EXCLUDES=(
 )
 
 if [[ "$INCLUDE_ADMIN" != "1" ]]; then
-  EXCLUDES+=(--exclude-glob "admin.html")
+  EXCLUDES+=(--exclude-glob "admin/")
   EXCLUDES+=(--exclude-glob "js/admin.js")
-  echo "Note: admin.html and js/admin.js are excluded from this deploy."
+  echo "Note: admin/ and js/admin.js are excluded from this deploy."
 fi
 
 echo "Deploying '$SOURCE_DIR/' to '$FTP_HOST:$FTP_REMOTE_DIR'..."

@@ -9,8 +9,8 @@ from ftplib import FTP_TLS, error_perm
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRS = {".git", ".github", ".cursor", ".vscode", "scripts", "node_modules"}
-SKIP_FILES = {".DS_Store", ".env", ".env.example", "README.md", "admin.html"}
+SKIP_DIRS = {".git", ".github", ".cursor", ".vscode", "scripts", "node_modules", "admin"}
+SKIP_FILES = {".DS_Store", ".env", ".env.example", "README.md"}
 SKIP_PATHS = {"js/admin.js"}
 
 

@@ -30,7 +30,7 @@ def should_skip(rel: Path, include_admin: bool) -> bool:
         return True
     if rel.name.startswith(".git"):
         return True
-    if not include_admin and rel.name in {"admin.html"}:
+    if not include_admin and rel.parts and rel.parts[0] == "admin":
         return True
     if not include_admin and rel.as_posix() == "js/admin.js":
         return True

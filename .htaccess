@@ -1,27 +1,38 @@
-# Irrlichter — „schöne“ URLs ohne .html (Apache, mod_rewrite)
-# Beispiel: /mitmachen und /mitmachen.html liefern beides die Datei mitmachen.html (interner Rewrite).
-# Voraussetzung: AllowOverride FileInfo (oder All) fuer dieses Verzeichnis.
+# Irrlichter — Kurz-URLs + Legacy-Redirects (Apache)
+# Seiten liegen in Ordnern: /mitmachen/index.html usw. (funktioniert auch ohne Rewrite)
+# Lokal: python3 scripts/dev-server.py  oder  python3 -m http.server
+
+Options -MultiViews
+DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Alte URLs → neue Seiten
-  RewriteRule ^events\.html$ mitmachen.html [R=301,L]
-  RewriteRule ^events/?$ mitmachen.html [R=301,L]
-  RewriteRule ^info\.html$ das-projekt.html [R=301,L]
-  RewriteRule ^info/?$ das-projekt.html [R=301,L]
-  RewriteRule ^anfahrt\.html$ das-projekt.html#kontakt-anfahrt [R=301,L,NE]
-  RewriteRule ^anfahrt/?$ das-projekt.html#kontakt-anfahrt [R=301,L,NE]
+  # Legacy-Pfade
+  RewriteRule ^events/?$ /mitmachen [R=301,L]
+  RewriteRule ^info/?$ /das-projekt [R=301,L]
+  RewriteRule ^anfahrt/?$ /das-projekt#kontakt-anfahrt [R=301,L,NE]
 
-  # Bereits existierende Datei oder Verzeichnis nicht anfassen
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
+  # Alte Root-Dateien *.html → Ordner-URLs (falls noch angefragt)
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
 
-  # Nur wenn zugehoerige *.html existiert: intern auf diese Datei umbiegen
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.+?)/?$ $1.html [L,QSA]
+  RewriteCond %{THE_REQUEST} \s/+mitmachen\.html[\s?] [NC]
+  RewriteRule ^ /mitmachen [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+das-projekt\.html[\s?] [NC]
+  RewriteRule ^ /das-projekt [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+impressum\.html[\s?] [NC]
+  RewriteRule ^ /impressum [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+datenschutz\.html[\s?] [NC]
+  RewriteRule ^ /datenschutz [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+admin\.html[\s?] [NC]
+  RewriteRule ^ /admin [R=301,L]
+
+  # Sonstige *.html im Root (nur falls noch vorhanden)
+  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
 </IfModule>
-
-# Optional: weitere Kurz-URLs (Beispiel):
-# RewriteRule ^veranstaltungen/?$ mitmachen.html [L]

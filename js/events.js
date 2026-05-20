@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "data/events.json";
+  var DATA_URL = "/data/events.json";
   var WEEKDAYS_FULL = [
     "Sonntag",
     "Montag",

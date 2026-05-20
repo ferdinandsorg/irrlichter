@@ -4,12 +4,12 @@
   var DATASETS = {
     collection: {
       file: "collection.json",
-      url: "data/collection.json",
+      url: "/data/collection.json",
       label: "Sammlung"
     },
     events: {
       file: "events.json",
-      url: "data/events.json",
+      url: "/data/events.json",
       label: "Mitmachen"
     }
   };

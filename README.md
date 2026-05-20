@@ -15,16 +15,18 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 - Reines HTML, CSS und JavaScript (Vanilla, ohne Framework)
 - Inhalte aus JSON werden zur Laufzeit per `fetch` geladen und client-seitig gerendert
 - Lokale Assets in `assets/`
-- Optionaler Browser-Editor (`admin.html`) fuer das Bearbeiten der JSON-Dateien
+- Optionaler Browser-Editor (`admin/`) fuer das Bearbeiten der JSON-Dateien
 
 ## Projektstruktur
 
 ```
 /
 ├── index.html          Startseite (Hero + Sammlung mit Filter)
-├── das-projekt.html    Das Projekt (inkl. Team, Moorbauer, Kontakt/Anfahrt)
-├── mitmachen.html      Mitmach-Termine
-├── admin.html          Browser-Editor fuer die JSON-Dateien
+├── mitmachen/index.html
+├── das-projekt/index.html
+├── impressum/index.html
+├── datenschutz/index.html
+├── admin/index.html    Browser-Editor (optional, nicht im Standard-Deploy)
 ├── css/
 │   └── style.css
 ├── js/
@@ -49,17 +51,36 @@ Die Seite laedt die JSON-Daten via `fetch`. Direktes Oeffnen der HTML-Dateien
 ueber `file://` funktioniert in vielen Browsern nicht (CORS). Daher empfiehlt
 sich ein einfacher statischer Webserver.
 
-Beispiele (im Projekt-Root ausfuehren):
+**Kurz-URLs lokal** (empfohlen):
 
 ```bash
-# Python (auf den meisten Systemen vorinstalliert)
-python3 -m http.server 8000
-
-# oder Node ohne globale Installation
-npx serve .
+python3 scripts/dev-server.py
+# optional: python3 scripts/dev-server.py 8080
 ```
 
-Danach im Browser oeffnen: `http://localhost:8000/`
+Danach: `http://127.0.0.1:8000/`, `http://127.0.0.1:8000/mitmachen`, …
+
+Alternativ (ohne Legacy-Redirects): `python3 -m http.server 8000` — die Ordner
+`/mitmachen/`, `/das-projekt/` usw. funktionieren direkt; nur `/mitmachen` ohne
+Schraegstrich haengt vom Server ab (Dev-Server oben ist sicherer).
+
+### SEO & Social (Meta)
+
+Öffentliche Seiten haben `description`, `canonical`, Open Graph, Twitter Cards und (Startseite + Das Projekt) JSON-LD. Basis-URL: `https://irrlichter.net` — bei anderer Live-Domain in allen HTML-`<head>`-Blöcken anpassen. Vorschau-Bild: `/assets/images/260519_reading_fb.png`. Vorlage: `includes/page-meta.html`. Zusätzlich: `robots.txt`, `sitemap.xml`.
+
+### Kurz-URLs (ohne `.html`)
+
+Seiten liegen in **Ordnern** (`mitmachen/index.html` → URL `/mitmachen/`). Das
+funktioniert auf Apache **auch ohne** `mod_rewrite` (per `DirectoryIndex`).
+
+Zusaetzlich leitet `.htaccess` alte Pfade um (`/mitmachen.html` → `/mitmachen`, …).
+Beim FTP-Deploy **`.htaccess` mit hochladen** (versteckte Dateien einblenden).
+
+Voraussetzungen Live-Server:
+
+- Document Root = Ordner mit `index.html`, `mitmachen/`, `.htaccess`
+- Optional: `mod_rewrite` + `AllowOverride` fuer Legacy-Redirects
+- Unterordner-Deploy (z. B. `/beta/`): `RewriteBase /beta/` in `.htaccess`
 
 VS Code-Nutzer koennen alternativ die Erweiterung **Live Server** verwenden.
 
@@ -72,11 +93,11 @@ Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 1. FTP-Client oeffnen und mit dem Server verbinden
 2. Zielordner waehlen (haeufig `public_html/` oder `www/`)
 3. Folgendes hochladen:
-   - `index.html`, `das-projekt.html`, `mitmachen.html`
-   - optional `admin.html` (siehe Hinweis unten)
+   - `index.html`, `mitmachen/`, `das-projekt/`, `impressum/`, `datenschutz/`, `.htaccess`
+   - optional `admin/` (siehe Hinweis unten)
    - `css/`, `js/`, `data/`, `assets/`
 4. Nicht hochladen: `.git/`, `scripts/`, `README.md`, `.cursor/`, `.vscode/`
-5. Seite im Browser pruefen: `/`, `/das-projekt.html`, `/mitmachen.html`
+5. Seite im Browser pruefen: `/`, `/das-projekt`, `/mitmachen` (ohne `.html`; siehe `.htaccess`)
 
 ### Variante B: Mit `scripts/deploy-ftp.sh`
 
@@ -97,7 +118,7 @@ Deploy ausfuehren:
 bash scripts/deploy-ftp.sh
 ```
 
-Falls `admin.html` und `js/admin.js` nicht auf den Server sollen:
+Falls `admin/` und `js/admin.js` nicht auf den Server sollen:
 
 ```bash
 INCLUDE_ADMIN=0 bash scripts/deploy-ftp.sh
@@ -121,13 +142,13 @@ Es gibt zwei Wege, Inhalte zu pflegen.
 oeffnen, bearbeiten und anschliessend per FTP wieder in den `data/`-Ordner auf
 dem Server hochladen.
 
-### Variante 2: Browser-Editor `admin.html`
+### Variante 2: Browser-Editor `admin/`
 
-`admin.html` ist ein einfacher Editor, der vollstaendig im Browser laeuft.
+`admin/` ist ein einfacher Editor, der vollstaendig im Browser laeuft.
 
 Ablauf:
 
-1. `admin.html` oeffnen (lokal ueber den dev-Server oder live auf dem Server)
+1. `/admin` oeffnen (lokal ueber den dev-Server oder live auf dem Server)
 2. Datensatz waehlen: **Sammlung** oder **Mitmachen**
 3. Daten laden:
    - „Vom Server laden" - liest die aktuelle `collection.json` bzw.
@@ -141,7 +162,7 @@ Ablauf:
    um die Live-Seite zu aktualisieren
 
 > Hinweis: Der Editor schreibt nichts direkt auf den Server. Er hilft nur beim
-> komfortablen Erzeugen einer neuen `.json`-Datei. Wenn `admin.html` oeffentlich
+> komfortablen Erzeugen einer neuen `.json`-Datei. Wenn `/admin` oeffentlich
 > liegen soll, empfiehlt sich ein Schutz per `.htaccess` (Basic Auth). Alternativ
 > mit `INCLUDE_ADMIN=0` vom Deploy ausschliessen und nur lokal verwenden.
 

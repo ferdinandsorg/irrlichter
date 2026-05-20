@@ -716,8 +716,20 @@ a.control-bar__status:focus-visible {
     "WONK" 1;
 }
 
-.info-card--has-toolbar.info-card--collection-in-view .info-card__collection-cta {
+/* Nur Startseite: „Zur Sammlung“ ausblenden, wenn Filter-Leiste sichtbar ist */
+body.page-home
+  .info-card--has-toolbar.info-card--collection-in-view
+  .info-card__collection-cta[data-scroll-to-collection] {
   display: none !important;
+}
+
+/* Mitmachen / Das Projekt: Anfahrt bleibt lesbar (nicht ambient-fg bei hellem Scroll) */
+.info-card__collection-cta:not([data-scroll-to-collection]) {
+  color: #040403;
+}
+
+.info-card__collection-cta:not([data-scroll-to-collection]):hover {
+  color: var(--palette-accent-strong);
 }
 
 .info-card--has-toolbar.info-card--expanded .info-card__lead-teaser,
