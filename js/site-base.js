@@ -30,4 +30,10 @@
 
   global.IRR_SITE_ROOT = siteRoot();
   global.irrSiteUrl = siteUrl;
-})();
+})(
+  typeof window !== "undefined"
+    ? window
+    : typeof self !== "undefined"
+      ? self
+      : this
+);
