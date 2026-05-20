@@ -1,7 +1,10 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "/data/open.json";
+  var DATA_URL =
+    typeof irrSiteUrl === "function"
+      ? irrSiteUrl("/data/open.json")
+      : "/data/open.json";
 
   function applyOpenStatus(data) {
     if (!data || typeof data.open !== "boolean") return;

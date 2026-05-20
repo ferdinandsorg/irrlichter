@@ -4,15 +4,20 @@
   var DATASETS = {
     collection: {
       file: "collection.json",
-      url: "/data/collection.json",
+      path: "/data/collection.json",
       label: "Sammlung"
     },
     events: {
       file: "events.json",
-      url: "/data/events.json",
+      path: "/data/events.json",
       label: "Mitmachen"
     }
   };
+
+  function datasetUrl(key) {
+    var path = DATASETS[key].path;
+    return typeof irrSiteUrl === "function" ? irrSiteUrl(path) : path;
+  }
 
   var state = {
     dataset: "collection",
@@ -306,7 +311,7 @@
   function loadFromServer() {
     var ds = DATASETS[state.dataset];
     setStatus("Lade " + ds.label + " vom Server...");
-    fetch(ds.url, { cache: "no-cache" })
+    fetch(datasetUrl(state.dataset), { cache: "no-cache" })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();

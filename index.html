@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Irrlichter GbR" />
     <meta name="theme-color" content="#2a261d" />
-    <link rel="icon" href="/assets/images/light-front.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/assets/images/260519_reading_fb.png" />
+    <link rel="icon" href="assets/images/light-front.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/images/260519_reading_fb.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Irrlichter" />
     <meta property="og:locale" content="de_DE" />
@@ -62,18 +62,18 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,100..700,1,25&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="page-home">
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
         <nav class="nav-links" aria-label="Hauptnavigation">
-          <a href="/" data-nav="index">Sammlung</a>
+          <a href="./" data-nav="index">Sammlung</a>
           <span class="nav-sep" aria-hidden="true">/</span>
-          <a href="/mitmachen" data-nav="mitmachen">Mitmachen</a>
+          <a href="mitmachen" data-nav="mitmachen">Mitmachen</a>
           <span class="nav-sep" aria-hidden="true">/</span>
-          <a href="/das-projekt" data-nav="das-projekt">Das Projekt</a>
+          <a href="das-projekt" data-nav="das-projekt">Das Projekt</a>
         </nav>
       </div>
     </header>
@@ -90,7 +90,7 @@
           <div class="info-card__logo">
             <p class="info-card__lead" id="info-card-heading">
               <a
-                href="/"
+                href="./"
                 class="info-card__mark-link"
                 data-info-card-home
                 >Irrlichter</a
@@ -194,7 +194,7 @@
           aria-live="polite"
         >
           <a
-            href="/das-projekt#kontakt-anfahrt"
+            href="das-projekt#kontakt-anfahrt"
             class="control-bar__meta-left"
             aria-label="Anfahrt und Öffnungszeiten"
           >
@@ -202,7 +202,7 @@
             <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
           </a>
           <a
-            href="/mitmachen"
+            href="mitmachen"
             class="control-bar__status control-bar__status--open"
             data-site-status
             aria-label="Mitmachen und Termine"
@@ -261,16 +261,17 @@
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
-          <a href="/impressum">Impressum</a>
+          <a href="impressum">Impressum</a>
           <span class="site-footer__sep" aria-hidden="true">&middot;</span>
-          <a href="/datenschutz">Datenschutz</a>
+          <a href="datenschutz">Datenschutz</a>
         </nav>
       </div>
     </footer>
-    <script src="/js/main.js?v=5" defer></script>
-    <script src="/js/home-intro.js" defer></script>
-    <script src="/js/site-status.js" defer></script>
-    <script src="/js/logo-card.js" defer></script>
-    <script src="/js/collection.js" defer></script>
+    <script src="js/site-base.js" defer></script>
+    <script src="js/main.js?v=5" defer></script>
+    <script src="js/home-intro.js" defer></script>
+    <script src="js/site-status.js" defer></script>
+    <script src="js/logo-card.js" defer></script>
+    <script src="js/collection.js" defer></script>
   </body>
 </html>

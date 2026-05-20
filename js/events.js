@@ -1,7 +1,10 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "/data/events.json";
+  var DATA_URL =
+    typeof irrSiteUrl === "function"
+      ? irrSiteUrl("/data/events.json")
+      : "/data/events.json";
   var WEEKDAYS_FULL = [
     "Sonntag",
     "Montag",
