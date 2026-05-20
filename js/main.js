@@ -226,6 +226,33 @@
     }, waitMs);
   }
 
+  function initInPageSectionScroll() {
+    var links = document.querySelectorAll(
+      "a[data-scroll-to-section][href^='#']"
+    );
+    links.forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        var id = link.getAttribute("href");
+        if (!id || id.length < 2) return;
+        var target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        var reduced =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({
+          behavior: reduced ? "auto" : "smooth",
+          block: "start"
+        });
+        if (history.replaceState) {
+          history.replaceState(null, "", id);
+        } else {
+          window.location.hash = id.slice(1);
+        }
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     removeIrrlichtLightsIfNotHome();
     markActiveNav();
@@ -233,5 +260,6 @@
     updateTextMode();
     document.addEventListener("irrlichter:collection-rendered", updateTextMode);
     initIrrlichtLights();
+    initInPageSectionScroll();
   });
 })();

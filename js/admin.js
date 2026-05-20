@@ -150,7 +150,11 @@
       if (item.id) parts.push("ID: " + item.id);
       if (item.date) parts.push(item.date);
       if (state.dataset === "collection" && item.type) parts.push(item.type);
-      if (state.dataset === "events" && item.location) parts.push(item.location);
+      if (state.dataset === "events") {
+        if (item.time) parts.push(item.time);
+        if (item.category) parts.push(item.category);
+        if (item.location) parts.push(item.location);
+      }
       meta.textContent = parts.join(" \u00b7 ");
       info.appendChild(meta);
 
@@ -209,9 +213,12 @@
       setFieldValue("location", item.location || "");
       setFieldValue("coordinates", item.coordinates || "");
     } else {
+      setFieldValue("time", item.time || "");
+      setFieldValue("category", item.category || "");
       setFieldValue("location", item.location || "");
       setFieldValue("description", item.description || "");
       setFieldValue("link", item.link || "");
+      setFieldValue("linkLabel", item.linkLabel || item.link_label || "");
     }
   }
 
@@ -269,8 +276,14 @@
       location: location2,
       description: description
     };
+    var time = readFieldValue("time");
+    if (time) event.time = time;
+    var category = readFieldValue("category");
+    if (category) event.category = category;
     var link = readFieldValue("link");
     if (link) event.link = link;
+    var linkLabel = readFieldValue("linkLabel");
+    if (linkLabel) event.linkLabel = linkLabel;
     return { item: event };
   }
 

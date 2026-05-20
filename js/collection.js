@@ -849,6 +849,39 @@
     });
   }
 
+  function wireSearchGlyph(searchInput) {
+    var control = searchInput.closest(".collection-toolbar__control");
+    var glyphBtn =
+      control && control.querySelector("[data-search-glyph-btn]");
+    var glyph = glyphBtn && glyphBtn.querySelector(".collection-toolbar__glyph");
+    if (!glyphBtn || !glyph) return;
+
+    function syncGlyph() {
+      var hasQuery = searchInput.value.trim().length > 0;
+      glyph.textContent = hasQuery ? "close" : "search";
+      glyphBtn.setAttribute("aria-label", hasQuery ? "Suche leeren" : "Suche");
+    }
+
+    function clearSearch() {
+      searchInput.value = "";
+      syncGlyph();
+      searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+      searchInput.focus();
+    }
+
+    glyphBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (searchInput.value.trim()) {
+        clearSearch();
+      } else {
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener("input", syncGlyph);
+    syncGlyph();
+  }
+
   function applyFilters(grid, typeSelect, tagSelect, searchInput) {
     var selectedType = (typeSelect && typeSelect.value) || "all";
     var selectedTag = (tagSelect && tagSelect.value) || "all";
@@ -870,7 +903,107 @@
       btn.classList.toggle("card-tag--active", on);
     });
 
+    updateFilterEmptyState(grid, typeSelect, tagSelect, searchInput);
     scheduleCollectionScatter(grid, true);
+  }
+
+  function getFilterState(typeSelect, tagSelect, searchInput) {
+    var hasType = typeSelect && typeSelect.value !== "all";
+    var hasTag = tagSelect && tagSelect.value !== "all";
+    var hasSearch =
+      searchInput && searchInput.value.trim().length > 0;
+    return {
+      hasFilters: hasType || hasTag,
+      hasSearch: hasSearch
+    };
+  }
+
+  function filterResetLabel(state) {
+    if (state.hasFilters && state.hasSearch) {
+      return "Filter/Suche zurücksetzen";
+    }
+    if (state.hasSearch) {
+      return "Suche zurücksetzen";
+    }
+    if (state.hasFilters) {
+      return "Filter zurücksetzen";
+    }
+    return "Filter/Suche zurücksetzen";
+  }
+
+  function resetActiveFilters(grid, typeSelect, tagSelect, searchInput) {
+    if (typeSelect) typeSelect.value = "all";
+    if (tagSelect) tagSelect.value = "all";
+    if (searchInput && searchInput.value.trim()) {
+      searchInput.value = "";
+      searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    } else {
+      applyFilters(grid, typeSelect, tagSelect, searchInput);
+    }
+  }
+
+  function buildFilterEmptyState(state, onReset) {
+    var resetBtn = el(
+      "button",
+      {
+        type: "button",
+        class: "collection-filter-empty__reset",
+        "data-collection-filter-reset": ""
+      },
+      [filterResetLabel(state)]
+    );
+    resetBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      onReset();
+    });
+    return el(
+      "div",
+      {
+        class: "collection-filter-empty",
+        "data-collection-filter-empty": ""
+      },
+      [
+        el("p", { class: "collection-filter-empty__text" }, [
+          "Leider keine Ergebnisse."
+        ]),
+        el("p", { class: "collection-filter-empty__action" }, [resetBtn])
+      ]
+    );
+  }
+
+  function updateFilterEmptyState(grid, typeSelect, tagSelect, searchInput) {
+    var cards = grid.querySelectorAll(".card");
+    var note = grid.querySelector("[data-collection-filter-empty]");
+
+    if (!cards.length) {
+      if (note) note.remove();
+      return;
+    }
+
+    var visibleCount = 0;
+    var i;
+    for (i = 0; i < cards.length; i++) {
+      if (!cards[i].classList.contains("hidden-by-filter")) {
+        visibleCount++;
+      }
+    }
+
+    if (visibleCount === 0) {
+      var state = getFilterState(typeSelect, tagSelect, searchInput);
+      if (!note) {
+        note = buildFilterEmptyState(state, function () {
+          resetActiveFilters(grid, typeSelect, tagSelect, searchInput);
+        });
+        grid.appendChild(note);
+      } else {
+        var resetBtn = note.querySelector("[data-collection-filter-reset]");
+        if (resetBtn) {
+          resetBtn.textContent = filterResetLabel(state);
+        }
+      }
+    } else if (note) {
+      note.remove();
+    }
   }
 
   function render(items) {
@@ -913,7 +1046,10 @@
     };
     if (typeSelect) typeSelect.addEventListener("change", run);
     if (tagSelect) tagSelect.addEventListener("change", run);
-    if (searchInput) searchInput.addEventListener("input", run);
+    if (searchInput) {
+      searchInput.addEventListener("input", run);
+      wireSearchGlyph(searchInput);
+    }
     run();
     grid.addEventListener("click", function (e) {
       var tagBtn = e.target && e.target.closest && e.target.closest("button.card-tag");

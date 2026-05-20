@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="page-legal">
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -30,7 +30,7 @@
       </div>
     </header>
     <aside
-      class="info-card"
+      class="info-card info-card--has-toolbar"
       id="site-info-card"
       data-info-card
       role="region"
@@ -38,43 +38,81 @@
       aria-expanded="false"
     >
       <div class="info-card__stack">
-        <div class="info-card__logo">
-          <p class="info-card__lead" id="info-card-heading">
-            <a
-              href="index.html"
-              class="info-card__mark-link"
-              data-info-card-home
-              >Irrlichter</a
-            ><span class="info-card__lead-teaser"> sind tanzende</span
-            ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
-            ><span class="info-card__lead-rest"
-              >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
-            >
-          </p>
+        <div class="info-card__toolbar">
+          <div class="info-card__logo">
+            <p class="info-card__lead" id="info-card-heading">
+              <a
+                href="index.html"
+                class="info-card__mark-link"
+                data-info-card-home
+                >Irrlichter</a
+              ><span class="info-card__lead-teaser"> sind tanzende</span
+              ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
+              ><span class="info-card__lead-rest"
+                >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
+              >
+            </p>
+          </div>
+          <a href="index.html" class="info-card__collection-cta"
+            >Zur Startseite
+            <span
+              class="material-symbols-sharp info-card__collection-cta-icon"
+              aria-hidden="true"
+              >arrow_forward</span
+            ></a
+          >
+        </div>
+        <div
+          class="control-bar__meta"
+          data-control-bar-meta
+          hidden
+          aria-live="polite"
+        >
+          <a
+            href="das-projekt.html#kontakt-anfahrt"
+            class="control-bar__meta-left"
+            aria-label="Anfahrt und Öffnungszeiten"
+          >
+            <span class="control-bar__location" data-site-location>Moorbauer</span>
+            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+          </a>
+          <a
+            href="mitmachen.html"
+            class="control-bar__status control-bar__status--open"
+            data-site-status
+            aria-label="Mitmachen und Termine"
+          >
+            <span
+              class="control-bar__status-dot"
+              data-site-status-dot
+              aria-hidden="true"
+            ></span>
+            <span class="control-bar__status-text">
+              <span class="control-bar__status-name" data-site-status-name>Pfadwerkstatt</span>
+              <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
+            </span>
+          </a>
         </div>
       </div>
     </aside>
     <main id="content">
       <div class="inner">
-        <section class="section" aria-labelledby="datenschutz-heading">
-          <h1 id="datenschutz-heading">Datenschutz</h1>
+        <section class="section section--plain" aria-labelledby="datenschutz-heading">
+          <h2 id="datenschutz-heading">Datenschutz</h2>
           <p>
             Wir nehmen den Schutz Ihrer personenbezogenen Daten ernst. Nachfolgend
             informieren wir Sie über die Verarbeitung personenbezogener Daten beim Besuch
             dieser Website.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Verantwortliche Stelle</h2>
           <p>
-            Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist das
-            Projektteam Irrlichter, Anschrift und Kontakt siehe
+            Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist die
+            Irrlichter GbR (Swantje Furtak &amp; Franziska Bax),
+            <a href="mailto:info@irrlichter.net">info@irrlichter.net</a>, siehe auch
             <a href="impressum.html">Impressum</a>.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Allgemeine Hinweise</h2>
           <p>
             Diese Website wird als statisches Angebot bereitgestellt. Wir setzen keine
@@ -82,9 +120,7 @@
             Aufruf der Seiten werden Inhalte und JSON-Daten von dem Server geladen, auf dem
             die Website gehostet wird.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Server-Logdateien</h2>
           <p>
             Der Hosting-Anbieter erhebt und speichert automatisch Informationen in
@@ -97,9 +133,7 @@
             (berechtigtes Interesse an einem sicheren und stabilen Betrieb der Website).
             Die Logdaten werden nach Ablauf der beim Hoster üblichen Fristen gelöscht.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Externe Schriftarten (Google Fonts)</h2>
           <p>
             Zur einheitlichen Darstellung laden wir Schriftarten von Google Fonts
@@ -115,9 +149,7 @@
               >https://policies.google.com/privacy</a
             >.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Lokale Inhalte und Medien</h2>
           <p>
             Bilder, Audio- und Videodateien werden von unserem Webserver ausgeliefert. Beim
@@ -125,9 +157,7 @@
             unseren Server gesendet; dabei können IP-Adresse und Zeitpunkt des Zugriffs in
             Server-Logdateien anfallen (siehe oben).
           </p>
-        </section>
 
-        <section class="section">
           <h2>Ihre Rechte</h2>
           <p>
             Sie haben gegenüber uns folgende Rechte hinsichtlich der Sie betreffenden
@@ -140,16 +170,14 @@
             beschweren. Für Mecklenburg-Vorpommern ist dies der Landesbeauftragte für
             Datenschutz und Informationsfreiheit Mecklenburg-Vorpommern.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Stand</h2>
           <p>Stand dieser Datenschutzerklärung: Mai 2026</p>
         </section>
       </div>
     </main>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner type-body-small">
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
@@ -160,6 +188,7 @@
       </div>
     </footer>
     <script src="js/main.js?v=5" defer></script>
+    <script src="js/site-status.js" defer></script>
     <script src="js/logo-card.js" defer></script>
   </body>
 </html>

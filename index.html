@@ -122,11 +122,18 @@
                     autocomplete="off"
                     enterkeyhint="search"
                   />
-                  <span
-                    class="material-symbols-sharp collection-toolbar__glyph"
-                    aria-hidden="true"
-                    >search</span
+                  <button
+                    type="button"
+                    class="collection-toolbar__glyph-btn"
+                    data-search-glyph-btn
+                    aria-label="Suche"
                   >
+                    <span
+                      class="material-symbols-sharp collection-toolbar__glyph"
+                      aria-hidden="true"
+                      >search</span
+                    >
+                  </button>
                 </span>
               </div>
             </div>
@@ -138,13 +145,19 @@
           hidden
           aria-live="polite"
         >
-          <div class="control-bar__meta-left">
+          <a
+            href="das-projekt.html#kontakt-anfahrt"
+            class="control-bar__meta-left"
+            aria-label="Anfahrt und Öffnungszeiten"
+          >
             <span class="control-bar__location" data-site-location>Moorbauer</span>
             <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
-          </div>
-          <div
+          </a>
+          <a
+            href="mitmachen.html"
             class="control-bar__status control-bar__status--open"
             data-site-status
+            aria-label="Mitmachen und Termine"
           >
             <span
               class="control-bar__status-dot"
@@ -155,7 +168,7 @@
               <span class="control-bar__status-name" data-site-status-name>Pfadwerkstatt</span>
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
-          </div>
+          </a>
         </div>
       </div>
     </aside>
@@ -196,7 +209,7 @@
       </div>
     </main>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner type-body-small">
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">

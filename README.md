@@ -22,7 +22,7 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 ```
 /
 ├── index.html          Startseite (Hero + Sammlung mit Filter)
-├── das-projekt.html    Das Projekt
+├── das-projekt.html    Das Projekt (inkl. Team, Moorbauer, Kontakt/Anfahrt)
 ├── mitmachen.html      Mitmach-Termine
 ├── admin.html          Browser-Editor fuer die JSON-Dateien
 ├── css/

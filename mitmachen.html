@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="page-mitmachen">
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -27,7 +27,7 @@
       </div>
     </header>
     <aside
-      class="info-card"
+      class="info-card info-card--has-toolbar"
       id="site-info-card"
       data-info-card
       role="region"
@@ -35,55 +35,79 @@
       aria-expanded="false"
     >
       <div class="info-card__stack">
-        <div class="info-card__logo">
-          <p class="info-card__lead" id="info-card-heading">
-            <a
-              href="index.html"
-              class="info-card__mark-link"
-              data-info-card-home
-              >Irrlichter</a
-            ><span class="info-card__lead-teaser"> sind tanzende</span
-            ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
-            ><span class="info-card__lead-rest"
-              >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
-            >
-          </p>
+        <div class="info-card__toolbar">
+          <div class="info-card__logo">
+            <p class="info-card__lead" id="info-card-heading">
+              <a
+                href="index.html"
+                class="info-card__mark-link"
+                data-info-card-home
+                >Irrlichter</a
+              ><span class="info-card__lead-teaser"> sind tanzende</span
+              ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
+              ><span class="info-card__lead-rest"
+                >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
+              >
+            </p>
+          </div>
+          <a href="das-projekt.html#kontakt-anfahrt" class="info-card__collection-cta"
+            >Anfahrt
+            <span
+              class="material-symbols-sharp info-card__collection-cta-icon"
+              aria-hidden="true"
+              >arrow_forward</span
+            ></a
+          >
         </div>
-        <div class="info-card__details" id="info-card-details" hidden>
-          <dl class="info-card__detail-list">
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Ort</dt>
-                <dd>Moorbauer</dd>
-              </div>
-            </div>
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Koordinaten</dt>
-                <dd>N 53° 46' 1.815498 E 12° 46' 59.96226</dd>
-              </div>
-            </div>
-            <div class="info-card__detail-group">
-              <div class="info-card__detail-row">
-                <dt>Wetter</dt>
-                <dd>Bewölkt, 16°</dd>
-              </div>
-            </div>
-          </dl>
+        <div
+          class="control-bar__meta"
+          data-control-bar-meta
+          hidden
+          aria-live="polite"
+        >
+          <a
+            href="das-projekt.html#kontakt-anfahrt"
+            class="control-bar__meta-left"
+            aria-label="Anfahrt und Öffnungszeiten"
+          >
+            <span class="control-bar__location" data-site-location>Moorbauer</span>
+            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+          </a>
+          <a
+            href="mitmachen.html"
+            class="control-bar__status control-bar__status--open"
+            data-site-status
+            aria-label="Mitmachen und Termine"
+          >
+            <span
+              class="control-bar__status-dot"
+              data-site-status-dot
+              aria-hidden="true"
+            ></span>
+            <span class="control-bar__status-text">
+              <span class="control-bar__status-name" data-site-status-name>Pfadwerkstatt</span>
+              <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
+            </span>
+          </a>
         </div>
       </div>
     </aside>
     <main id="content">
       <div class="inner">
-        <section class="section" aria-label="Mitmach-Termine">
-          <ul class="event-list" data-event-list aria-live="polite" aria-busy="true">
-            <li class="loading-note">Termine werden geladen&hellip;</li>
-          </ul>
+        <section class="section section--plain" aria-label="Mitmach-Termine">
+          <div
+            class="event-calendar"
+            data-event-calendar
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <p class="loading-note">Termine werden geladen&hellip;</p>
+          </div>
         </section>
       </div>
     </main>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner type-body-small">
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
@@ -94,6 +118,7 @@
       </div>
     </footer>
     <script src="js/main.js?v=5" defer></script>
+    <script src="js/site-status.js" defer></script>
     <script src="js/logo-card.js" defer></script>
     <script src="js/events.js" defer></script>
   </body>

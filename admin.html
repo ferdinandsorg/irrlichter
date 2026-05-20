@@ -194,6 +194,20 @@
 
             <!-- Events-spezifische Felder -->
             <div data-only="events" hidden>
+              <div class="admin-form-row">
+                <label>
+                  Uhrzeit
+                  <input type="time" data-field="time" />
+                </label>
+                <label>
+                  Kategorie
+                  <input
+                    type="text"
+                    data-field="category"
+                    placeholder="Rundgang, Werkstatt, …"
+                  />
+                </label>
+              </div>
               <label>
                 Ort *
                 <input type="text" data-field="location" />
@@ -202,10 +216,20 @@
                 Beschreibung *
                 <textarea data-field="description" rows="3"></textarea>
               </label>
-              <label>
-                Link (optional)
-                <input type="url" data-field="link" placeholder="https://..." />
-              </label>
+              <div class="admin-form-row">
+                <label>
+                  Link (optional)
+                  <input type="url" data-field="link" placeholder="https://..." />
+                </label>
+                <label>
+                  Link-Label (optional)
+                  <input
+                    type="text"
+                    data-field="linkLabel"
+                    placeholder="Weitere Informationen"
+                  />
+                </label>
+              </div>
             </div>
 
             <p class="admin-form-error" data-form-error role="alert"></p>
@@ -219,7 +243,7 @@
       </div>
     </main>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner type-body-small">
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">

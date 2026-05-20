@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="page-legal">
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -27,7 +27,7 @@
       </div>
     </header>
     <aside
-      class="info-card"
+      class="info-card info-card--has-toolbar"
       id="site-info-card"
       data-info-card
       role="region"
@@ -35,58 +35,82 @@
       aria-expanded="false"
     >
       <div class="info-card__stack">
-        <div class="info-card__logo">
-          <p class="info-card__lead" id="info-card-heading">
-            <a
-              href="index.html"
-              class="info-card__mark-link"
-              data-info-card-home
-              >Irrlichter</a
-            ><span class="info-card__lead-teaser"> sind tanzende</span
-            ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
-            ><span class="info-card__lead-rest"
-              >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
-            >
-          </p>
+        <div class="info-card__toolbar">
+          <div class="info-card__logo">
+            <p class="info-card__lead" id="info-card-heading">
+              <a
+                href="index.html"
+                class="info-card__mark-link"
+                data-info-card-home
+                >Irrlichter</a
+              ><span class="info-card__lead-teaser"> sind tanzende</span
+              ><span class="info-card__lead-ellipsis" aria-hidden="true">…</span
+              ><span class="info-card__lead-rest"
+                >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
+              >
+            </p>
+          </div>
+          <a href="index.html" class="info-card__collection-cta"
+            >Zur Startseite
+            <span
+              class="material-symbols-sharp info-card__collection-cta-icon"
+              aria-hidden="true"
+              >arrow_forward</span
+            ></a
+          >
+        </div>
+        <div
+          class="control-bar__meta"
+          data-control-bar-meta
+          hidden
+          aria-live="polite"
+        >
+          <a
+            href="das-projekt.html#kontakt-anfahrt"
+            class="control-bar__meta-left"
+            aria-label="Anfahrt und Öffnungszeiten"
+          >
+            <span class="control-bar__location" data-site-location>Moorbauer</span>
+            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+          </a>
+          <a
+            href="mitmachen.html"
+            class="control-bar__status control-bar__status--open"
+            data-site-status
+            aria-label="Mitmachen und Termine"
+          >
+            <span
+              class="control-bar__status-dot"
+              data-site-status-dot
+              aria-hidden="true"
+            ></span>
+            <span class="control-bar__status-text">
+              <span class="control-bar__status-name" data-site-status-name>Pfadwerkstatt</span>
+              <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
+            </span>
+          </a>
         </div>
       </div>
     </aside>
     <main id="content">
       <div class="inner">
-        <section class="section" aria-labelledby="impressum-heading">
-          <h1 id="impressum-heading">Impressum</h1>
-          <p>Angaben gemäß § 5 TMG</p>
-        </section>
+        <section class="section section--plain" aria-labelledby="impressum-heading">
+          <h2 id="impressum-heading">Impressum</h2>
+          <p class="type-body-small">Angaben gemäß § 5 TMG</p>
 
-        <section class="section">
           <h2>Anbieter</h2>
           <p>
-            Projekt Irrlichter<br />
-            moorbasiertes Kunst- und Umweltarchiv<br />
-            c/o Ausflugsgaststätte „Moorbauer“<br />
-            Dorfstraße 123<br />
-            17139 Malchin (Gorschendorf)<br />
-            Mecklenburg-Vorpommern
+            Irrlichter GbR<br />
+            Swantje Furtak &amp; Franziska Bax<br />
+            <a href="mailto:info@irrlichter.net">info@irrlichter.net</a>
           </p>
-        </section>
 
-        <section class="section">
-          <h2>Kontakt</h2>
-          <p>
-            E-Mail:
-            <a href="mailto:kontakt@irrlichter.de">kontakt@irrlichter.de</a>
-          </p>
-        </section>
-
-        <section class="section">
           <h2>Verantwortlich für den Inhalt</h2>
           <p>
             Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:<br />
-            Projektteam Irrlichter, Anschrift wie oben.
+            Swantje Furtak &amp; Franziska Bax, Irrlichter GbR
           </p>
-        </section>
 
-        <section class="section">
           <h2>Haftung für Inhalte</h2>
           <p>
             Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf
@@ -102,9 +126,7 @@
             möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir
             diese Inhalte umgehend entfernen.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Haftung für Links</h2>
           <p>
             Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir
@@ -119,9 +141,7 @@
             konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden
             von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
           </p>
-        </section>
 
-        <section class="section">
           <h2>Urheberrecht</h2>
           <p>
             Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten
@@ -135,7 +155,7 @@
       </div>
     </main>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner type-body-small">
         <small>&copy; Irrlichter 2026</small>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
@@ -146,6 +166,7 @@
       </div>
     </footer>
     <script src="js/main.js?v=5" defer></script>
+    <script src="js/site-status.js" defer></script>
     <script src="js/logo-card.js" defer></script>
   </body>
 </html>

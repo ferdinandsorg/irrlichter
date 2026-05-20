@@ -2,14 +2,19 @@
   {
     "id": "walk-2026-05",
     "date": "2026-05-21",
+    "time": "16:00",
+    "category": "Rundgang",
     "title": "Offener Moorrundgang",
     "location": "Treffpunkt Moorsteg West",
     "description": "Gemeinsamer Rundgang mit kurzen Impulsen zu Kunst, Klima und lokaler Moorpflege. Dauer ca. 90 Minuten.",
-    "link": "https://example.org/irrlichter/events/moorrundgang"
+    "link": "https://example.org/irrlichter/events/moorrundgang",
+    "linkLabel": "Anmeldung & Details"
   },
   {
     "id": "listening-2026-06",
     "date": "2026-06-07",
+    "time": "14:00",
+    "category": "Listening",
     "title": "Listening Session am Rand",
     "location": "Suedkante, kleiner Unterstand",
     "description": "Praesentation neuer Feldaufnahmen, kurze Einfuehrung in die Aufnahmeorte und offenes Gespraech."
@@ -17,8 +22,19 @@
   {
     "id": "workshop-2026-07",
     "date": "2026-07-12",
+    "time": "11:00",
+    "category": "Werkstatt",
     "title": "Werkstatt: Eigenes Moor-Logbuch",
     "location": "Projektflaeche Nord, Pavillon",
     "description": "Praktischer Einstieg in Beobachtungsnotizen, einfache Aufnahmetechnik und strukturierte Archivierung."
+  },
+  {
+    "id": "intro-2026-04",
+    "date": "2026-04-18",
+    "time": "15:00",
+    "category": "Gespräch",
+    "title": "Einführung Irrlichter",
+    "location": "Moorbauer, Pavillon",
+    "description": "Kurze Vorstellung des Projekts, der Sammlung und der Mitmach-Möglichkeiten am Moor."
   }
 ]
