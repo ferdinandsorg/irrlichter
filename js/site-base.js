@@ -2,8 +2,8 @@
   "use strict";
 
   var PAGE_SLUGS = [
-    "mitmachen",
-    "das-projekt",
+    "veranstaltungen",
+    "ueber",
     "impressum",
     "datenschutz",
     "admin"

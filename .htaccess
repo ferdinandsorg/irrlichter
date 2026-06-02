@@ -1,5 +1,5 @@
 # Irrlichter — Kurz-URLs + Legacy-Redirects (Apache)
-# Seiten liegen in Ordnern: /mitmachen/index.html usw. (funktioniert auch ohne Rewrite)
+# Seiten: /veranstaltungen/index.html, /ueber/index.html (auch ohne Rewrite)
 # Lokal: python3 scripts/dev-server.py  oder  python3 -m http.server
 
 Options -MultiViews
@@ -8,20 +8,24 @@ DirectoryIndex index.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Legacy-Pfade
-  RewriteRule ^events/?$ /mitmachen [R=301,L]
-  RewriteRule ^info/?$ /das-projekt [R=301,L]
-  RewriteRule ^anfahrt/?$ /das-projekt#kontakt-anfahrt [R=301,L,NE]
+  # Umbenannte Seiten (301)
+  RewriteRule ^mitmachen/?$ /veranstaltungen [R=301,L]
+  RewriteRule ^das-projekt/?$ /ueber [R=301,L]
 
-  # Alte Root-Dateien *.html → Ordner-URLs (falls noch angefragt)
+  # Legacy-Pfade
+  RewriteRule ^events/?$ /veranstaltungen [R=301,L]
+  RewriteRule ^info/?$ /ueber [R=301,L]
+  RewriteRule ^anfahrt/?$ /ueber#anfahrt [R=301,L,NE]
+
+  # Alte Root-Dateien *.html → aktuelle Ordner-URLs
   RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
   RewriteRule ^ / [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s/+mitmachen\.html[\s?] [NC]
-  RewriteRule ^ /mitmachen [R=301,L]
+  RewriteRule ^ /veranstaltungen [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s/+das-projekt\.html[\s?] [NC]
-  RewriteRule ^ /das-projekt [R=301,L]
+  RewriteRule ^ /ueber [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s/+impressum\.html[\s?] [NC]
   RewriteRule ^ /impressum [R=301,L]

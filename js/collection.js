@@ -364,6 +364,54 @@
     document.dispatchEvent(new CustomEvent("irrlichter:collection-rendered"));
   }
 
+  function bindCollectionToolbarLayout(toolbar) {
+    var layoutRaf = null;
+
+    function updateCollectionToolbarLayout() {
+      if (layoutRaf) {
+        cancelAnimationFrame(layoutRaf);
+      }
+      layoutRaf = requestAnimationFrame(function () {
+        layoutRaf = null;
+        if (toolbar.hasAttribute("hidden")) {
+          toolbar.classList.remove("collection-toolbar--stacked");
+          return;
+        }
+        toolbar.classList.remove("collection-toolbar--stacked");
+        void toolbar.offsetHeight;
+        var needsStack = toolbar.scrollWidth > toolbar.clientWidth + 1;
+        toolbar.classList.toggle("collection-toolbar--stacked", needsStack);
+      });
+    }
+
+    if (typeof ResizeObserver === "function") {
+      var ro = new ResizeObserver(updateCollectionToolbarLayout);
+      ro.observe(toolbar);
+      var stack = toolbar.closest(".info-card__stack");
+      if (stack) {
+        ro.observe(stack);
+      }
+    }
+
+    window.addEventListener("resize", updateCollectionToolbarLayout, {
+      passive: true
+    });
+    document.addEventListener(
+      "irrlichter:collection-rendered",
+      updateCollectionToolbarLayout
+    );
+
+    if (typeof MutationObserver === "function") {
+      var mo = new MutationObserver(updateCollectionToolbarLayout);
+      mo.observe(toolbar, {
+        attributes: true,
+        attributeFilter: ["hidden"]
+      });
+    }
+
+    return updateCollectionToolbarLayout;
+  }
+
   function initCollectionToolbarReveal() {
     var section = document.getElementById("sammlung");
     var card = document.getElementById("site-info-card");
@@ -373,6 +421,7 @@
       return;
     }
 
+    var updateCollectionToolbarLayout = bindCollectionToolbarLayout(toolbar);
     var scrollToCollectionPending = false;
 
     function setCollectionChromeInView(inView) {
@@ -389,6 +438,12 @@
           cta.removeAttribute("tabindex");
         }
       }
+      updateCollectionToolbarLayout();
+      document.dispatchEvent(
+        new CustomEvent("irrlichter:info-card-toolbar-chrome", {
+          detail: { collectionInView: inView }
+        })
+      );
     }
 
     if (cta) {

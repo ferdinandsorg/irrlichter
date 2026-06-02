@@ -72,12 +72,68 @@
     });
   }
 
+  function bindToolbarWrap(card) {
+    var toolbar = card.querySelector(".info-card__toolbar");
+    var logo = card.querySelector(".info-card__logo");
+    var cta = card.querySelector(".info-card__collection-cta");
+    if (!toolbar || !logo || !cta) return;
+
+    var wrapRaf = null;
+
+    function updateToolbarWrap() {
+      if (wrapRaf) {
+        cancelAnimationFrame(wrapRaf);
+      }
+      wrapRaf = requestAnimationFrame(function () {
+        wrapRaf = null;
+        if (cta.hasAttribute("hidden")) {
+          toolbar.classList.remove("info-card__toolbar--wrapped");
+          return;
+        }
+        /* Ohne --wrapped messen: volle CTA-Breite wuerde den Umbruch festhalten. */
+        toolbar.classList.remove("info-card__toolbar--wrapped");
+        void toolbar.offsetHeight;
+        var wrapped = cta.offsetTop > logo.offsetTop + 1;
+        toolbar.classList.toggle("info-card__toolbar--wrapped", wrapped);
+      });
+    }
+
+    if (typeof ResizeObserver === "function") {
+      var ro = new ResizeObserver(updateToolbarWrap);
+      ro.observe(toolbar);
+      ro.observe(logo);
+      ro.observe(cta);
+    }
+
+    window.addEventListener("resize", updateToolbarWrap, { passive: true });
+    document.addEventListener("irrlichter:info-card-expanded", updateToolbarWrap);
+    document.addEventListener(
+      "irrlichter:info-card-toolbar-chrome",
+      updateToolbarWrap
+    );
+
+    if (typeof MutationObserver === "function") {
+      var mo = new MutationObserver(updateToolbarWrap);
+      mo.observe(cta, { attributes: true, attributeFilter: ["hidden"] });
+      var collectionToolbar = card.querySelector("[data-collection-toolbar]");
+      if (collectionToolbar) {
+        mo.observe(collectionToolbar, {
+          attributes: true,
+          attributeFilter: ["hidden"]
+        });
+      }
+    }
+
+    updateToolbarWrap();
+  }
+
   function bindCard(card) {
     var logoPanel = card.querySelector(".info-card__logo");
     var home = card.querySelector("[data-info-card-home]");
     if (!logoPanel) return;
 
     card.setAttribute("aria-expanded", "false");
+    bindToolbarWrap(card);
 
     logoPanel.addEventListener("click", function (e) {
       if (e.target.closest(".info-card__details")) return;

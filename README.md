@@ -22,8 +22,8 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 ```
 /
 ├── index.html          Startseite (Hero + Sammlung mit Filter)
-├── mitmachen/index.html
-├── das-projekt/index.html
+├── veranstaltungen/index.html
+├── ueber/index.html
 ├── impressum/index.html
 ├── datenschutz/index.html
 ├── admin/index.html    Browser-Editor (optional, nicht im Standard-Deploy)
@@ -58,27 +58,33 @@ python3 scripts/dev-server.py
 # optional: python3 scripts/dev-server.py 8080
 ```
 
-Danach: `http://127.0.0.1:8000/`, `http://127.0.0.1:8000/mitmachen`, …
+Danach: `http://127.0.0.1:8000/`, `http://127.0.0.1:8000/veranstaltungen`, …
+
+**Im gleichen WLAN** (Handy, Tablet): Der Server hoert auf allen Interfaces und gibt
+beim Start eine **Netzwerk-URL** aus (z. B. `http://192.168.1.42:8000/`) — diese im
+Browser des anderen Geraets oeffnen, nicht `localhost`. Bei Verbindungsproblemen:
+macOS-Firewall fuer Python eingehende Verbindungen erlauben; beide Geraete im gleichen
+WLAN (kein Gast-Netz mit Client-Isolation).
 
 Alternativ (ohne Legacy-Redirects): `python3 -m http.server 8000` — die Ordner
-`/mitmachen/`, `/das-projekt/` usw. funktionieren direkt; nur `/mitmachen` ohne
+`/veranstaltungen/`, `/ueber/` usw. funktionieren direkt; nur `/veranstaltungen` ohne
 Schraegstrich haengt vom Server ab (Dev-Server oben ist sicherer).
 
 ### SEO & Social (Meta)
 
-Öffentliche Seiten haben `description`, `canonical`, Open Graph, Twitter Cards und (Startseite + Das Projekt) JSON-LD. Basis-URL: `https://irrlichter.net` — bei anderer Live-Domain in allen HTML-`<head>`-Blöcken anpassen. Vorschau-Bild: `/assets/images/260519_reading_fb.png`. Vorlage: `includes/page-meta.html`. Zusätzlich: `robots.txt`, `sitemap.xml`.
+Öffentliche Seiten haben `description`, `canonical`, Open Graph, Twitter Cards und (Startseite + Über) JSON-LD. Basis-URL: `https://irrlichter.net` — bei anderer Live-Domain in allen HTML-`<head>`-Blöcken anpassen. Vorschau-Bild: `/assets/images/260519_reading_fb.png`. Vorlage: `includes/page-meta.html`. Zusätzlich: `robots.txt`, `sitemap.xml`.
 
 ### Kurz-URLs (ohne `.html`)
 
-Seiten liegen in **Ordnern** (`mitmachen/index.html` → URL `/mitmachen/`). Das
+Seiten liegen in **Ordnern** (`veranstaltungen/index.html` → URL `/veranstaltungen/`). Das
 funktioniert auf Apache **auch ohne** `mod_rewrite` (per `DirectoryIndex`).
 
-Zusaetzlich leitet `.htaccess` alte Pfade um (`/mitmachen.html` → `/mitmachen`, …).
+Zusaetzlich leitet `.htaccess` alte Pfade um (`/mitmachen` → `/veranstaltungen`, `/das-projekt` → `/ueber`, …).
 Beim FTP-Deploy **`.htaccess` mit hochladen** (versteckte Dateien einblenden).
 
 Voraussetzungen Live-Server:
 
-- Document Root = Ordner mit `index.html`, `mitmachen/`, `.htaccess`
+- Document Root = Ordner mit `index.html`, `veranstaltungen/`, `ueber/`, `.htaccess`
 - Optional: `mod_rewrite` + `AllowOverride` fuer Legacy-Redirects
 - Unterordner-Deploy (z. B. `/beta/`): `RewriteBase /beta/` in `.htaccess`
 
@@ -93,11 +99,11 @@ Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 1. FTP-Client oeffnen und mit dem Server verbinden
 2. Zielordner waehlen (haeufig `public_html/` oder `www/`)
 3. Folgendes hochladen:
-   - `index.html`, `mitmachen/`, `das-projekt/`, `impressum/`, `datenschutz/`, `.htaccess`
+   - `index.html`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`, `.htaccess`
    - optional `admin/` (siehe Hinweis unten)
    - `css/`, `js/`, `data/`, `assets/`
 4. Nicht hochladen: `.git/`, `scripts/`, `README.md`, `.cursor/`, `.vscode/`
-5. Seite im Browser pruefen: `/`, `/das-projekt`, `/mitmachen` (ohne `.html`; siehe `.htaccess`)
+5. Seite im Browser pruefen: `/`, `/ueber`, `/veranstaltungen` (ohne `.html`; siehe `.htaccess`)
 
 ### Variante B: Mit `scripts/deploy-ftp.sh`
 
@@ -149,7 +155,7 @@ dem Server hochladen.
 Ablauf:
 
 1. `/admin` oeffnen (lokal ueber den dev-Server oder live auf dem Server)
-2. Datensatz waehlen: **Sammlung** oder **Mitmachen**
+2. Datensatz waehlen: **Sammlung** oder **Veranstaltungen**
 3. Daten laden:
    - „Vom Server laden" - liest die aktuelle `collection.json` bzw.
      `events.json` ueber `fetch`
@@ -189,7 +195,7 @@ Optionale Felder:
 - `coordinates` (z. B. `"53.501, 8.702"`)
 - `status` (`published` oder `draft`)
 
-### Mitmachen (`data/events.json`)
+### Veranstaltungen (`data/events.json`)
 
 Pflichtfelder pro Eintrag:
 

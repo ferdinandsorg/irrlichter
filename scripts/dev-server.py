@@ -5,31 +5,35 @@ Lokaler Dev-Server — Kurz-URLs wie auf dem Live-Server (Ordner + Legacy-Redire
   python3 scripts/dev-server.py
   python3 scripts/dev-server.py 8080
 
+Hoert auf allen Interfaces (0.0.0.0) — im gleichen WLAN auch vom Handy/Tablet erreichbar.
 Funktioniert wie python3 -m http.server, plus:
-  /mitmachen  → mitmachen/index.html
-  /mitmachen.html → Redirect nach /mitmachen
+  /veranstaltungen  → veranstaltungen/index.html
+  /mitmachen        → Redirect nach /veranstaltungen
 """
 from __future__ import annotations
 
 import os
+import socket
 import sys
 import urllib.parse
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PAGES = ("mitmachen", "das-projekt", "impressum", "datenschutz", "admin")
+PAGES = ("veranstaltungen", "ueber", "impressum", "datenschutz", "admin")
 
 LEGACY = {
-    "events": "/mitmachen",
-    "info": "/das-projekt",
-    "anfahrt": "/das-projekt#kontakt-anfahrt",
+    "events": "/veranstaltungen",
+    "info": "/ueber",
+    "anfahrt": "/ueber#anfahrt",
+    "mitmachen": "/veranstaltungen",
+    "das-projekt": "/ueber",
 }
 
 HTML_REDIRECTS = {
     "index.html": "/",
-    "mitmachen.html": "/mitmachen",
-    "das-projekt.html": "/das-projekt",
+    "mitmachen.html": "/veranstaltungen",
+    "das-projekt.html": "/ueber",
     "impressum.html": "/impressum",
     "datenschutz.html": "/datenschutz",
     "admin.html": "/admin",
@@ -73,16 +77,59 @@ class IrrlichterHandler(SimpleHTTPRequestHandler):
         sys.stderr.write("[dev] %s - %s\n" % (self.address_string(), format % args))
 
 
+def _lan_ipv4_addresses() -> list[str]:
+    """Nicht-loopback IPv4-Adressen fuer URLs im lokalen Netzwerk."""
+    found: list[str] = []
+    seen: set[str] = set()
+
+    def add(ip: str) -> None:
+        if not ip or ip.startswith("127.") or ip in seen:
+            return
+        seen.add(ip)
+        found.append(ip)
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.connect(("8.8.8.8", 80))
+            add(sock.getsockname()[0])
+    except OSError:
+        pass
+
+    try:
+        for info in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET):
+            add(info[4][0])
+    except OSError:
+        pass
+
+    return found
+
+
+def _print_startup_urls(port: int) -> None:
+    local = "http://127.0.0.1:%d/" % port
+    print("Irrlichter dev server")
+    print("  Lokal:    %s" % local)
+    lan_ips = _lan_ipv4_addresses()
+    if lan_ips:
+        print("  Netzwerk: (gleiches WLAN — Handy/Tablet)")
+        for ip in lan_ips:
+            print("            http://%s:%d/" % (ip, port))
+    else:
+        print(
+            "  Netzwerk: keine LAN-IP ermittelt "
+            "(gleiches WLAN? macOS: ipconfig getifaddr en0)"
+        )
+    print("Kurz-URLs: /veranstaltungen, /ueber, … (Ordnerstruktur)")
+    print("Legacy: /mitmachen → /veranstaltungen, /das-projekt → /ueber")
+
+
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     server = ThreadingHTTPServer(("", port), IrrlichterHandler)
-    print("Irrlichter dev server: http://127.0.0.1:%d/" % port)
-    print("Kurz-URLs: /mitmachen, /das-projekt, … (Ordnerstruktur)")
-    print("Ctrl+C zum Beenden.")
+    _print_startup_urls(port)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nBeendet.")
+        print("\nStopped.")
         server.server_close()
 
 

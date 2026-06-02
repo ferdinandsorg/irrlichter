@@ -10,7 +10,7 @@
     events: {
       file: "events.json",
       path: "/data/events.json",
-      label: "Mitmachen"
+      label: "Veranstaltungen"
     }
   };
 
