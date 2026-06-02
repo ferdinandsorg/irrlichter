@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  var DATA_URL =
-    typeof irrSiteUrl === "function"
+  function collectionDataUrl() {
+    return typeof irrSiteUrl === "function"
       ? irrSiteUrl("/data/collection.json")
-      : "/data/collection.json";
+      : (window.IRR_SITE_ROOT || "") + "/data/collection.json";
+  }
   var COLLECTION_PREVIEW_KEY = "irrlichter:collection:preview";
   var SCATTER_DEBOUNCE_MS = 120;
   var SCATTER_DENSITY_EPS = 0.01;
@@ -1176,7 +1177,7 @@
       return;
     }
 
-    fetch(DATA_URL, { cache: "no-cache" })
+    fetch(collectionDataUrl(), { cache: "no-cache" })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();

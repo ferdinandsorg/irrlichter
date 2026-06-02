@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  var DATA_URL =
-    typeof irrSiteUrl === "function"
+  function openDataUrl() {
+    return typeof irrSiteUrl === "function"
       ? irrSiteUrl("/data/open.json")
-      : "/data/open.json";
+      : (window.IRR_SITE_ROOT || "") + "/data/open.json";
+  }
 
   function applyOpenStatus(data) {
     if (!data || typeof data.open !== "boolean") return;
@@ -27,7 +28,7 @@
       return;
     }
 
-    fetch(DATA_URL, { cache: "no-cache" })
+    fetch(openDataUrl(), { cache: "no-cache" })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();

@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  var DATA_URL =
-    typeof irrSiteUrl === "function"
+  function eventsDataUrl() {
+    return typeof irrSiteUrl === "function"
       ? irrSiteUrl("/data/events.json")
-      : "/data/events.json";
+      : (window.IRR_SITE_ROOT || "") + "/data/events.json";
+  }
   var WEEKDAYS_FULL = [
     "Sonntag",
     "Montag",
@@ -285,7 +286,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    fetch(DATA_URL, { cache: "no-cache" })
+    fetch(eventsDataUrl(), { cache: "no-cache" })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
