@@ -1,3 +1,13 @@
+/**
+ * Irrlichter — site root & absolute URLs (load before all other app scripts).
+ *
+ * Globals:
+ *   IRR_SITE_ROOT  — e.g. "" or "/beta"
+ *   irrSiteUrl(path) — "/data/foo.json" → "{root}/data/foo.json"
+ *   irrDataUrl(file) — "events.json" → irrSiteUrl("/data/events.json")
+ *
+ * Root detection: script src of site-base.js first, else pathname minus PAGE_SLUGS.
+ */
 (function (global) {
   "use strict";
 
@@ -9,29 +19,34 @@
     "admin"
   ];
 
+  var SITE_BASE_SCRIPT_RE = /\/js\/site-base\.js(\?|#|$)/i;
+
+  function rootFromScriptSrc(src) {
+    if (!src || !SITE_BASE_SCRIPT_RE.test(src)) {
+      return null;
+    }
+    try {
+      var url = new URL(src, global.location.href);
+      return url.pathname.replace(/\/js\/site-base\.js$/i, "") || "";
+    } catch (err) {
+      return null;
+    }
+  }
+
   function siteRootFromScript() {
-    var script = document.currentScript;
-    if (script && script.src && /\/js\/site-base\.js(\?|#|$)/i.test(script.src)) {
-      try {
-        var url = new URL(script.src, global.location.href);
-        return url.pathname.replace(/\/js\/site-base\.js$/i, "") || "";
-      } catch (err) {
-        /* ignore */
-      }
+    var fromCurrent = rootFromScriptSrc(
+      document.currentScript && document.currentScript.src
+    );
+    if (fromCurrent !== null) {
+      return fromCurrent;
     }
 
     var scripts = document.getElementsByTagName("script");
     var i;
     for (i = scripts.length - 1; i >= 0; i--) {
-      var src = scripts[i].src;
-      if (!src) continue;
-      if (/\/js\/site-base\.js(\?|#|$)/i.test(src)) {
-        try {
-          var scriptUrl = new URL(src, global.location.href);
-          return scriptUrl.pathname.replace(/\/js\/site-base\.js$/i, "") || "";
-        } catch (err2) {
-          /* ignore */
-        }
+      var found = rootFromScriptSrc(scripts[i].src);
+      if (found !== null) {
+        return found;
       }
     }
 
@@ -65,8 +80,16 @@
     return siteRoot() + normalized;
   }
 
+  /** @param {string} file — "events.json" or "/data/events.json" */
+  function irrDataUrl(file) {
+    var path =
+      file.indexOf("/data/") === 0 ? file : "/data/" + file.replace(/^\//, "");
+    return siteUrl(path);
+  }
+
   global.IRR_SITE_ROOT = siteRoot();
   global.irrSiteUrl = siteUrl;
+  global.irrDataUrl = irrDataUrl;
 })(
   typeof window !== "undefined"
     ? window

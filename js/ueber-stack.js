@@ -1,3 +1,4 @@
+/** Über page: scroll-linked scale on .ueber-pillars-stack cards (page-ueber only). */
 (function () {
   "use strict";
 

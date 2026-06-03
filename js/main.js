@@ -1,3 +1,7 @@
+/**
+ * Global UI: scroll ambient, nav, mobile menu, irrlicht, copy buttons, in-page anchors.
+ * Requires site-base.js on pages that use irrSiteUrl (irrlicht assets).
+ */
 (function () {
   "use strict";
 
@@ -315,6 +319,7 @@
     return min + Math.random() * (max - min);
   }
 
+  /** Site root with trailing slash for asset paths (irrlicht SVGs). */
   function scriptBaseUrl() {
     if (typeof irrSiteUrl === "function") {
       return irrSiteUrl("/");
@@ -511,6 +516,7 @@
     });
   }
 
+  /** Buttons with data-copy-text copy to clipboard; optional .ui-button__label feedback. */
   function initCopyTextButtons() {
     var buttons = document.querySelectorAll("[data-copy-text]");
     buttons.forEach(function (button) {

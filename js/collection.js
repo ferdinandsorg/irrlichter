@@ -1,10 +1,12 @@
+/** Home Sammlung scatter + filters — requires site-base.js (irrDataUrl). */
 (function () {
   "use strict";
 
   function collectionDataUrl() {
-    return typeof irrSiteUrl === "function"
-      ? irrSiteUrl("/data/collection.json")
-      : (window.IRR_SITE_ROOT || "") + "/data/collection.json";
+    if (typeof irrDataUrl === "function") {
+      return irrDataUrl("collection.json");
+    }
+    return (window.IRR_SITE_ROOT || "") + "/data/collection.json";
   }
   var COLLECTION_PREVIEW_KEY = "irrlichter:collection:preview";
   var SCATTER_DEBOUNCE_MS = 120;

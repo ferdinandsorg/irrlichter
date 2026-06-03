@@ -1,10 +1,12 @@
+/** Veranstaltungen calendar — requires site-base.js (irrDataUrl). */
 (function () {
   "use strict";
 
   function eventsDataUrl() {
-    return typeof irrSiteUrl === "function"
-      ? irrSiteUrl("/data/events.json")
-      : (window.IRR_SITE_ROOT || "") + "/data/events.json";
+    if (typeof irrDataUrl === "function") {
+      return irrDataUrl("events.json");
+    }
+    return (window.IRR_SITE_ROOT || "") + "/data/events.json";
   }
   var WEEKDAYS_FULL = [
     "Sonntag",

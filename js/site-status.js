@@ -1,10 +1,12 @@
+/** Control-bar open/closed pill — requires site-base.js (irrDataUrl). */
 (function () {
   "use strict";
 
   function openDataUrl() {
-    return typeof irrSiteUrl === "function"
-      ? irrSiteUrl("/data/open.json")
-      : (window.IRR_SITE_ROOT || "") + "/data/open.json";
+    if (typeof irrDataUrl === "function") {
+      return irrDataUrl("open.json");
+    }
+    return (window.IRR_SITE_ROOT || "") + "/data/open.json";
   }
 
   function applyOpenStatus(data) {

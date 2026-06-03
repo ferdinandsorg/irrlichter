@@ -1,3 +1,4 @@
+/** Über page: animated expand/collapse for .team-member__details (page-ueber only). */
 (function () {
   "use strict";
 

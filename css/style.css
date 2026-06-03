@@ -1885,7 +1885,7 @@ body.page-home .collection-grid {
   color: var(--ambient-fg);
 }
 
-/* Über — Inhaltsseite (Figma 111:169, Designsystem-Typo) */
+/* === ÜBER PAGE (agents: docs/CODE-MAP.md ~L1888) === */
 body.page-ueber {
   padding-bottom: 0;
 }
@@ -1916,7 +1916,10 @@ body.page-ueber .ueber-page
   text-decoration: none;
 }
 
-/* Reusable Button Component (basis: info-card__collection-cta) */
+/* === UI BUTTON (agents: docs/CODE-MAP.md ~L1919) ===
+   Modifiers: --ghost, --icon-leading, --icon-trailing
+   Markup: .ui-button__label, .ui-button__icon--lead|--trail
+   Do not use --ambient-fg on white buttons; use --ui-button-fg */
 .ui-button {
   --ui-button-fg: var(--palette-dark-950);
   --ui-button-icon-wght: 300;

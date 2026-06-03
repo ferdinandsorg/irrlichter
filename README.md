@@ -2,6 +2,8 @@
 
 Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irrlichter**.
 
+**Für KI-Assistenten / Handoff:** [AGENTS.md](AGENTS.md) · [docs/PROJECT-CONTEXT.md](docs/PROJECT-CONTEXT.md) · [docs/CODE-MAP.md](docs/CODE-MAP.md)
+
 ## Ziele
 
 - MVP mit sehr kleinem Footprint
