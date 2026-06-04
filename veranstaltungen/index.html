@@ -91,12 +91,15 @@
               >expand_more</span
             >
           </div>
-          <a href="../ueber#anfahrt" class="info-card__collection-cta"
-            >Anfahrt
+          <a
+            href="#termine"
+            class="info-card__collection-cta"
+            data-scroll-to-section
+            >Termine
             <span
               class="material-symbols-sharp info-card__collection-cta-icon"
               aria-hidden="true"
-              >arrow_forward</span
+              >south</span
             ></a
           >
         </div>
@@ -112,13 +115,14 @@
             aria-label="Anfahrt und Öffnungszeiten"
           >
             <span class="control-bar__location" data-site-location>Moorbauer</span>
-            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+            <span class="control-bar__weather" data-site-weather hidden aria-hidden="true"></span>
           </a>
           <a
-            href="../veranstaltungen"
+            href="."
             class="control-bar__status control-bar__status--open"
             data-site-status
-            aria-label="Veranstaltungen und Termine"
+            data-hours-toggle
+            aria-label="Pfadwerkstatt — Zeiten einblenden"
           >
             <span
               class="control-bar__status-dot"
@@ -130,18 +134,71 @@
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
           </a>
+          <div
+            class="control-bar__hours"
+            id="site-hours-panel"
+            data-site-hours
+            hidden
+          >
+            <p class="control-bar__hours-line">
+              <em>7.&nbsp;Juni – 31.&nbsp;August</em>
+            </p>
+            <p class="control-bar__hours-line">
+              <em>Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
+            </p>
+            <p class="control-bar__hours-note type-body-small">
+              Bei gutem Wetter und Veranstaltungen auch schon mal länger.
+            </p>
+            <a
+              href="#termine"
+              class="control-bar__hours-link type-body-small"
+              data-scroll-to-section
+              >Zum Kalender</a
+            >
+          </div>
         </div>
       </div>
     </aside>
     <main id="content">
-      <div class="inner">
-        <section class="section section--plain" aria-label="Veranstaltungen">
-          <p class="veranstaltungen-intro type-body">
-            Der Moorbauer ist zwischen dem
-            <em>7.&nbsp;Juni und dem 31.&nbsp;August von Donnerstag bis Sonntag</em> jeweils
-            <em>von 12&nbsp;Uhr mittags bis 20&nbsp;Uhr</em> geöffnet. Und bei gutem Wetter und
-            Veranstaltungen auch schon mal länger.
-          </p>
+      <div class="inner veranstaltungen-page">
+        <section class="section section--plain veranstaltungen-section" aria-label="Veranstaltungen">
+          <div class="veranstaltungen-story">
+            <p class="veranstaltungen-story__lead type-body-large">
+              Wir bauen einen ungewöhnlichen Moorpfad: Matten aus Moorpflanzen, anstatt klassischem
+              Bohlenweg; wachsende Räume aus Weiden anstatt einer Aussichtsplattform; Fragen und
+              Gedichte anstatt Lehrtafeln.
+            </p>
+            <div class="ueber-story__block">
+              <h3 class="ueber-story__subhead type-body-small">Wenn du kommst</h3>
+              <p class="type-body">
+                Wenn du zu uns kommst, wird der Pfad nicht fertig gebaut sein. Du wirst eine Flagge
+                mitten im Moor sehen. Zu dieser gehst du und findest uns an einer seltsamen Maschine.
+                Du kannst einfach mitmachen, ein paar Weiden biegen, Moorgräser wulstwickeln, den Pfad
+                flechten, mit uns bestimmen, wo er als Nächstes entlang geht, etwas notieren, die Augen
+                schließen und dem Moor lauschen oder ein Detail entdecken, das wir bislang übersehen
+                haben.
+              </p>
+            </div>
+            <div class="ueber-story__block">
+              <h3 class="ueber-story__subhead type-body-small">Pfadwerkstatt</h3>
+              <p class="type-body veranstaltungen-story__body--muted">
+                Über das gemeinsame Arbeiten in unserer Pfadwerkstatt wollen wir miteinander ins
+                Gespräch kommen (obwohl du natürlich auch bauen kannst, ohne mit uns zu sprechen). Wir
+                wollen mit unserem Projekt gedanklich und ganz praktisch zeigen, wie wir gerade aus all
+                den verschiedensten Perspektiven auf Moore uns gemeinsam einen Weg über den unsicheren
+                Boden bauen können.
+              </p>
+            </div>
+            <div class="ueber-story__block">
+              <h3 class="ueber-story__subhead type-body-small">Im Sommer</h3>
+              <p class="type-body">
+                An folgenden Terminen im Juli und August öffnen wir unsere Pfadwerkstatt zum
+                gemeinschaftlichen Bauen. Während dieses Bauens finden Veranstaltungen statt, manche
+                geplant und manche ganz spontan. Kommst du ein paar Schritte mit uns hinein ins
+                Dickicht?
+              </p>
+            </div>
+          </div>
           <div
             class="event-calendar"
             data-event-calendar
@@ -167,7 +224,10 @@
     <script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=5" defer></script>
     <script src="../js/site-status.js" defer></script>
+    <script src="../js/site-hours.js" defer></script>
+    <script src="../js/site-weather.js" defer></script>
     <script src="../js/logo-card.js" defer></script>
+    <script src="../js/event-calendar-details.js" defer></script>
     <script src="../js/events.js" defer></script>
   </body>
 </html>

@@ -104,13 +104,14 @@
             aria-label="Anfahrt und Öffnungszeiten"
           >
             <span class="control-bar__location" data-site-location>Moorbauer</span>
-            <span class="control-bar__weather" data-site-weather>Bewölkt, 16°</span>
+            <span class="control-bar__weather" data-site-weather hidden aria-hidden="true"></span>
           </a>
           <a
             href="../veranstaltungen"
             class="control-bar__status control-bar__status--open"
             data-site-status
-            aria-label="Veranstaltungen und Termine"
+            data-hours-toggle
+            aria-label="Pfadwerkstatt — Zeiten einblenden"
           >
             <span
               class="control-bar__status-dot"
@@ -122,6 +123,25 @@
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
           </a>
+          <div
+            class="control-bar__hours"
+            id="site-hours-panel"
+            data-site-hours
+            hidden
+          >
+            <p class="control-bar__hours-line">
+              <em>7.&nbsp;Juni – 31.&nbsp;August</em>
+            </p>
+            <p class="control-bar__hours-line">
+              <em>Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
+            </p>
+            <p class="control-bar__hours-note type-body-small">
+              Bei gutem Wetter und Veranstaltungen auch schon mal länger.
+            </p>
+            <a href="../veranstaltungen" class="control-bar__hours-link type-body-small"
+              >Zu den Terminen</a
+            >
+          </div>
         </div>
       </div>
     </aside>
@@ -220,6 +240,8 @@
     <script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=5" defer></script>
     <script src="../js/site-status.js" defer></script>
+    <script src="../js/site-hours.js" defer></script>
+    <script src="../js/site-weather.js" defer></script>
     <script src="../js/logo-card.js" defer></script>
   </body>
 </html>

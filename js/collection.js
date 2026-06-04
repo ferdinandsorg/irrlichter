@@ -367,8 +367,14 @@
     document.dispatchEvent(new CustomEvent("irrlichter:collection-rendered"));
   }
 
+  var COLLECTION_TOOLBAR_STACK_MQ = "(max-width: 430px)";
+
   function bindCollectionToolbarLayout(toolbar) {
     var layoutRaf = null;
+    var stackMq =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia(COLLECTION_TOOLBAR_STACK_MQ)
+        : null;
 
     function updateCollectionToolbarLayout() {
       if (layoutRaf) {
@@ -380,10 +386,8 @@
           toolbar.classList.remove("collection-toolbar--stacked");
           return;
         }
-        toolbar.classList.remove("collection-toolbar--stacked");
-        void toolbar.offsetHeight;
-        var needsStack = toolbar.scrollWidth > toolbar.clientWidth + 1;
-        toolbar.classList.toggle("collection-toolbar--stacked", needsStack);
+        var stacked = stackMq && stackMq.matches;
+        toolbar.classList.toggle("collection-toolbar--stacked", !!stacked);
       });
     }
 
@@ -399,6 +403,11 @@
     window.addEventListener("resize", updateCollectionToolbarLayout, {
       passive: true
     });
+    if (stackMq && typeof stackMq.addEventListener === "function") {
+      stackMq.addEventListener("change", updateCollectionToolbarLayout);
+    } else if (stackMq && typeof stackMq.addListener === "function") {
+      stackMq.addListener(updateCollectionToolbarLayout);
+    }
     document.addEventListener(
       "irrlichter:collection-rendered",
       updateCollectionToolbarLayout
@@ -432,11 +441,14 @@
       toolbar.hidden = !inView;
       toolbar.setAttribute("aria-hidden", inView ? "false" : "true");
       if (cta) {
-        cta.hidden = inView;
-        if (inView) {
+        if (cta.classList.contains("info-card__collection-cta--to-top")) {
+          /* Sichtbarkeit bei Seitenende — main.js */
+        } else if (inView) {
+          cta.hidden = true;
           cta.setAttribute("aria-hidden", "true");
           cta.setAttribute("tabindex", "-1");
         } else {
+          cta.removeAttribute("hidden");
           cta.removeAttribute("aria-hidden");
           cta.removeAttribute("tabindex");
         }
@@ -451,6 +463,14 @@
 
     if (cta) {
       cta.addEventListener("click", function (e) {
+        if (cta.classList.contains("info-card__collection-cta--to-top")) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.dispatchEvent(
+            new CustomEvent("irrlichter:scroll-page-top")
+          );
+          return;
+        }
         e.preventDefault();
         scrollToCollectionPending = true;
         setCollectionChromeInView(true);

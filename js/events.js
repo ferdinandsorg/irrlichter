@@ -120,10 +120,14 @@
     return date;
   }
 
+  function hasExpandableContent(event) {
+    return !!(event.description || event.link);
+  }
+
   function buildDateColumn(event) {
     var dt = parseEventDate(event);
     if (!dt) {
-      return el("div", { class: "event-calendar__date" }, [
+      return el("div", { class: "event-calendar__date-col" }, [
         el("time", { datetime: event.date || "" }, [event.date || ""])
       ]);
     }
@@ -149,29 +153,48 @@
       );
     }
 
-    return el("div", { class: "event-calendar__date" }, dateChildren);
+    return el("div", { class: "event-calendar__date-col" }, dateChildren);
   }
 
-  function buildBodyColumn(event) {
-    var bodyChildren = [];
+  function buildSummaryMain(event) {
+    var mainChildren = [];
 
     if (event.category) {
-      bodyChildren.push(
-        el("div", { class: "card-tags", role: "group", "aria-label": "Kategorie" }, [
-          el("span", { class: "card-tag" }, [event.category])
-        ])
+      mainChildren.push(
+        el("span", { class: "event-calendar__category" }, [event.category])
       );
     }
 
-    bodyChildren.push(
+    mainChildren.push(
       el("h3", { class: "event-calendar__title" }, [event.title || ""])
     );
 
     if (event.location) {
-      bodyChildren.push(
+      mainChildren.push(
         el("p", { class: "event-calendar__location" }, [event.location])
       );
     }
+
+    return el("div", { class: "event-calendar__summary-text" }, mainChildren);
+  }
+
+  function buildSummary(event) {
+    var summaryChildren = [buildDateColumn(event), buildSummaryMain(event)];
+
+    if (hasExpandableContent(event)) {
+      summaryChildren.push(
+        el("span", {
+          class: "material-symbols-sharp event-calendar__chevron",
+          "aria-hidden": "true"
+        }, ["expand_more"])
+      );
+    }
+
+    return el("summary", { class: "event-calendar__summary" }, summaryChildren);
+  }
+
+  function buildExpandableBody(event) {
+    var bodyChildren = [];
 
     if (event.description) {
       bodyChildren.push(
@@ -212,11 +235,28 @@
     var rowClass = "event-calendar__row";
     if (isPast) rowClass += " event-calendar__row--past";
 
+    var articleChildren;
+
+    if (hasExpandableContent(event)) {
+      articleChildren = [
+        el("details", { class: "event-calendar__details" }, [
+          buildSummary(event),
+          buildExpandableBody(event)
+        ])
+      ];
+    } else {
+      articleChildren = [
+        el("div", { class: "event-calendar__details event-calendar__details--static" }, [
+          el("div", { class: "event-calendar__summary event-calendar__summary--static" }, [
+            buildDateColumn(event),
+            buildSummaryMain(event)
+          ])
+        ])
+      ];
+    }
+
     return el("li", { class: "event-calendar__item" }, [
-      el("article", { class: rowClass }, [
-        buildDateColumn(event),
-        buildBodyColumn(event)
-      ])
+      el("article", { class: rowClass }, articleChildren)
     ]);
   }
 
@@ -233,6 +273,44 @@
     ]);
   }
 
+  var TERMINE_HASH = "#termine";
+  var TERMINE_ID = "termine";
+
+  function scrollToTermineTarget(target) {
+    if (!target) return;
+    var reduced =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start"
+    });
+  }
+
+  function setCalendarScrollTarget(root) {
+    root.querySelectorAll("#" + TERMINE_ID).forEach(function (node) {
+      node.removeAttribute("id");
+    });
+
+    var heading = root.querySelector(
+      ".event-calendar__group .event-calendar__heading"
+    );
+    if (heading) {
+      heading.id = TERMINE_ID;
+    }
+  }
+
+  function scrollToTermineIfHash() {
+    if (window.location.hash !== TERMINE_HASH) return;
+    var target = document.getElementById(TERMINE_ID);
+    if (!target) return;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        scrollToTermineTarget(target);
+      });
+    });
+  }
+
   function render(events) {
     var root = document.querySelector("[data-event-calendar]");
     if (!root) return;
@@ -243,6 +321,7 @@
       root.appendChild(
         el("p", { class: "loading-note" }, ["Keine Termine vorhanden."])
       );
+      setCalendarScrollTarget(root);
       return;
     }
 
@@ -271,12 +350,18 @@
       root.appendChild(
         el("p", { class: "loading-note" }, ["Keine Termine vorhanden."])
       );
+      setCalendarScrollTarget(root);
       return;
     }
 
     groups.forEach(function (group) {
       root.appendChild(group);
     });
+    setCalendarScrollTarget(root);
+    scrollToTermineIfHash();
+    if (typeof window.initEventCalendarDetails === "function") {
+      window.initEventCalendarDetails(root);
+    }
   }
 
   function showError(message) {
@@ -285,6 +370,16 @@
     root.innerHTML = "";
     root.setAttribute("aria-busy", "false");
     root.appendChild(el("p", { class: "error-note" }, [message]));
+    setCalendarScrollTarget(root);
+    scrollToTermineIfHash();
+  }
+
+  window.irrScrollToTermine = scrollToTermineTarget;
+
+  document.addEventListener("hashchange", scrollToTermineIfHash);
+
+  if (document.readyState !== "loading") {
+    scrollToTermineIfHash();
   }
 
   document.addEventListener("DOMContentLoaded", function () {

@@ -1,40 +1,111 @@
 [
   {
-    "id": "walk-2026-05",
-    "date": "2026-05-21",
-    "time": "16:00",
-    "category": "Rundgang",
-    "title": "Offener Moorrundgang",
-    "location": "Treffpunkt Moorsteg West",
-    "description": "Gemeinsamer Rundgang mit kurzen Impulsen zu Kunst, Klima und lokaler Moorpflege. Dauer ca. 90 Minuten.",
-    "link": "https://example.org/irrlichter/events/moorrundgang",
-    "linkLabel": "Anmeldung & Details"
+    "id": "moortheater-2026-06",
+    "date": "2026-06-27",
+    "category": "Moortheater",
+    "title": "Moortheater «Menschenschutzgebiet»",
+    "location": "Am Moor — Pfad im Rahmen der Aufführung",
+    "description": "27./28. Juni — Details und Anmeldung in Kürze. Der Pfad wird das erste Mal bei der Aufführung des diesjährigen Moortheater «Menschenschutzgebiet» zugänglich. Für das mobile Landschaftstheater inszeniert Uta Berghöfer seit zehn Jahren mit Kindern und Jugendlichen aus Malchiner Schulen Theaterstücke, die das Moor als lebendiges Gegenüber in Szene setzen. Wir sind eng mit Uta Berghöfer im Gespräch, wo der Pfad, auch im Sinne des Theaterstücks, lang gehen wird und wo wir wachsende Bühnen entstehen lassen. Nach der Aufführung (27./28. Juni) wird der Pfad unabhängig von uns für die Öffentlichkeit begehbar sein."
   },
   {
-    "id": "listening-2026-06",
-    "date": "2026-06-07",
+    "id": "pfadwerkstatt-2026-07-03",
+    "date": "2026-07-03",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "3.–5. Juli — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "pfadwerkstatt-2026-07-09",
+    "date": "2026-07-09",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "9.–12. Juli — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "gase-moorgase-2026-07-11",
+    "date": "2026-07-11",
+    "time": "17:00",
+    "category": "Gase",
+    "title": "Moorgase",
+    "location": "Moorpfad am Moorbauer",
+    "description": "Mit dem Forscher John Couwenberg (max. 20 Teilnehmende, Anmeldung in Kürze). John Couwenberg lehrt und forscht an der Universität Greifswald und sammelt seit Jahren Belege und Namen von Irrlichtern, die eventuell durch Moorgase entstehen (genau weiß man das bis heute nicht). Mit John sprechen wir über Moorgase — Methan, CO₂, N₂O und eventuell Irrlichter-Gas — und messen sie."
+  },
+  {
+    "id": "gase-irrlichter-2026-07-11",
+    "date": "2026-07-11",
+    "time": "21:00",
+    "category": "Gase",
+    "title": "Irrlichter-Geschichten",
+    "location": "Moorpfad am Moorbauer",
+    "description": "Mit dem Forscher John Couwenberg (max. 20 Teilnehmende, Anmeldung in Kürze). John Couwenberg lehrt und forscht an der Universität Greifswald und sammelt seit Jahren Belege und Namen von Irrlichtern, die eventuell durch Moorgase entstehen. Wenn einer Moorgase, Irrlichter und ihre Geschichten vorstellbar und verständlich machen kann, dann John."
+  },
+  {
+    "id": "pfadwerkstatt-2026-07-23",
+    "date": "2026-07-23",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "23.–26. Juli — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "tanz-2026-07-24",
+    "date": "2026-07-24",
+    "time": "17:00",
+    "category": "Tanz",
+    "title": "Tanz am Moor",
+    "location": "Moorpfad am Moorbauer",
+    "description": "Mit Tänzer:in Maya von Ahnen (max. 20 Teilnehmende, Anmeldung in Kürze). Maya von Ahnen hat eine Tanzpraxis entwickelt, mit der Teilnehmende ihre Umwelt durch Bewegung erkunden. Wie fühlt sich das Moor an? Können wir für das Schilf tanzen? Der Melodie eines Schilfrohrsängers folgen? Wie antwortet der Moorboden auf unseren Tanz? Antworten, die wir nur in Bewegungen finden."
+  },
+  {
+    "id": "pfadwerkstatt-2026-08-13",
+    "date": "2026-08-13",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "13.–16. August — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "pfadwerkstatt-2026-08-20",
+    "date": "2026-08-20",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "20.–23. August — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "poesie-2026-08-21",
+    "date": "2026-08-21",
+    "category": "Poesie",
+    "title": "Fest der Poesie",
+    "location": "Moorpfad am Moorbauer",
+    "description": "Den ganzen Tag — Teilnahme ohne Anmeldung möglich. Schreibwerkstätten und Lesungen mit Michael Stavaric (Romane, Kinderbücher und Gedichte; z. B. «Zu brechen bleibt die See») und Siljarosa Schletterer (Lyrikerin; Gedichte in «azur ton nähe – flussdiktate» zeigen die Vielsprachigkeit von Wasser). Im Pfad weben wir nicht nur Pflanzen, sondern auch Wasser und Worte ein. Sobald die Dunkelheit eintritt, huschen kleine blaue Lichter durch das Schilf und Gedichte werden geflüstert."
+  },
+  {
+    "id": "verwurzlung-2026-08-27",
+    "date": "2026-08-27",
+    "time": "17:00",
+    "category": "Verwurzlung",
+    "title": "Verwurzlung",
+    "location": "Pflanzeninsel am Moorpfad",
+    "description": "Mit Augustin Berghöfer — Teilnahme ohne Anmeldung möglich. Welche Sprache spricht dieser Ort selbst? Gemeinsam mit Augustin Berghöfer, der vor Ort arbeitet, gehen wir auf einer Pflanzeninsel den geschichtlichen Wurzeln des Moorbauerns nach und den Arten, wie über Entwässerung und Wiedervernässung verschieden gedacht und gesprochen wurde. Vielleicht reichen die Beziehungen zwischen Mensch und Moor tiefer als wir denken. Wir lassen die Geschichten lebendig werden, indem wir sie erzählen."
+  },
+  {
+    "id": "pfadwerkstatt-2026-08-26",
+    "date": "2026-08-26",
+    "category": "Pfadwerkstatt",
+    "title": "Pfadwerkstatt geöffnet",
+    "location": "Moorpfad am Moorbauer",
+    "description": "26.–29. August — Pfadwerkstatt geöffnet."
+  },
+  {
+    "id": "demo-vergangen-fiktiv",
+    "date": "2024-03-15",
     "time": "14:00",
-    "category": "Listening",
-    "title": "Listening Session am Rand",
-    "location": "Suedkante, kleiner Unterstand",
-    "description": "Praesentation neuer Feldaufnahmen, kurze Einfuehrung in die Aufnahmeorte und offenes Gespraech."
-  },
-  {
-    "id": "workshop-2026-07",
-    "date": "2026-07-12",
-    "time": "11:00",
-    "category": "Werkstatt",
-    "title": "Werkstatt: Eigenes Moor-Logbuch",
-    "location": "Projektflaeche Nord, Pavillon",
-    "description": "Praktischer Einstieg in Beobachtungsnotizen, einfache Aufnahmetechnik und strukturierte Archivierung."
-  },
-  {
-    "id": "intro-2026-04",
-    "date": "2026-04-18",
-    "time": "15:00",
-    "category": "Gespräch",
-    "title": "Einführung Irrlichter",
-    "location": "Moorbauer, Pavillon",
-    "description": "Kurze Vorstellung des Projekts, der Sammlung und der Mitmach-Möglichkeiten am Moor."
+    "category": "Platzhalter",
+    "title": "Fiktiver Termin (nur Layout-Vorschau)",
+    "location": "Nur zur Darstellung — kein echtes Event",
+    "description": "Dieser Eintrag ist absichtlich erfunden: Das Datum 15. März 2024 existiert nicht im Irrlichter-Programm. Er dient nur dazu, die Sektion «Vergangene Termine» auf der Website zu prüfen und kann jederzeit wieder entfernt werden."
   }
 ]

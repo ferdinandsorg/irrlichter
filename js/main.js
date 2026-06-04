@@ -469,26 +469,215 @@
     );
     links.forEach(function (link) {
       link.addEventListener("click", function (e) {
+        if (link.classList.contains("info-card__collection-cta--to-top")) {
+          return;
+        }
         var id = link.getAttribute("href");
         if (!id || id.length < 2) return;
-        var target = document.querySelector(id);
-        if (!target) return;
         e.preventDefault();
-        var reduced =
-          window.matchMedia &&
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        target.scrollIntoView({
-          behavior: reduced ? "auto" : "smooth",
-          block: "start"
-        });
         if (history.replaceState) {
           history.replaceState(null, "", id);
         } else {
           window.location.hash = id.slice(1);
         }
+        var target = document.querySelector(id);
+        if (!target) return;
+        if (
+          id === "#termine" &&
+          typeof window.irrScrollToTermine === "function"
+        ) {
+          window.irrScrollToTermine(target);
+        } else {
+          var reduced =
+            window.matchMedia &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          target.scrollIntoView({
+            behavior: reduced ? "auto" : "smooth",
+            block: "start"
+          });
+        }
       });
     });
   }
+
+  function getInfoCardCtaLabelEl(cta, icon) {
+    var labelEl = cta.querySelector(".info-card__collection-cta-label");
+    if (!labelEl) {
+      labelEl = document.createElement("span");
+      labelEl.className = "info-card__collection-cta-label";
+      var text = readInfoCardCtaLabel(cta, icon);
+      Array.from(cta.childNodes).forEach(function (node) {
+        if (node !== icon && node !== labelEl) {
+          cta.removeChild(node);
+        }
+      });
+      labelEl.textContent = text;
+      cta.insertBefore(labelEl, icon || null);
+    }
+    return labelEl;
+  }
+
+  function readInfoCardCtaLabel(cta, icon) {
+    var labelEl = cta.querySelector(".info-card__collection-cta-label");
+    if (labelEl) {
+      return labelEl.textContent.replace(/\s+/g, " ").trim();
+    }
+    var label = "";
+    cta.childNodes.forEach(function (node) {
+      if (node === icon) {
+        return;
+      }
+      if (node.nodeType === Node.TEXT_NODE) {
+        label += node.textContent;
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        label += node.textContent;
+      }
+    });
+    return label.replace(/\s+/g, " ").trim();
+  }
+
+  function writeInfoCardCtaLabel(cta, icon, label) {
+    var labelEl = getInfoCardCtaLabelEl(cta, icon);
+    labelEl.textContent = label;
+  }
+
+  function restoreHomeCollectionCtaHidden(cta) {
+    if (!cta || !document.body.classList.contains("page-home")) {
+      return;
+    }
+    var card = document.getElementById("site-info-card");
+    if (!card || !card.classList.contains("info-card--collection-in-view")) {
+      return;
+    }
+    cta.hidden = true;
+    cta.setAttribute("aria-hidden", "true");
+    cta.setAttribute("tabindex", "-1");
+  }
+
+  function scrollPageToTop() {
+    var scrollEl = document.scrollingElement || document.documentElement;
+    var reduced =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollEl.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: reduced ? "auto" : "smooth"
+    });
+    if (history.replaceState) {
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
+    }
+    window.requestAnimationFrame(function () {
+      window.dispatchEvent(new Event("scroll"));
+    });
+  }
+
+  function initInfoCardCtaScroll() {
+    var cta = document.querySelector(".info-card__collection-cta");
+    if (!cta) {
+      return;
+    }
+
+    var ctaIcon = cta.querySelector(".info-card__collection-cta-icon");
+    getInfoCardCtaLabelEl(cta, ctaIcon);
+    var defaultCtaLabel = readInfoCardCtaLabel(cta, ctaIcon);
+    var defaultCtaIcon = ctaIcon ? ctaIcon.textContent.trim() : "south";
+    var defaultCtaHref = cta.getAttribute("href") || "";
+    var bottomThreshold = 96;
+    var scrollTicking = false;
+    var pageBottomActive = false;
+
+    function isAtPageBottom() {
+      var doc = document.documentElement;
+      return (
+        window.innerHeight + window.scrollY >=
+        doc.scrollHeight - bottomThreshold
+      );
+    }
+
+    function applyPageBottomMode(toTop) {
+      var stateChanged = toTop !== pageBottomActive;
+      pageBottomActive = toTop;
+
+      cta.classList.toggle("info-card__collection-cta--to-top", toTop);
+
+      if (toTop) {
+        writeInfoCardCtaLabel(cta, ctaIcon, "Nach oben");
+        if (ctaIcon) {
+          ctaIcon.textContent = "north";
+        }
+        cta.setAttribute("href", "#");
+        cta.setAttribute("aria-label", "Nach oben scrollen");
+        cta.setAttribute("role", "button");
+        cta.removeAttribute("hidden");
+        cta.removeAttribute("aria-hidden");
+        cta.removeAttribute("tabindex");
+      } else if (stateChanged) {
+        writeInfoCardCtaLabel(cta, ctaIcon, defaultCtaLabel);
+        if (ctaIcon) {
+          ctaIcon.textContent = defaultCtaIcon;
+        }
+        if (defaultCtaHref) {
+          cta.setAttribute("href", defaultCtaHref);
+        } else {
+          cta.removeAttribute("href");
+        }
+        cta.removeAttribute("aria-label");
+        cta.removeAttribute("role");
+        restoreHomeCollectionCtaHidden(cta);
+      }
+
+      if (stateChanged) {
+        document.dispatchEvent(
+          new CustomEvent("irrlichter:info-card-toolbar-chrome")
+        );
+      }
+    }
+
+    function updatePageBottomMode() {
+      applyPageBottomMode(isAtPageBottom());
+      scrollTicking = false;
+    }
+
+    function schedulePageBottomModeUpdate() {
+      if (scrollTicking) {
+        return;
+      }
+      scrollTicking = true;
+      requestAnimationFrame(updatePageBottomMode);
+    }
+
+    cta.addEventListener(
+      "click",
+      function (e) {
+        if (!cta.classList.contains("info-card__collection-cta--to-top")) {
+          return;
+        }
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        scrollPageToTop();
+      },
+      true
+    );
+
+    window.addEventListener("scroll", schedulePageBottomModeUpdate, {
+      passive: true
+    });
+    window.addEventListener("resize", schedulePageBottomModeUpdate, {
+      passive: true
+    });
+    document.addEventListener(
+      "irrlichter:info-card-toolbar-chrome",
+      schedulePageBottomModeUpdate
+    );
+    schedulePageBottomModeUpdate();
+  }
+
+  document.addEventListener("irrlichter:scroll-page-top", scrollPageToTop);
 
   function copyTextToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -569,5 +758,6 @@
     initUeberStoryLeadIrrlicht();
     initCopyTextButtons();
     initInPageSectionScroll();
+    initInfoCardCtaScroll();
   });
 })();

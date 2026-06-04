@@ -9,6 +9,123 @@
     return card && card.classList.contains("info-card--expanded");
   }
 
+  var layoutMetricsRaf = null;
+  var layoutMetricsPostTransitionTimer = null;
+  var STACK_TRANSITION_MS = 400;
+
+  function getStack(card) {
+    return card.querySelector(".info-card__stack") || card;
+  }
+
+  function syncFooterContentHeight() {
+    var footerInner = document.querySelector(".site-footer .inner");
+    if (!footerInner) return;
+    var footerH = Math.ceil(footerInner.offsetHeight);
+    if (footerH > 0) {
+      document.documentElement.style.setProperty(
+        "--footer-content-height",
+        footerH + "px"
+      );
+    }
+  }
+
+  function syncInfoCardLayoutMetrics(card) {
+    if (!card) return;
+    var stack = getStack(card);
+    var height = Math.ceil(stack.offsetHeight);
+    if (height > 0) {
+      document.documentElement.style.setProperty(
+        "--info-card-stack-height",
+        height + "px"
+      );
+    }
+    syncFooterContentHeight();
+  }
+
+  function scheduleInfoCardLayoutMetrics(card) {
+    if (!card) return;
+    if (layoutMetricsRaf) {
+      cancelAnimationFrame(layoutMetricsRaf);
+    }
+    layoutMetricsRaf = requestAnimationFrame(function () {
+      layoutMetricsRaf = requestAnimationFrame(function () {
+        layoutMetricsRaf = null;
+        syncInfoCardLayoutMetrics(card);
+      });
+    });
+  }
+
+  function scheduleInfoCardLayoutMetricsAfterChange(card) {
+    scheduleInfoCardLayoutMetrics(card);
+    if (layoutMetricsPostTransitionTimer) {
+      window.clearTimeout(layoutMetricsPostTransitionTimer);
+    }
+    layoutMetricsPostTransitionTimer = window.setTimeout(function () {
+      layoutMetricsPostTransitionTimer = null;
+      syncInfoCardLayoutMetrics(card);
+    }, STACK_TRANSITION_MS);
+  }
+
+  function bindInfoCardLayoutMetrics(card) {
+    var stack = getStack(card);
+    var meta = card.querySelector("[data-control-bar-meta]");
+    var hours = document.getElementById("site-hours-panel");
+
+    scheduleInfoCardLayoutMetrics(card);
+    window.addEventListener(
+      "resize",
+      function () {
+        scheduleInfoCardLayoutMetrics(card);
+      },
+      { passive: true }
+    );
+    document.addEventListener("irrlichter:info-card-expanded", function () {
+      scheduleInfoCardLayoutMetricsAfterChange(card);
+    });
+    document.addEventListener(
+      "irrlichter:info-card-toolbar-chrome",
+      function () {
+        scheduleInfoCardLayoutMetricsAfterChange(card);
+      }
+    );
+
+    stack.addEventListener("transitionend", function (e) {
+      if (e.target !== stack) return;
+      if (e.propertyName === "width" || e.propertyName === "height") {
+        scheduleInfoCardLayoutMetrics(card);
+      }
+    });
+
+    if (typeof ResizeObserver === "function") {
+      var ro = new ResizeObserver(function () {
+        scheduleInfoCardLayoutMetrics(card);
+      });
+      ro.observe(stack);
+      if (meta) {
+        ro.observe(meta);
+      }
+      if (hours) {
+        ro.observe(hours);
+      }
+    }
+
+    if (meta && typeof MutationObserver === "function") {
+      var mo = new MutationObserver(function () {
+        scheduleInfoCardLayoutMetricsAfterChange(card);
+      });
+      mo.observe(meta, {
+        attributes: true,
+        attributeFilter: ["hidden", "class"]
+      });
+    }
+
+    if (typeof document.fonts !== "undefined" && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        syncInfoCardLayoutMetrics(card);
+      });
+    }
+  }
+
   function setExpanded(card, expanded) {
     if (!card) return;
     var hasControlBar = card.classList.contains("info-card--has-toolbar");
@@ -41,6 +158,7 @@
         detail: { expanded: expanded }
       })
     );
+    scheduleInfoCardLayoutMetricsAfterChange(card);
   }
 
   function toggleExpanded(card) {
@@ -133,6 +251,7 @@
     if (!logoPanel) return;
 
     card.setAttribute("aria-expanded", "false");
+    bindInfoCardLayoutMetrics(card);
     bindToolbarWrap(card);
 
     logoPanel.addEventListener("click", function (e) {
