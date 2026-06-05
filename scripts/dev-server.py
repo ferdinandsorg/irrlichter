@@ -13,6 +13,7 @@ Funktioniert wie python3 -m http.server, plus:
 from __future__ import annotations
 
 import os
+import shutil
 import socket
 import sys
 import urllib.parse
@@ -38,6 +39,10 @@ HTML_REDIRECTS = {
     "datenschutz.html": "/datenschutz",
     "admin.html": "/admin",
 }
+
+
+class ReuseThreadingHTTPServer(ThreadingHTTPServer):
+    allow_reuse_address = True
 
 
 class IrrlichterHandler(SimpleHTTPRequestHandler):
@@ -72,6 +77,12 @@ class IrrlichterHandler(SimpleHTTPRequestHandler):
         self.send_response(301)
         self.send_header("Location", location)
         self.end_headers()
+
+    def copyfile(self, source, outputfile):
+        try:
+            shutil.copyfileobj(source, outputfile)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def log_message(self, format, *args):
         sys.stderr.write("[dev] %s - %s\n" % (self.address_string(), format % args))
@@ -124,7 +135,17 @@ def _print_startup_urls(port: int) -> None:
 
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
-    server = ThreadingHTTPServer(("", port), IrrlichterHandler)
+    try:
+        server = ReuseThreadingHTTPServer(("", port), IrrlichterHandler)
+    except OSError as exc:
+        if exc.errno == 48:
+            sys.exit(
+                "Port %d ist belegt — alter Prozess noch aktiv?\n"
+                "  lsof -i :%d   dann kill <PID>\n"
+                "  oder: python3 scripts/dev-server.py <anderer-port>"
+                % (port, port)
+            )
+        raise
     _print_startup_urls(port)
     try:
         server.serve_forever()

@@ -754,24 +754,10 @@ body::after {
     max-width: none;
   }
 
-  .control-bar__meta {
-    flex-wrap: wrap;
-    align-items: stretch;
-    gap: 2px;
-    row-gap: 2px;
-  }
-
-  .control-bar__meta-left,
-  .control-bar__status,
   .control-bar__hours {
     flex: 1 1 100%;
     width: 100%;
     box-sizing: border-box;
-  }
-
-  .control-bar__status {
-    flex-shrink: 1;
-    justify-content: flex-start;
   }
 }
 
@@ -872,13 +858,16 @@ body::after {
 .control-bar__meta-left {
   display: flex;
   flex: 1 1 auto;
-  align-items: center;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: 4px;
   min-width: 0;
   font-size: var(--type-size-meta);
   line-height: 1;
   color: #040403;
   white-space: nowrap;
+  text-align: left;
   text-decoration: none;
   border-radius: 2px;
 }
@@ -915,6 +904,7 @@ body::after {
 
 .control-bar__status {
   display: flex;
+  flex-flow: row nowrap;
   flex-shrink: 0;
   align-items: center;
   gap: 8px;
@@ -924,6 +914,21 @@ body::after {
   white-space: nowrap;
   text-decoration: none;
   border-radius: 2px;
+}
+
+.control-bar__status-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.control-bar__status-line--name {
+  gap: 8px;
+}
+
+.control-bar__status-line--state {
+  flex-shrink: 0;
 }
 
 a.control-bar__status:hover {
@@ -951,14 +956,6 @@ a.control-bar__status:focus-visible {
   background: #d64545;
 }
 
-.control-bar__status-text {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-
 .control-bar__status-name {
   font-style: normal;
   font-feature-settings: var(--type-ff-dlig-frac);
@@ -977,6 +974,40 @@ a.control-bar__status:focus-visible {
     "opsz" var(--type-opsz-display),
     "SOFT" 0,
     "WONK" 1;
+}
+
+/* Schmale Leiste: Ort/Wetter und Status je zweizeilig, links/rechts positioniert */
+@media (max-width: 520px) {
+  .control-bar__meta {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 0.35rem;
+    min-height: auto;
+  }
+
+  .control-bar__meta-left {
+    flex: 0 1 auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2px;
+    min-width: 0;
+    max-width: calc(50% - 0.5rem);
+    line-height: var(--line-height-body);
+    text-align: left;
+  }
+
+  .control-bar__status {
+    flex-flow: column nowrap;
+    flex: 0 1 auto;
+    flex-shrink: 1;
+    align-items: flex-end;
+    gap: 2px;
+    min-width: 0;
+    max-width: calc(50% - 0.5rem);
+    margin-left: auto;
+    white-space: normal;
+    line-height: var(--line-height-body);
+  }
 }
 
 /* Nur Startseite: „Zur Sammlung“ ausblenden, wenn Filter-Leiste sichtbar ist */
@@ -1382,13 +1413,13 @@ body.page-home.info-card-expanded {
   );
 }
 
-/* Irrlichter — Startseite + Über */
-body:not(.page-home):not(.page-ueber) .irrlicht-lights {
+/* Irrlichter — Startseite, Über, Veranstaltungen (Lade-Animation) */
+body:not(.page-home):not(.page-ueber):not(.page-veranstaltungen) .irrlicht-lights {
   display: none !important;
 }
 
 /* Licht-Ebenen (Figma Startpage 57:639): Ellipsen + SVG-Blur, Opacity animiert */
-:is(.page-home, .page-ueber) .irrlicht-lights {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-lights {
   position: fixed;
   inset: 0;
   z-index: 95;
@@ -1396,21 +1427,21 @@ body:not(.page-home):not(.page-ueber) .irrlicht-lights {
   overflow: visible;
 }
 
-:is(.page-home, .page-ueber) .irrlicht-lights--done {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-lights--done {
   visibility: hidden;
 }
 
-:is(.page-home, .page-ueber) .irrlicht-lights--done .irrlicht-light {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-lights--done .irrlicht-light {
   will-change: auto;
 }
 
-:is(.page-home, .page-ueber) .irrlicht-light {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light {
   position: absolute;
   opacity: 0;
   will-change: opacity;
 }
 
-:is(.page-home, .page-ueber) .irrlicht-light img {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1419,13 +1450,13 @@ body:not(.page-home):not(.page-ueber) .irrlicht-lights {
   pointer-events: none;
 }
 
-:is(.page-home, .page-ueber) .irrlicht-light__img-wrap {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light__img-wrap {
   position: absolute;
   pointer-events: none;
 }
 
 /* light back — 264×1160 auf 1440×784, horizontal zentriert */
-:is(.page-home, .page-ueber) .irrlicht-light--back {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back {
   left: 50%;
   top: 26.025%;
   width: 18.358%;
@@ -1435,12 +1466,12 @@ body:not(.page-home):not(.page-ueber) .irrlicht-lights {
   transform: translateX(-50%);
 }
 
-:is(.page-home, .page-ueber) .irrlicht-light--back .irrlicht-light__img-wrap {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back .irrlicht-light__img-wrap {
   inset: -34.48% -151.31%;
 }
 
 /* light front — 149×655 auf 1440×784 */
-:is(.page-home, .page-ueber) .irrlicht-light--front {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front {
   left: 50%;
   top: 58.201%;
   width: 10.373%;
@@ -1450,25 +1481,25 @@ body:not(.page-home):not(.page-ueber) .irrlicht-lights {
   transform: translateX(-50%);
 }
 
-:is(.page-home, .page-ueber) .irrlicht-light--front .irrlicht-light__img-wrap {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front .irrlicht-light__img-wrap {
   inset: -12.21% -53.56%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.page-home, .page-ueber) .irrlicht-lights {
+  :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-lights {
     display: none !important;
   }
 }
 
 @media (max-width: 520px) {
-  :is(.page-home, .page-ueber) .irrlicht-light--back {
+  :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back {
     min-width: 180px;
     width: 28vw;
     top: 22%;
     height: 130%;
   }
 
-  :is(.page-home, .page-ueber) .irrlicht-light--front {
+  :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front {
     min-width: 100px;
     width: 16vw;
     top: 52%;
@@ -1690,7 +1721,7 @@ html.nav-open .nav-backdrop:not([hidden]) {
   }
 
   .site-header .inner.site-header__bar {
-    width: min(1024px, calc(100% - 32px));
+    width: 100%;
   }
 
   .nav-toggle {
@@ -1701,6 +1732,11 @@ html.nav-open .nav-backdrop:not([hidden]) {
     display: block;
   }
 
+  .site-header__bar--mobile-ready .nav-current {
+    padding-left: 0;
+    box-sizing: border-box;
+  }
+
   html.nav-open .nav-backdrop:not([hidden]) {
     display: block;
   }
@@ -1708,6 +1744,8 @@ html.nav-open .nav-backdrop:not([hidden]) {
   .site-header__bar--mobile-ready {
     justify-content: space-between;
     gap: 0.75rem;
+    box-sizing: border-box;
+    padding-inline: var(--layout-inline-gutter);
   }
 
   .site-header__bar--mobile-ready .nav-links {
@@ -1793,6 +1831,7 @@ html.nav-open .nav-backdrop:not([hidden]) {
     position: relative;
     z-index: 151;
     flex-shrink: 0;
+    padding-inline: 0;
   }
 
 }
@@ -2659,6 +2698,36 @@ body.page-ueber .ueber-moorbauer-cta__action {
   color: #040403;
 }
 
+@media (max-width: 640px) {
+  body.page-ueber .ueber-moorbauer-cta.content-breakout-wide {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  body.page-ueber .ueber-moorbauer-cta__link {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: auto;
+  }
+
+  body.page-ueber .ueber-moorbauer-cta__image {
+    position: relative;
+    inset: auto;
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1600 / 1066;
+  }
+
+  body.page-ueber .ueber-moorbauer-cta__panel {
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 1rem 1rem 1.05rem;
+  }
+}
+
 body.page-ueber .ueber-funding__card {
   display: flex;
   align-items: stretch;
@@ -2948,12 +3017,6 @@ body.page-ueber .team-member__bio em {
   body.page-ueber .team-member__body {
     padding-left: 0;
     padding-top: 0.35rem;
-  }
-
-  body.page-ueber .ueber-moorbauer-cta__panel {
-    width: min(100%, 20rem);
-    max-width: calc(100% - 1rem);
-    margin: 0 0 0.75rem 0.75rem;
   }
 
 }

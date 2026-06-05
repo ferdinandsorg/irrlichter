@@ -237,7 +237,8 @@
     if (!document.body) return false;
     return (
       document.body.classList.contains("page-home") ||
-      document.body.classList.contains("page-ueber")
+      document.body.classList.contains("page-ueber") ||
+      document.body.classList.contains("page-veranstaltungen")
     );
   }
 

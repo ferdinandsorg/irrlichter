@@ -9,7 +9,7 @@ Reference for agents. **Re-verify with editor search** after large edits — lin
 | `js/site-base.js` | 1–12, 84–88 | File header; `irrSiteUrl`, `irrDataUrl`, `IRR_SITE_ROOT` |
 | `js/main.js` | 1–50 | Scroll ambient, `data-text-mode` |
 | `js/main.js` | 332–411 | Irrlicht fade + Über story lead hover |
-| `js/main.js` | 413–459 | Full-page irrlicht (home + über) |
+| `js/main.js` | 413–459 | Full-page irrlicht (home + über + veranstaltungen) |
 | `js/main.js` | 488–552 | `data-copy-text` clipboard buttons |
 | `js/main.js` | 554–566 | `DOMContentLoaded` init order |
 | `js/events.js` | 1–10 | `irrDataUrl("events.json")` |
