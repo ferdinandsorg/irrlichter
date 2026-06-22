@@ -18,13 +18,12 @@ Reference for agents. **Re-verify with editor search** after large edits — lin
 | `js/site-weather.js` | 1–120 | Open-Meteo live weather (Malchin) |
 | `js/team-member.js` | all | `.team-member__details` animation |
 | `js/event-calendar-details.js` | all | `.event-calendar__details` animation (after `events.js` render) |
-| `js/ueber-stack.js` | all | `.ueber-pillars-stack` scroll scale |
 
 ### Script load order (every page with data)
 
 1. `site-base.js`
 2. `main.js` (most pages)
-3. Page modules: `events.js` / `event-calendar-details.js` / `collection.js` / `site-status.js` / `logo-card.js` / `ueber-stack.js` / `team-member.js`
+3. Page modules: `events.js` / `event-calendar-details.js` / `collection.js` / `site-status.js` / `logo-card.js` / `team-member.js`
 
 ## CSS (`css/style.css`)
 

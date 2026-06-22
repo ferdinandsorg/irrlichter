@@ -117,6 +117,14 @@
   global.irrSiteUrl = siteUrl;
   global.irrDataUrl = irrDataUrl;
   global.irrPageKey = pageKeyFromPathname;
+
+  try {
+    if (localStorage.getItem("irrlichter-text-scale") === "large") {
+      document.documentElement.setAttribute("data-text-scale", "large");
+    }
+  } catch (err) {
+    /* ignore */
+  }
 })(
   typeof window !== "undefined"
     ? window
