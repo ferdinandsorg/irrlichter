@@ -156,9 +156,6 @@
     document.body.classList.toggle("info-card-expanded", expanded);
 
     if (hasControlBar) {
-      if (controlMeta) {
-        controlMeta.removeAttribute("hidden");
-      }
       if (details) {
         details.setAttribute("hidden", "");
       }

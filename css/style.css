@@ -279,7 +279,6 @@ html[data-text-scale="large"] .control-bar__meta {
 
 html[data-text-scale="large"] .control-bar__meta-left,
 html[data-text-scale="large"] .control-bar__status {
-  white-space: normal;
   max-width: 100%;
 }
 
@@ -587,6 +586,7 @@ body::after {
 }
 
 .info-card__logo-chevron {
+  display: none;
   flex-shrink: 0;
   align-self: center;
   margin-left: auto;
@@ -827,11 +827,10 @@ body::after {
 /* Control Bar geöffnet (Figma 102:160) */
 .control-bar__meta {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  row-gap: 0.5rem;
   width: 100%;
   min-height: 36px;
   padding: 12px 16px;
@@ -912,10 +911,10 @@ body::after {
 .control-bar__meta-left {
   display: flex;
   flex: 1 1 auto;
-  flex-flow: column nowrap;
-  align-items: flex-start;
+  flex-flow: row nowrap;
+  align-items: baseline;
   justify-content: flex-start;
-  gap: 2px;
+  gap: 0.5rem;
   min-width: 0;
   font-size: var(--type-size-meta);
   line-height: 1;
@@ -958,10 +957,11 @@ body::after {
 
 .control-bar__status {
   display: flex;
-  flex-flow: column nowrap;
-  flex-shrink: 0;
-  align-items: flex-end;
-  gap: 2px;
+  flex-flow: row nowrap;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
   font-size: var(--type-size-meta);
   line-height: 1;
   color: #040403;
@@ -1030,7 +1030,7 @@ a.control-bar__status:focus-visible {
     "WONK" 1;
 }
 
-/* Schmale Leiste: Ort/Wetter und Status je zweizeilig, links/rechts positioniert */
+/* Schmale Leiste: erst umbrechen, wenn eine Zeile nicht mehr passt */
 @media (max-width: 520px) {
   .control-bar__meta {
     flex-wrap: wrap;
@@ -1040,27 +1040,39 @@ a.control-bar__status:focus-visible {
   }
 
   .control-bar__meta-left {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    flex-flow: column nowrap;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 2px;
-    min-width: 0;
-    max-width: calc(50% - 0.5rem);
+    min-width: min-content;
+    max-width: 100%;
     line-height: var(--line-height-body);
     text-align: left;
+    white-space: normal;
   }
 
   .control-bar__status {
     flex-flow: column nowrap;
     flex: 0 1 auto;
-    flex-shrink: 1;
     align-items: flex-end;
     gap: 2px;
-    min-width: 0;
-    max-width: calc(50% - 0.5rem);
+    min-width: min-content;
+    max-width: 100%;
     margin-left: auto;
     white-space: normal;
     line-height: var(--line-height-body);
+  }
+}
+
+/* Mobile Toolbar: Chevron klappt Meta-Zeile auf; Desktop Meta immer sichtbar */
+@media (max-width: 720px) {
+  .info-card--has-toolbar .info-card__logo-chevron {
+    display: block;
+  }
+
+  .info-card--has-toolbar:not(.info-card--expanded) .control-bar__meta {
+    display: none !important;
   }
 }
 
@@ -1509,55 +1521,46 @@ body:not(.page-home):not(.page-ueber):not(.page-veranstaltungen) .irrlicht-light
   pointer-events: none;
 }
 
-/* light back — 264×1160 auf 1440×784, horizontal zentriert */
-:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back {
-  left: 50%;
-  top: 26.025%;
-  width: 18.358%;
-  min-width: 200px;
-  max-width: 264px;
-  height: 147.953%;
-  transform: translateX(-50%);
+/* Cluster: Back + Front als eine Einheit, zufällig platziert (main.js) */
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-cluster {
+  position: absolute;
+  left: var(--irrlicht-anchor-x, 50%);
+  top: var(--irrlicht-anchor-y, 32%);
+  width: clamp(44px, 5.5vw, 72px);
+  height: clamp(96px, 16vh, 148px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back .irrlicht-light__img-wrap {
+/* light back — Figma-Proportionen innerhalb des Clusters */
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-cluster .irrlicht-light--back {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-cluster .irrlicht-light--back .irrlicht-light__img-wrap {
   inset: -34.48% -151.31%;
 }
 
-/* light front — 149×655 auf 1440×784 */
-:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front {
+/* light front — horizontal zentriert, vertikal relativ zum Back (Figma 1440×784) */
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-cluster .irrlicht-light--front {
   left: 50%;
-  top: 58.201%;
-  width: 10.373%;
-  min-width: 120px;
-  max-width: 149px;
-  height: 83.598%;
+  top: 21.74%;
+  width: 56.5%;
+  height: 56.5%;
   transform: translateX(-50%);
 }
 
-:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front .irrlicht-light__img-wrap {
+:is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-cluster .irrlicht-light--front .irrlicht-light__img-wrap {
   inset: -12.21% -53.56%;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-lights {
     display: none !important;
-  }
-}
-
-@media (max-width: 520px) {
-  :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--back {
-    min-width: 180px;
-    width: 28vw;
-    top: 22%;
-    height: 130%;
-  }
-
-  :is(.page-home, .page-ueber, .page-veranstaltungen) .irrlicht-light--front {
-    min-width: 100px;
-    width: 16vw;
-    top: 52%;
-    height: 75%;
   }
 }
 
@@ -2054,17 +2057,6 @@ main .inner {
 
 .home-intro__para {
   margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--type-size-headline);
-  line-height: var(--line-height-body);
-  font-style: normal;
-  font-weight: 400;
-  font-feature-settings: "dlig" 1;
-  font-variation-settings:
-    "wght" var(--type-wght-regular),
-    "SOFT" 0,
-    "WONK" 1;
-  color: var(--palette-dark-950);
   opacity: var(--home-intro-opacity, 1);
 }
 
@@ -3479,6 +3471,82 @@ textarea {
     var(--palette-light-100) 88%,
     var(--collection-card-surface) 12%
   );
+}
+
+.card-media--image,
+.card-media--video {
+  cursor: zoom-in;
+}
+
+.card-media--video .card-media__video {
+  pointer-events: none;
+}
+
+/* Sammlung — Lightbox (Bild/Video Vollbild) */
+body.collection-lightbox-open {
+  overflow: hidden;
+}
+
+.collection-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(16px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+}
+
+.collection-lightbox[hidden] {
+  display: none;
+}
+
+.collection-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, var(--palette-dark-900) 78%, transparent);
+}
+
+.collection-lightbox__stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(96vw, 72rem);
+  max-height: min(88vh, 56rem);
+}
+
+.collection-lightbox__img,
+.collection-lightbox__video {
+  display: block;
+  max-width: 100%;
+  max-height: min(88vh, 56rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.collection-lightbox__img[hidden],
+.collection-lightbox__video[hidden] {
+  display: none;
+}
+
+.collection-lightbox__video {
+  background: var(--palette-dark-800);
+}
+
+.collection-lightbox__close {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  z-index: 2;
 }
 
 .card-lead {

@@ -317,6 +317,15 @@
     return min + Math.random() * (max - min);
   }
 
+  /** Zufällige Position pro Seitenaufruf — oberer/mittlerer Viewport, Info-Card frei. */
+  function placeIrrlichtRandomly(wrap) {
+    if (!wrap) return;
+    var x = randomBetween(14, 86);
+    var y = randomBetween(10, 52);
+    wrap.style.setProperty("--irrlicht-anchor-x", x.toFixed(2) + "%");
+    wrap.style.setProperty("--irrlicht-anchor-y", y.toFixed(2) + "%");
+  }
+
   /** Site root with trailing slash for asset paths (irrlicht SVGs). */
   function scriptBaseUrl() {
     if (typeof irrSiteUrl === "function") {
@@ -434,6 +443,7 @@
     wrap.className = "irrlicht-lights";
     wrap.setAttribute("aria-hidden", "true");
     wrap.innerHTML =
+      '<div class="irrlicht-cluster">' +
       '<div class="irrlicht-light irrlicht-light--back" data-irrlicht-layer="back">' +
       '<div class="irrlicht-light__img-wrap"><img src="' +
       imgBack +
@@ -441,18 +451,22 @@
       '<div class="irrlicht-light irrlicht-light--front" data-irrlicht-layer="front">' +
       '<div class="irrlicht-light__img-wrap"><img src="' +
       imgFront +
-      '" alt="" decoding="async"/></div></div>';
+      '" alt="" decoding="async"/></div></div>' +
+      "</div>";
 
     main.parentNode.insertBefore(wrap, main);
 
+    var cluster = wrap.querySelector(".irrlicht-cluster");
     var back = wrap.querySelector(".irrlicht-light--back");
     var front = wrap.querySelector(".irrlicht-light--front");
-    if (!back || !front) return;
+    if (!cluster || !back || !front) return;
 
-    var waitMs = Math.round(randomBetween(500, 3000));
-    var fadeInMs = Math.round(randomBetween(280, 900));
-    var holdMs = Math.round(randomBetween(120, 650));
-    var fadeOutMs = Math.round(randomBetween(500, 3000));
+    placeIrrlichtRandomly(cluster);
+
+    var waitMs = Math.round(randomBetween(0, 9000));
+    var fadeInMs = Math.round(randomBetween(100, 2800));
+    var holdMs = Math.round(randomBetween(150, 2500));
+    var fadeOutMs = Math.round(randomBetween(120, 3800));
 
     window.setTimeout(function flareIn() {
       flareIrrlichtPair(back, front, fadeInMs, holdMs, fadeOutMs, function () {
@@ -726,7 +740,7 @@
             if (!labelEl) {
               return;
             }
-            labelEl.textContent = "Adresse kopiert";
+            labelEl.textContent = "Koordinaten kopiert";
             window.setTimeout(function () {
               labelEl.textContent = defaultLabel;
             }, 2000);
