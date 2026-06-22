@@ -113,6 +113,50 @@
     );
   }
 
+  function formatEventDateDisplay(event, dt) {
+    if (event.dateLabel) {
+      return String(event.dateLabel);
+    }
+    var desc = (event.description || "").trim();
+    var prefix = /^([^—\n]+)\s*—/.exec(desc);
+    if (prefix && prefix[1] && /\d/.test(prefix[1])) {
+      return prefix[1].trim();
+    }
+    if (!dt) {
+      return event.date || "";
+    }
+    return formatEventDateLabel(dt);
+  }
+
+  function formatEventTimeDisplay(event) {
+    if (event.hours) {
+      return String(event.hours);
+    }
+    if (event.time) {
+      return formatTimeLabel(event.time);
+    }
+    var desc = (event.description || "").trim();
+    if (/^Den ganzen Tag/i.test(desc)) {
+      return "Den ganzen Tag";
+    }
+    if (event.category === "Pfadwerkstatt") {
+      return "täglich 12–20 Uhr";
+    }
+    return "";
+  }
+
+  function formatEventWithLabel(event) {
+    if (event.with) {
+      return String(event.with);
+    }
+    var desc = (event.description || "").trim();
+    var mit = desc.match(/\bMit\s+[^—.(]+/);
+    if (mit) {
+      return mit[0].trim();
+    }
+    return "";
+  }
+
   function buildDatetimeAttr(event) {
     var date = event.date || "";
     if (!date) return "";
@@ -132,7 +176,6 @@
       ]);
     }
 
-    var timeLabel = formatTimeLabel(event.time);
     var dateChildren = [
       el("span", { class: "event-calendar__weekday" }, [
         WEEKDAYS_FULL[dt.getDay()]
@@ -143,25 +186,21 @@
           class: "event-calendar__when",
           datetime: buildDatetimeAttr(event)
         },
-        [formatEventDateLabel(dt)]
+        [formatEventDateDisplay(event, dt)]
       )
     ];
-
-    if (timeLabel) {
-      dateChildren.push(
-        el("span", { class: "event-calendar__time type-body" }, [timeLabel])
-      );
-    }
 
     return el("div", { class: "event-calendar__date-col" }, dateChildren);
   }
 
   function buildSummaryMain(event) {
     var mainChildren = [];
+    var timeLabel = formatEventTimeDisplay(event);
+    var withLabel = formatEventWithLabel(event);
 
-    if (event.category) {
+    if (timeLabel) {
       mainChildren.push(
-        el("span", { class: "event-calendar__category" }, [event.category])
+        el("span", { class: "event-calendar__time type-body" }, [timeLabel])
       );
     }
 
@@ -169,7 +208,11 @@
       el("h3", { class: "event-calendar__title" }, [event.title || ""])
     );
 
-    if (event.location) {
+    if (withLabel) {
+      mainChildren.push(
+        el("p", { class: "event-calendar__with type-body-small" }, [withLabel])
+      );
+    } else if (event.location) {
       mainChildren.push(
         el("p", { class: "event-calendar__location" }, [event.location])
       );

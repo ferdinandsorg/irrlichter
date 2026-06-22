@@ -211,7 +211,7 @@
             class="control-bar__status control-bar__status--open"
             data-site-status
             data-hours-toggle
-            aria-label="Pfadwerkstatt — Zeiten einblenden"
+            aria-label="Pfadwerkstatt — Öffnungszeiten einblenden"
           >
             <span class="control-bar__status-line control-bar__status-line--name">
               <span
@@ -225,25 +225,32 @@
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
           </a>
-          <div
-            class="control-bar__hours"
-            id="site-hours-panel"
-            data-site-hours
-            hidden
+        </div>
+        <div
+          class="info-card__hours"
+          id="site-hours-panel"
+          data-site-hours
+          hidden
+        >
+          <p class="control-bar__hours-schedule">
+            <em class="control-bar__hours-range">7.&nbsp;Juni – 31.&nbsp;August</em>
+            <span class="control-bar__hours-sep" aria-hidden="true">·</span>
+            <em class="control-bar__hours-slot">Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
+          </p>
+          <p class="control-bar__hours-note type-body-small">
+            Bei gutem Wetter und Veranstaltungen auch schon mal länger.
+          </p>
+          <a
+            href="veranstaltungen#termine"
+            class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
-            <p class="control-bar__hours-line">
-              <em>7.&nbsp;Juni – 31.&nbsp;August</em>
-            </p>
-            <p class="control-bar__hours-line">
-              <em>Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
-            </p>
-            <p class="control-bar__hours-note type-body-small">
-              Bei gutem Wetter und Veranstaltungen auch schon mal länger.
-            </p>
-            <a href="veranstaltungen" class="control-bar__hours-link type-body-small"
-              >Zu den Terminen</a
+            <span class="ui-button__label">Zu den Terminen</span>
+            <span
+              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
+              aria-hidden="true"
+              >arrow_forward</span
             >
-          </div>
+          </a>
         </div>
       </div>
     </aside>
@@ -256,13 +263,13 @@
             Arten, Mut, Identität.
           </p>
           <p class="home-intro__para home-intro__para--2">
-            Es fehlt ein Raum, wo ein unmittelbarer Austausch zwischen all diesen
-            Perspektiven stattfinden kann. Das ist unser Ziel. Wir bringen vielfältige
-            Perspektiven aus dem Moor zusammen.
+            Diese unterschiedlichen Perspektiven wollen wir miteinander verflechten —
+            gedanklich und ganz praktisch. Mitten in Mecklenburg-Vorpommern, bei der
+            Ausflugsgaststätte „Moorbauer“, bauen wir einen ungewöhnlichen Pfad ins Schilf.
           </p>
           <p class="home-intro__para home-intro__para--3">
-            Mitten in Mecklenburg-Vorpommern, in der Ausflugsgaststätte „Moorbauer“,
-            sammeln, verstehen, suchen wir: Was ist ein Moor? Und wer sind wir im Moor?
+            Dabei sammeln, begreifen, suchen wir: Was hat das Moor mit mir zu tun? Was ist
+            das Moor? Was macht das Moor — mit mir? Und in welchem Moor wollen wir leben?
           </p>
         </div>
       </section>
@@ -285,7 +292,10 @@
     </main>
     <footer class="site-footer">
       <div class="inner type-body-small">
-        <small>&copy; Irrlichter 2026</small>
+        <div class="site-footer__meta">
+          <small>&copy; Irrlichter 2026</small>
+          <p class="site-footer__credit" hidden data-footer-credit></p>
+        </div>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
           <a href="impressum">Impressum</a>
@@ -295,7 +305,7 @@
       </div>
     </footer>
     <script src="js/site-base.js" defer></script>
-    <script src="js/main.js?v=5" defer></script>
+    <script src="js/main.js?v=6" defer></script>
     <script src="js/home-intro.js" defer></script>
     <script src="js/site-status.js" defer></script>
     <script src="js/site-hours.js" defer></script>

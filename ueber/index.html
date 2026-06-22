@@ -137,7 +137,7 @@
             class="control-bar__status control-bar__status--open"
             data-site-status
             data-hours-toggle
-            aria-label="Pfadwerkstatt — Zeiten einblenden"
+            aria-label="Pfadwerkstatt — Öffnungszeiten einblenden"
           >
             <span class="control-bar__status-line control-bar__status-line--name">
               <span
@@ -151,25 +151,32 @@
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
           </a>
-          <div
-            class="control-bar__hours"
-            id="site-hours-panel"
-            data-site-hours
-            hidden
+        </div>
+        <div
+          class="info-card__hours"
+          id="site-hours-panel"
+          data-site-hours
+          hidden
+        >
+          <p class="control-bar__hours-schedule">
+            <em class="control-bar__hours-range">7.&nbsp;Juni – 31.&nbsp;August</em>
+            <span class="control-bar__hours-sep" aria-hidden="true">·</span>
+            <em class="control-bar__hours-slot">Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
+          </p>
+          <p class="control-bar__hours-note type-body-small">
+            Bei gutem Wetter und Veranstaltungen auch schon mal länger.
+          </p>
+          <a
+            href="../veranstaltungen#termine"
+            class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
-            <p class="control-bar__hours-line">
-              <em>7.&nbsp;Juni – 31.&nbsp;August</em>
-            </p>
-            <p class="control-bar__hours-line">
-              <em>Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
-            </p>
-            <p class="control-bar__hours-note type-body-small">
-              Bei gutem Wetter und Veranstaltungen auch schon mal länger.
-            </p>
-            <a href="../veranstaltungen" class="control-bar__hours-link type-body-small"
-              >Zu den Terminen</a
+            <span class="ui-button__label">Zu den Terminen</span>
+            <span
+              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
+              aria-hidden="true"
+              >arrow_forward</span
             >
-          </div>
+          </a>
         </div>
       </div>
     </aside>
@@ -331,7 +338,7 @@
               <h2 id="moorbauer-heading" class="ueber-moorbauer-cta__title">Der Moorbauer</h2>
               <p class="ueber-moorbauer-cta__text type-body">
                 Alte Bauernstelle am Moor — heute Sommergaststätte, Kulturort und Insel
-                Lebendigkeit am Wasser. Nur per Boot erreichbar.
+                der Lebendigkeit am Wasser. Nur per Boot erreichbar.
               </p>
               <span
                 class="ui-button ui-button--ghost ui-button--icon-trailing ueber-moorbauer-cta__action"
@@ -370,11 +377,10 @@
                       />
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Swantje Furtak <span class="team-member__age">26</span>
-                      </span>
+                      <span class="team-member__name">Swantje Furtak</span>
                       <span class="team-member__meta type-body-small">
-                        fühlt sich Ostdeutsch · Journalistin
+                        <span class="team-member__age">26</span>
+                        · fühlt sich Ostdeutsch · Journalistin
                       </span>
                     </span>
                     <span
@@ -416,11 +422,10 @@
                       />
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Augustin Berghöfer <span class="team-member__age">51</span>
-                      </span>
+                      <span class="team-member__name">Augustin Berghöfer</span>
                       <span class="team-member__meta type-body-small">
-                        Wossi · Wissenschaftler &amp; Gastwirt
+                        <span class="team-member__age">51</span>
+                        · Wossi · Wissenschaftler &amp; Gastwirt
                       </span>
                     </span>
                     <span
@@ -460,11 +465,10 @@
                       />
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Franziska Bax <span class="team-member__age">29</span>
-                      </span>
+                      <span class="team-member__name">Franziska Bax</span>
                       <span class="team-member__meta type-body-small">
-                        Westdeutsch sozialisiert · Kuratorin
+                        <span class="team-member__age">29</span>
+                        · Westdeutsch sozialisiert · Kuratorin
                       </span>
                     </span>
                     <span
@@ -537,11 +541,10 @@
                       <span class="team-member__placeholder" aria-hidden="true">AL</span>
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Anna Luz Pueyo <span class="team-member__age">29</span>
-                      </span>
+                      <span class="team-member__name">Anna Luz Pueyo</span>
                       <span class="team-member__meta type-body-small">
-                        Französisch-Irisch · Künstlerin und Gärtnerin
+                        <span class="team-member__age">29</span>
+                        · Französisch-Irisch · Künstlerin und Gärtnerin
                       </span>
                     </span>
                     <span
@@ -576,11 +579,10 @@
                       <span class="team-member__placeholder" aria-hidden="true">UB</span>
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Uta Berghöfer <span class="team-member__age">50</span>
-                      </span>
+                      <span class="team-member__name">Uta Berghöfer</span>
                       <span class="team-member__meta type-body-small">
-                        Geographin und promovierte Landschaftsökologin
+                        <span class="team-member__age">50</span>
+                        · Geographin und promovierte Landschaftsökologin
                       </span>
                     </span>
                     <span
@@ -608,11 +610,10 @@
                       <span class="team-member__placeholder" aria-hidden="true">FS</span>
                     </span>
                     <span class="team-member__summary-text">
-                      <span class="team-member__name">
-                        Ferdinand Sorg <span class="team-member__age">31</span>
-                      </span>
+                      <span class="team-member__name">Ferdinand Sorg</span>
                       <span class="team-member__meta type-body-small">
-                        Westdeutsch sozialisiert · Gestalter und Programmierer
+                        <span class="team-member__age">31</span>
+                        · Westdeutsch sozialisiert · Gestalter und Programmierer
                       </span>
                     </span>
                     <span
@@ -669,8 +670,8 @@
         >
           <h2 id="kontakt-heading">Kontakt</h2>
           <p>
-            Du hast Fragen oder Anregungen zum Projekt? Schreib uns — wir freuen uns, von dir zu
-            hören.
+            Wir haben dich auf neue Gedanken, Fragen oder eine Veranstaltungsidee gebracht? Was auch
+            immer es ist, schreib uns!
           </p>
           <a class="ui-button ui-button--icon-leading ueber-contact__cta" href="mailto:info@irrlichter.net">
             <span class="material-symbols-sharp ui-button__icon ui-button__icon--lead" aria-hidden="true"
@@ -725,7 +726,10 @@
     </main>
     <footer class="site-footer">
       <div class="inner type-body-small">
-        <small>&copy; Irrlichter 2026</small>
+        <div class="site-footer__meta">
+          <small>&copy; Irrlichter 2026</small>
+          <p class="site-footer__credit" hidden data-footer-credit></p>
+        </div>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
           <a href="../impressum">Impressum</a>
@@ -735,7 +739,7 @@
       </div>
     </footer>
     <script src="../js/site-base.js" defer></script>
-    <script src="../js/main.js?v=5" defer></script>
+    <script src="../js/main.js?v=6" defer></script>
     <script src="../js/ueber-stack.js" defer></script>
     <script src="../js/team-member.js" defer></script>
     <script src="../js/site-status.js" defer></script>

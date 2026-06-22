@@ -119,6 +119,26 @@
       });
     }
 
+    if (hours && typeof MutationObserver === "function") {
+      var hoursMo = new MutationObserver(function () {
+        scheduleInfoCardLayoutMetricsAfterChange(card);
+      });
+      hoursMo.observe(hours, {
+        attributes: true,
+        attributeFilter: ["hidden", "class"]
+      });
+    }
+
+    if (typeof MutationObserver === "function") {
+      var cardMo = new MutationObserver(function () {
+        scheduleInfoCardLayoutMetricsAfterChange(card);
+      });
+      cardMo.observe(card, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
     if (typeof document.fonts !== "undefined" && document.fonts.ready) {
       document.fonts.ready.then(function () {
         syncInfoCardLayoutMetrics(card);

@@ -5,6 +5,7 @@
  *   IRR_SITE_ROOT  — e.g. "" or "/beta"
  *   irrSiteUrl(path) — "/data/foo.json" → "{root}/data/foo.json"
  *   irrDataUrl(file) — "events.json" → irrSiteUrl("/data/events.json")
+ *   irrPageKey(pathname) — aktive Nav: "index" | "veranstaltungen" | … (inkl. /beta/)
  *
  * Root detection: script src of site-base.js first, else pathname minus PAGE_SLUGS.
  */
@@ -87,9 +88,35 @@
     return siteUrl(path);
   }
 
+  /** Nav slug: "index" | "veranstaltungen" | "ueber" | … — works under /beta/ */
+  function pageKeyFromPathname(pathname) {
+    var segments = (pathname || "")
+      .replace(/\/index\.html?$/i, "")
+      .split("/")
+      .filter(Boolean);
+    var rootSegs = siteRoot().split("/").filter(Boolean);
+    var i;
+    for (
+      i = 0;
+      i < rootSegs.length && segments.length && segments[0] === rootSegs[i];
+      i++
+    ) {
+      segments.shift();
+    }
+    if (segments.length === 0) {
+      return "index";
+    }
+    var last = segments[segments.length - 1].replace(/\.html$/i, "").toLowerCase();
+    if (PAGE_SLUGS.indexOf(last) !== -1) {
+      return last;
+    }
+    return "index";
+  }
+
   global.IRR_SITE_ROOT = siteRoot();
   global.irrSiteUrl = siteUrl;
   global.irrDataUrl = irrDataUrl;
+  global.irrPageKey = pageKeyFromPathname;
 })(
   typeof window !== "undefined"
     ? window

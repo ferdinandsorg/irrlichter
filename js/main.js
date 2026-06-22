@@ -68,13 +68,10 @@
   }
 
   function markActiveNav() {
-    var segs = (window.location.pathname || "")
-      .split("/")
-      .filter(function (s) {
-        return s;
-      });
-    var current = (segs.pop() || "index").toLowerCase();
-    var key = current.replace(/\.html$/i, "");
+    var key =
+      typeof irrPageKey === "function"
+        ? irrPageKey(window.location.pathname || "")
+        : "index";
     var links = document.querySelectorAll(".nav-links a[data-nav]");
     links.forEach(function (link) {
       if (link.getAttribute("data-nav") === key) {

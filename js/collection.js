@@ -237,6 +237,7 @@
       item.card.style.visibility = "";
       item.card.style.left = placedRect.x + "px";
       item.card.style.top = placedRect.y + "px";
+      item.card.style.setProperty("--card-stack", String(i));
       placed.push(placedRect);
     }
 
@@ -256,6 +257,16 @@
     if (!video || video.getAttribute("poster") || video.poster) return;
     if (video.dataset.posterFromFrame === "1") return;
 
+    video.muted = true;
+    video.playsInline = true;
+
+    function markPosterReady() {
+      var wrap = video.closest(".card-media--video");
+      if (wrap) {
+        wrap.classList.add("card-media--has-poster");
+      }
+    }
+
     function drawFrame() {
       if (!video.videoWidth || !video.videoHeight) return;
       var canvas = document.createElement("canvas");
@@ -267,6 +278,7 @@
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         video.poster = canvas.toDataURL("image/jpeg", 0.85);
         video.dataset.posterFromFrame = "1";
+        markPosterReady();
         if (grid) scheduleCollectionScatter(grid, true);
       } catch (err) {
         /* z. B. cross-origin */
@@ -294,6 +306,7 @@
       seekToFirstFrame();
     } else {
       video.addEventListener("loadeddata", seekToFirstFrame, { once: true });
+      video.addEventListener("loadedmetadata", seekToFirstFrame, { once: true });
     }
   }
 

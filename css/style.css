@@ -203,9 +203,9 @@
      (oben hell: eher deckend; unten dunkel: leichtes Glas wie zuvor). */
   --collection-card-surface: color-mix(
     in oklch,
-    color-mix(in oklch, var(--palette-light-50) 38%, var(--ambient-bg))
+    color-mix(in oklch, var(--palette-light-50) 62%, var(--ambient-bg))
       calc((1 - var(--scroll-shift)) * 100%),
-    color-mix(in oklch, var(--palette-light-50) 22%, var(--palette-dark-800))
+    color-mix(in oklch, var(--palette-light-50) 38%, var(--palette-dark-800))
       calc(var(--scroll-shift) * 100%)
   );
   --collection-tag-pill-bg: color-mix(
@@ -754,8 +754,7 @@ body::after {
     max-width: none;
   }
 
-  .control-bar__hours {
-    flex: 1 1 100%;
+  .info-card__hours {
     width: 100%;
     box-sizing: border-box;
   }
@@ -796,34 +795,42 @@ body::after {
   overflow: clip;
 }
 
-.control-bar__meta--hours-open {
-  overflow: visible;
-}
-
-.control-bar__hours[hidden] {
-  display: none !important;
-}
-
-.control-bar__hours {
+/* Öffnungszeiten — eigenes Stack-Segment wie Toolbar */
+.info-card__hours {
+  box-sizing: border-box;
   display: flex;
-  flex: 1 1 100%;
   flex-direction: column;
-  gap: 0.25rem;
+  align-items: flex-start;
+  gap: 4px;
   width: 100%;
   margin: 0;
-  padding: 0.5rem 0 0;
-  border-top: 1px solid color-mix(in oklch, var(--ambient-border) 65%, transparent);
+  padding: var(--info-card-toolbar-pad-y) var(--info-card-toolbar-pad-x);
+  background: #fff;
   font-family: var(--font-body);
   font-size: var(--type-size-meta);
   line-height: var(--line-height-body);
   color: #040403;
 }
 
-.control-bar__hours-line {
-  margin: 0;
+.info-card__hours[hidden] {
+  display: none !important;
 }
 
-.control-bar__hours-line em {
+.control-bar__hours-schedule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.4rem;
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: var(--type-size-meta);
+  line-height: var(--line-height-body);
+  color: #040403;
+}
+
+.control-bar__hours-range,
+.control-bar__hours-slot {
   font-style: italic;
   font-weight: 400;
   font-feature-settings: var(--type-ff-dlig);
@@ -834,21 +841,23 @@ body::after {
     "WONK" 1;
 }
 
-.control-bar__hours-note {
-  margin: 0.15rem 0 0;
-  color: var(--ambient-fg-muted);
-}
-
-.control-bar__hours-link {
-  margin-top: 0.35rem;
-  color: var(--ambient-fg-muted);
+.control-bar__hours-sep {
   font-family: var(--font-display);
-  font-style: italic;
-  text-decoration: none;
+  font-style: normal;
+  font-size: var(--type-size-nav-sep);
+  line-height: 1;
+  color: var(--ambient-fg-muted);
+  user-select: none;
 }
 
-.control-bar__hours-link:hover {
-  color: var(--ambient-accent);
+.control-bar__hours-note {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--ambient-fg-muted);
+}
+
+.control-bar__hours-cta.ui-button {
+  margin-top: 0.1rem;
 }
 
 .control-bar__meta[hidden] {
@@ -858,10 +867,10 @@ body::after {
 .control-bar__meta-left {
   display: flex;
   flex: 1 1 auto;
-  flex-flow: row wrap;
+  flex-flow: column nowrap;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
   font-size: var(--type-size-meta);
   line-height: 1;
@@ -904,10 +913,10 @@ body::after {
 
 .control-bar__status {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   flex-shrink: 0;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 2px;
   font-size: var(--type-size-meta);
   line-height: 1;
   color: #040403;
@@ -1560,6 +1569,11 @@ body:not(.page-home):not(.page-ueber):not(.page-veranstaltungen) .irrlicht-light
   min-width: 0;
 }
 
+.site-footer__credit {
+  margin: 0;
+  color: var(--ambient-fg-muted);
+}
+
 .site-footer__credit a:hover {
   color: var(--ambient-fg);
   text-decoration: none;
@@ -1920,7 +1934,7 @@ main .inner {
 .home-intro__para {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--type-size-body);
+  font-size: var(--type-size-headline);
   line-height: var(--line-height-body);
   font-style: normal;
   font-weight: 400;
@@ -3297,6 +3311,8 @@ textarea {
   max-width: 438px;
   margin: 0;
   box-sizing: border-box;
+  isolation: isolate;
+  z-index: calc(10 + var(--card-stack, 0));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -3330,9 +3346,22 @@ textarea {
   background: var(--palette-dark-700);
 }
 
+.card-media--video.card-media--has-poster {
+  background: var(--card-muted-bg);
+}
+
 .card-media__video {
   border-radius: var(--radius-sm);
   object-fit: contain;
+  background: var(--card-muted-bg);
+}
+
+.section--collection .card-media--image {
+  background: color-mix(
+    in oklch,
+    var(--palette-light-100) 88%,
+    var(--collection-card-surface) 12%
+  );
 }
 
 .card-lead {
@@ -3502,7 +3531,10 @@ textarea {
   color: var(--collection-fg);
 }
 
-.section--collection .card-title,
+.section--collection .card-title {
+  display: none;
+}
+
 .section--collection .card-meta,
 .section--collection .card-summary {
   color: var(--collection-fg);
@@ -3810,6 +3842,15 @@ textarea {
 .event-calendar__time {
   margin: 0;
   color: var(--ambient-fg);
+  font-family: var(--font-body);
+  font-size: var(--type-size-meta);
+  line-height: var(--line-height-body);
+}
+
+.event-calendar__with {
+  margin: 0;
+  color: var(--ambient-fg-muted);
+  font-style: italic;
 }
 
 .event-calendar__summary-text {
@@ -3894,9 +3935,11 @@ textarea {
 }
 
 .event-calendar__summary:hover .event-calendar__location,
+.event-calendar__summary:hover .event-calendar__with,
 .event-calendar__summary:hover .event-calendar__chevron,
 .event-calendar__summary:hover .event-calendar__category,
 .event-calendar__details[open] .event-calendar__location,
+.event-calendar__details[open] .event-calendar__with,
 .event-calendar__details[open] .event-calendar__chevron,
 .event-calendar__details[open] .event-calendar__category {
   color: var(--ambient-fg);

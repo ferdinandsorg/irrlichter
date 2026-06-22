@@ -122,7 +122,7 @@
             class="control-bar__status control-bar__status--open"
             data-site-status
             data-hours-toggle
-            aria-label="Pfadwerkstatt — Zeiten einblenden"
+            aria-label="Pfadwerkstatt — Öffnungszeiten einblenden"
           >
             <span class="control-bar__status-line control-bar__status-line--name">
               <span
@@ -136,28 +136,33 @@
               <span class="control-bar__status-state" data-site-status-state>geöffnet</span>
             </span>
           </a>
-          <div
-            class="control-bar__hours"
-            id="site-hours-panel"
-            data-site-hours
-            hidden
+        </div>
+        <div
+          class="info-card__hours"
+          id="site-hours-panel"
+          data-site-hours
+          hidden
+        >
+          <p class="control-bar__hours-schedule">
+            <em class="control-bar__hours-range">7.&nbsp;Juni – 31.&nbsp;August</em>
+            <span class="control-bar__hours-sep" aria-hidden="true">·</span>
+            <em class="control-bar__hours-slot">Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
+          </p>
+          <p class="control-bar__hours-note type-body-small">
+            Bei gutem Wetter und Veranstaltungen auch schon mal länger.
+          </p>
+          <a
+            href="#termine"
+            class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
+            data-scroll-to-section
           >
-            <p class="control-bar__hours-line">
-              <em>7.&nbsp;Juni – 31.&nbsp;August</em>
-            </p>
-            <p class="control-bar__hours-line">
-              <em>Donnerstag – Sonntag · 12–20&nbsp;Uhr</em>
-            </p>
-            <p class="control-bar__hours-note type-body-small">
-              Bei gutem Wetter und Veranstaltungen auch schon mal länger.
-            </p>
-            <a
-              href="#termine"
-              class="control-bar__hours-link type-body-small"
-              data-scroll-to-section
-              >Zum Kalender</a
+            <span class="ui-button__label">Zu den Terminen</span>
+            <span
+              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
+              aria-hidden="true"
+              >arrow_forward</span
             >
-          </div>
+          </a>
         </div>
       </div>
     </aside>
@@ -214,7 +219,10 @@
     </main>
     <footer class="site-footer">
       <div class="inner type-body-small">
-        <small>&copy; Irrlichter 2026</small>
+        <div class="site-footer__meta">
+          <small>&copy; Irrlichter 2026</small>
+          <p class="site-footer__credit" hidden data-footer-credit></p>
+        </div>
         <span class="site-footer__sep site-footer__sep--lead" aria-hidden="true"> &mdash; </span>
         <nav class="site-footer__nav" aria-label="Rechtliches">
           <a href="../impressum">Impressum</a>
@@ -224,7 +232,7 @@
       </div>
     </footer>
     <script src="../js/site-base.js" defer></script>
-    <script src="../js/main.js?v=5" defer></script>
+    <script src="../js/main.js?v=6" defer></script>
     <script src="../js/site-status.js" defer></script>
     <script src="../js/site-hours.js" defer></script>
     <script src="../js/site-weather.js" defer></script>
