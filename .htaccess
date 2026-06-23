@@ -8,9 +8,10 @@ DirectoryIndex index.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # HTTP → HTTPS (301)
-  RewriteCond %{HTTPS} !=on
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  # HTTP → HTTPS: erst aktivieren, wenn irrlichter.net ein gültiges Zertifikat hat
+  # (Hetzner/KonsoleH: SSL für die Domain zuweisen, nicht *your-server.de)
+  # RewriteCond %{HTTPS} !=on
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
   # Umbenannte Seiten (301)
   RewriteRule ^mitmachen/?$ /veranstaltungen [R=301,L]
