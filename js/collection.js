@@ -1218,6 +1218,12 @@
       searchInput.addEventListener("input", run);
       wireSearchGlyph(searchInput);
     }
+    var filterForm = document.querySelector("[data-filters]");
+    if (filterForm) {
+      filterForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+      });
+    }
     run();
     grid.addEventListener("click", function (e) {
       var tagBtn = e.target && e.target.closest && e.target.closest("button.card-tag");

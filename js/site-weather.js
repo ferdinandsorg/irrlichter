@@ -3,8 +3,8 @@
   "use strict";
 
   /* Dorfstraße 123, 17139 Malchin — Raster ~1 km Open-Meteo */
-  var LAT = 53.7578;
-  var LON = 12.7628;
+  var LAT = 53.767631;
+  var LON = 12.779701;
   var CACHE_KEY = "irrlichter-weather-v1";
   var CACHE_TTL_MS = 30 * 60 * 1000;
   var API_URL =
