@@ -344,128 +344,16 @@
     }
   }
 
-  var lightboxRoot = null;
-  var lightboxImg = null;
-  var lightboxVideo = null;
-  var lightboxCloseBtn = null;
-  var lightboxOpen = false;
-  var lightboxLastFocus = null;
-
-  function initCollectionLightbox() {
-    if (lightboxRoot) return;
-
-    lightboxImg = el("img", {
-      class: "collection-lightbox__img",
-      alt: "",
-      decoding: "async",
-      hidden: true
-    });
-    lightboxVideo = el("video", {
-      class: "collection-lightbox__video",
-      controls: true,
-      playsinline: true,
-      preload: "metadata",
-      hidden: true
-    });
-    lightboxCloseBtn = el(
-      "button",
-      {
-        type: "button",
-        class: "ui-button ui-button--icon-leading collection-lightbox__close",
-        "aria-label": "Schließen"
-      },
-      [
-        el(
-          "span",
-          {
-            class: "material-symbols-sharp ui-button__icon ui-button__icon--lead",
-            "aria-hidden": "true"
-          },
-          ["close"]
-        ),
-        el("span", { class: "ui-button__label" }, ["Schließen"])
-      ]
-    );
-
-    lightboxRoot = el("div", {
-      class: "collection-lightbox",
-      hidden: true,
-      role: "dialog",
-      "aria-modal": "true",
-      "aria-label": "Medienansicht"
-    }, [
-      el("div", { class: "collection-lightbox__backdrop" }),
-      el("div", { class: "collection-lightbox__stage" }, [lightboxImg, lightboxVideo]),
-      lightboxCloseBtn
-    ]);
-
-    document.body.appendChild(lightboxRoot);
-
-    lightboxCloseBtn.addEventListener("click", closeCollectionLightbox);
-    lightboxRoot
-      .querySelector(".collection-lightbox__backdrop")
-      .addEventListener("click", closeCollectionLightbox);
-
-    document.addEventListener("keydown", function (e) {
-      if (!lightboxOpen || e.key !== "Escape") return;
-      e.preventDefault();
-      closeCollectionLightbox();
-    });
-  }
-
   function pauseCardVideos() {
     document.querySelectorAll("video.card-media__video").forEach(function (video) {
       video.pause();
     });
   }
 
-  function openCollectionLightbox(payload) {
-    if (!payload || !payload.kind) return;
-    initCollectionLightbox();
+  function openLightbox(payload) {
+    if (!window.irrMediaLightbox) return;
     pauseCardVideos();
-
-    if (payload.kind === "image") {
-      lightboxImg.hidden = false;
-      lightboxVideo.hidden = true;
-      lightboxVideo.pause();
-      lightboxVideo.removeAttribute("src");
-      lightboxVideo.load();
-      lightboxImg.src = payload.src || "";
-      lightboxImg.alt = payload.alt || "";
-    } else if (payload.kind === "video") {
-      lightboxImg.hidden = true;
-      lightboxImg.removeAttribute("src");
-      lightboxVideo.hidden = false;
-      lightboxVideo.src = payload.src || "";
-      if (payload.poster) {
-        lightboxVideo.setAttribute("poster", payload.poster);
-      } else {
-        lightboxVideo.removeAttribute("poster");
-      }
-    } else {
-      return;
-    }
-
-    lightboxLastFocus = document.activeElement;
-    lightboxRoot.hidden = false;
-    lightboxOpen = true;
-    document.body.classList.add("collection-lightbox-open");
-    lightboxCloseBtn.focus();
-  }
-
-  function closeCollectionLightbox() {
-    if (!lightboxRoot || !lightboxOpen) return;
-    lightboxOpen = false;
-    lightboxRoot.hidden = true;
-    document.body.classList.remove("collection-lightbox-open");
-    lightboxVideo.pause();
-    lightboxVideo.removeAttribute("src");
-    lightboxVideo.load();
-    lightboxImg.removeAttribute("src");
-    if (lightboxLastFocus && typeof lightboxLastFocus.focus === "function") {
-      lightboxLastFocus.focus();
-    }
-    lightboxLastFocus = null;
+    window.irrMediaLightbox.open(payload);
   }
 
   function wireCardMediaLightbox(card) {
@@ -479,7 +367,7 @@
       imgWrap.setAttribute("aria-label", imgLabel + " vergrößern");
 
       function openImage() {
-        openCollectionLightbox({
+        openLightbox({
           kind: "image",
           src: img.currentSrc || img.src,
           alt: img.alt || ""
@@ -506,7 +394,7 @@
       videoWrap.setAttribute("aria-label", videoLabel + " in Vollbild öffnen");
 
       function openVideo() {
-        openCollectionLightbox({
+        openLightbox({
           kind: "video",
           src: video.currentSrc || video.src || "",
           poster: video.getAttribute("poster") || ""
@@ -1389,7 +1277,9 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    initCollectionLightbox();
+    if (window.irrMediaLightbox) {
+      window.irrMediaLightbox.init();
+    }
     initCollectionToolbarReveal();
     var preview = readCollectionPreview();
     if (preview) {

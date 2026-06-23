@@ -23,6 +23,15 @@
   font-display: swap;
 }
 
+/* Material Symbols Sharp — lokal (variable WOFF2, ~3 MB). Update: scripts/update-material-icons.sh */
+@font-face {
+  font-family: "Material Symbols Sharp";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url("../font/MaterialSymbolsSharp.woff2") format("woff2");
+}
+
 /* Figma Irrlichter Exploration (Frame Startpage, n70:174) — Fraunces-Variable + OT.
    Custom Properties sind @property-registriert, damit transition/animation
    auf Achsen (wght, opsz, SOFT, WONK) zuverlaessig interpoliert. */
@@ -335,7 +344,7 @@ body.page-home {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  font-feature-settings: "liga";
+  font-feature-settings: "liga", "rlig";
   -webkit-font-smoothing: antialiased;
   font-variation-settings:
     "FILL" 1,
@@ -2138,6 +2147,66 @@ body.page-home .collection-grid {
   color: var(--ambient-fg);
 }
 
+/* Fließtext-Links — kursiv, unterstrichen; Hover/Active fett+kursiv; Farbe wie umgebender Text */
+:is(.type-body, .section--plain p, .team-member__bio)
+  a:not(.ui-button):not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta) {
+  color: inherit;
+  font-style: italic;
+  font-variation-settings:
+    "wght" var(--type-wght-regular),
+    "SOFT" 0,
+    "WONK" 1;
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: 0.08em;
+  transition: font-variation-settings var(--type-dur-hover) var(--type-ease-out);
+}
+
+:is(.type-body, .section--plain p, .team-member__bio)
+  a:not(.ui-button):not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta) em {
+  font-style: italic;
+  font-weight: 400;
+  font-feature-settings: "dlig" 1;
+  font-variation-settings:
+    "wght" var(--type-wght-regular),
+    "SOFT" 0,
+    "WONK" 1;
+}
+
+:is(.type-body, .section--plain p, .team-member__bio)
+  a:not(.ui-button):not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta):is(
+    :link,
+    :visited,
+    :hover,
+    :active
+  ) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+:is(.type-body, .section--plain p, .team-member__bio)
+  a:not(.ui-button):not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta):is(
+    :hover,
+    :active
+  ) {
+  font-style: italic;
+  font-variation-settings:
+    "wght" var(--type-wght-semibold),
+    "SOFT" 0,
+    "WONK" 1;
+  text-decoration-thickness: 0.12em;
+}
+
+:is(.type-body, .section--plain p, .team-member__bio)
+  a:not(.ui-button):not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta):is(
+    :hover,
+    :active
+  )
+  em {
+  font-variation-settings: inherit;
+}
+
 .type-body-large {
   font-family: var(--font-body);
   font-size: var(--type-size-headline);
@@ -2237,19 +2306,6 @@ body.page-ueber main#content > .inner {
   max-width: var(--info-card-control-width);
   margin-inline: auto;
   box-sizing: border-box;
-}
-
-body.page-ueber .ueber-page
-  a:not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta):not(.ui-button) {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-body.page-ueber .ueber-page
-  a:not(.ueber-moorbauer-cta__link):not(.ueber-contact__cta):not(.ui-button):hover {
-  color: var(--ambient-accent);
-  text-decoration: none;
 }
 
 /* === UI BUTTON (agents: docs/CODE-MAP.md ~L1919) ===
@@ -2357,12 +2413,6 @@ body.page-ueber .ueber-anfahrt__address-copy {
   margin-top: 0.35rem;
 }
 
-#anfahrt,
-#kontakt,
-#kontakt-anfahrt {
-  scroll-margin-top: calc(var(--site-header-offset) + 1rem);
-}
-
 .ueber-section-anchor {
   display: block;
   height: 0;
@@ -2408,6 +2458,13 @@ body.page-ueber .ueber-section p em {
   font-variation-settings:
     "wght" var(--type-wght-semibold),
     "opsz" var(--type-opsz-display),
+    "SOFT" 0,
+    "WONK" 1;
+}
+
+body.page-ueber .ueber-section p a:not(.ui-button):not(.ueber-contact__cta) em {
+  font-variation-settings:
+    "wght" var(--type-wght-regular),
     "SOFT" 0,
     "WONK" 1;
 }
@@ -2663,16 +2720,15 @@ body.page-ueber .ueber-stack-card {
 body.page-ueber .ueber-stack-card__level {
   margin: 0;
   padding: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--type-size-label);
   line-height: var(--line-height-nav);
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
   letter-spacing: 0;
-  font-feature-settings: var(--type-ff-dlig);
+  font-feature-settings: "dlig" 1;
   font-variation-settings:
-    "wght" var(--type-wght-semibold),
-    "opsz" var(--type-opsz-display),
+    "wght" var(--type-wght-regular),
     "SOFT" 0,
     "WONK" 1;
   color: #040403;
@@ -3053,6 +3109,10 @@ body.page-ueber .team-member__photo {
   object-fit: cover;
 }
 
+body.page-ueber .team-member__media:not(.team-member__media--fallback) {
+  cursor: zoom-in;
+}
+
 body.page-ueber .team-member__name {
   display: block;
   margin: 0;
@@ -3185,12 +3245,6 @@ body.page-veranstaltungen .event-calendar {
 
 body.page-veranstaltungen .event-calendar__group:first-child {
   margin-top: clamp(3.5rem, 8vw, 5.5rem);
-}
-
-body.page-veranstaltungen #termine {
-  scroll-margin-top: calc(
-    var(--site-header-offset) + clamp(3.5rem, 8vw, 5.5rem)
-  );
 }
 
 body.page-legal {

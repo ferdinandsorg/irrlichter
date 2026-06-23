@@ -118,6 +118,95 @@
   global.irrDataUrl = irrDataUrl;
   global.irrPageKey = pageKeyFromPathname;
 
+  function irrGetSiteHeaderOffset() {
+    var header = document.querySelector(".site-header");
+    if (header) {
+      return Math.ceil(header.getBoundingClientRect().height);
+    }
+    return 0;
+  }
+
+  /** Scrollt target so, dass dessen Oberkante direkt unter der fixen Nav sitzt. */
+  function irrScrollToAnchor(target) {
+    if (!target || !target.getBoundingClientRect) return;
+    var reduced =
+      global.matchMedia &&
+      global.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var offset = irrGetSiteHeaderOffset();
+    var scrollEl = document.scrollingElement || document.documentElement;
+    var top =
+      target.getBoundingClientRect().top +
+      (global.pageYOffset || scrollEl.scrollTop || 0) -
+      offset;
+    global.scrollTo({
+      top: Math.max(0, top),
+      behavior: reduced ? "auto" : "smooth"
+    });
+  }
+
+  function irrScrollToHashIfPresent() {
+    var hash = global.location && global.location.hash;
+    if (!hash || hash.length < 2) return;
+    var id = hash.slice(1);
+    if (id === "termine") return;
+    var target = document.getElementById(id);
+    if (id === "anfahrt") {
+      var heading = document.getElementById("anfahrt-heading");
+      if (heading) target = heading;
+    }
+    if (!target) return;
+    global.requestAnimationFrame(function () {
+      irrScrollToAnchor(target);
+    });
+  }
+
+  global.irrGetSiteHeaderOffset = irrGetSiteHeaderOffset;
+  global.irrScrollToAnchor = irrScrollToAnchor;
+  global.irrScrollToHashIfPresent = irrScrollToHashIfPresent;
+
+  /** Externe http(s)-Links in neuem Tab — optional scope (Element oder Document). */
+  function irrApplyExternalLinkTargets(scope) {
+    var root = scope && scope.querySelectorAll ? scope : document;
+    var origin = global.location && global.location.origin;
+    if (!origin) return;
+
+    root.querySelectorAll("a[href]").forEach(function (anchor) {
+      var href = anchor.getAttribute("href") || "";
+      if (!/^https?:\/\//i.test(href)) return;
+      try {
+        if (new URL(href).origin === origin) return;
+      } catch (err) {
+        return;
+      }
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+    });
+  }
+
+  global.irrApplyExternalLinkTargets = irrApplyExternalLinkTargets;
+
+  function onReadyApplyExternalLinks() {
+    irrApplyExternalLinkTargets(document);
+  }
+
+  function onReadySiteBase() {
+    onReadyApplyExternalLinks();
+    if (global.location && global.location.hash) {
+      if ("scrollRestoration" in global.history) {
+        global.history.scrollRestoration = "manual";
+      }
+      irrScrollToHashIfPresent();
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", onReadySiteBase);
+  } else {
+    onReadySiteBase();
+  }
+
+  document.addEventListener("irrlichter:collection-rendered", onReadyApplyExternalLinks);
+
   try {
     if (localStorage.getItem("irrlichter-text-scale") === "large") {
       document.documentElement.setAttribute("data-text-scale", "large");

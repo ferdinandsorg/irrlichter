@@ -321,6 +321,10 @@
 
   function scrollToTermineTarget(target) {
     if (!target) return;
+    if (typeof window.irrScrollToAnchor === "function") {
+      window.irrScrollToAnchor(target);
+      return;
+    }
     var reduced =
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -404,6 +408,9 @@
     scrollToTermineIfHash();
     if (typeof window.initEventCalendarDetails === "function") {
       window.initEventCalendarDetails(root);
+    }
+    if (typeof window.irrApplyExternalLinkTargets === "function") {
+      window.irrApplyExternalLinkTargets(root);
     }
   }
 

@@ -56,11 +56,12 @@
         }
       }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,100..700,1,25&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="../font/MaterialSymbolsSharp.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <link rel="stylesheet" href="../css/style.css" />
   </head>
@@ -126,6 +127,7 @@
           <a
             href="#anfahrt"
             class="control-bar__meta-left"
+            data-scroll-to-section
             aria-label="Anfahrt und Öffnungszeiten"
           >
             <span class="control-bar__location" data-site-location>Moorbauer</span>
@@ -370,8 +372,8 @@
                       <span class="team-member__placeholder" aria-hidden="true">SF</span>
                       <img
                         class="team-member__photo"
-                        src="../assets/images/team/swantje-furtak.jpg"
-                        alt=""
+                        src="../assets/images/team/Swantje_Furtak.jpg"
+                        alt="Porträt von Swantje Furtak"
                         width="160"
                         height="184"
                         loading="lazy"
@@ -383,7 +385,7 @@
                       <span class="team-member__name">Swantje Furtak</span>
                       <span class="team-member__meta type-body-small">
                         <span class="team-member__age">26</span>
-                        — fühlt sich Ostdeutsch — Journalistin
+                        — Journalistin
                       </span>
                     </span>
                     <span
@@ -394,16 +396,19 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Swantje Furtak hat ursprünglich Biochemie studiert und ist dabei tief im Thema
-                      Moor versunken. Sie forschte in den Sumpfwäldern Perus, drehte einen
-                      Dokumentarfilm in den irischen Midlands, recherchierte zum Torfabbau in Lettland
-                      und spricht mit deutschen Landwirt:innen. Swantje ist fasziniert davon, wie eng
-                      Menschen und Moore miteinander verwoben sind. Ihr erstes Buch
+                      Swantje hat ursprünglich Biochemie studiert und ist dabei tief im Thema Moor
+                      versunken. Sie forschte in den Sumpfwäldern Perus, drehte einen Dokumentarfilm in
+                      den irischen Midlands, recherchierte zum Torfabbau in Lettland und spricht mit
+                      deutschen Landwirten. Swantje ist fasziniert davon, wie eng Menschen und Moore
+                      miteinander verwoben sind. Ihr erstes Buch
                       <em>Moore sind wie Menschen, nur nasser</em> (Katapult Verlag, 2024) schrieb sie
                       gemeinsam mit Professor Hans Joosten. Seit 2025 ist sie Kuratoriumsmitglied der
-                      Stiftung Moorbibliothek und berät als Mitglied im Wissenschaftlichen Beirat der
-                      UN-Dekade Wiederherstellung von Ökosystemen das Bundesministerium für Umwelt- und
-                      Klimaschutz.
+                      <a href="https://www.moorbibliothek.de/">Stiftung Moorbibliothek</a> und berät als
+                      Mitglied im
+                      <a href="https://www.undekade-restoration.de/wissenschaftlicher-beirat/"
+                        >Wissenschaftlichen Beirat der UN-Dekade Wiederherstellung von Ökosystemen</a
+                      >
+                      das Bundesministerium für Umwelt- und Klimaschutz.
                     </p>
                   </div>
                 </details>
@@ -415,8 +420,8 @@
                       <span class="team-member__placeholder" aria-hidden="true">AB</span>
                       <img
                         class="team-member__photo"
-                        src="../assets/images/team/augustin-berghoefer.jpg"
-                        alt=""
+                        src="../assets/images/team/Augustin_Berghöfer.jpg"
+                        alt="Porträt von Augustin Berghöfer"
                         width="160"
                         height="184"
                         loading="lazy"
@@ -428,7 +433,7 @@
                       <span class="team-member__name">Augustin Berghöfer</span>
                       <span class="team-member__meta type-body-small">
                         <span class="team-member__age">51</span>
-                        — Wossi — Wissenschaftler &amp; Gastwirt
+                        — Politikwissenschaftler &amp; Gastwirt
                       </span>
                     </span>
                     <span
@@ -458,8 +463,8 @@
                       <span class="team-member__placeholder" aria-hidden="true">FB</span>
                       <img
                         class="team-member__photo"
-                        src="../assets/images/team/franziska-bax.jpg"
-                        alt=""
+                        src="../assets/images/team/Franziska_Bax.jpg"
+                        alt="Porträt von Franziska Bax"
                         width="160"
                         height="184"
                         loading="lazy"
@@ -471,7 +476,7 @@
                       <span class="team-member__name">Franziska Bax</span>
                       <span class="team-member__meta type-body-small">
                         <span class="team-member__age">29</span>
-                        — Westdeutsch sozialisiert — Kuratorin
+                        — Kuratorin
                       </span>
                     </span>
                     <span
@@ -482,16 +487,20 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Franziska Bax bewegt sich zwischen Kulturproduktion und den
+                      Franziska bewegt sich zwischen Kulturproduktion und den
                       (Umwelt-)Geisteswissenschaften. Ihr Anliegen ist es, sanfte und gemeinschaftliche
-                      Lebens- und Arbeitsweisen in unserer sich stetig wandelnden Welt zu erproben.
-                      Während ihrer Anstellung am Rachel Carson Center kuratierte sie eine Ausstellung,
-                      in der Studierende Unsicherheit und Mut als Hoffnungsträger in globalen Krisen
+                      Lebens- und Arbeitsweisen in unserer sich stetig wandelnden Welt zu erproben. Während
+                      ihrer Anstellung am
+                      <a href="https://www.carsoncenter.uni-muenchen.de/index.html">Rachel Carson Center</a>
+                      kuratierte sie eine Ausstellung in der Studierende
+                      <a href="https://onebookmanyworldsausstellung.cargo.site/"
+                        >Unsicherheit und Mut als Hoffnungsträger in globalen Krisen</a
+                      >
                       befragten. Ihr letztes Projekt führte sie gemeinsam mit Swantje Furtak ins
-                      Teufelsmoor, wo sie die dichte Perspektive und emotionale Lage von Landwirt:innen
-                      im Kontext von bevorstehender Wiedervernässung einfing. Seit September 2025
-                      assistiert sie in der Stiftung Kunst und Natur Nantesbuch bei der Entwicklung eines
-                      Forum zum Thema Boden.
+                      Teufelsmoor, wo sie die dichte Perspektive und emotionale Lage von Landwirt:innen im
+                      Kontext von bevorstehender Wiedervernässung einfing. Seit September 2025 arbeitet sie
+                      in der Stiftung Kunst und Natur Nantesbuch für die Bodeninitiative
+                      <em>Forum Nantesbuch</em>.
                     </p>
                   </div>
                 </details>
@@ -511,7 +520,7 @@
                     <span class="team-member__summary-text">
                       <span class="team-member__name">Charlett Wenig</span>
                       <span class="team-member__meta type-body-small">
-                        Materialwissenschaftlerin und Produktdesignerin
+                        Materialwissenschaftlerin &amp; Produktdesignerin
                       </span>
                     </span>
                     <span
@@ -522,17 +531,21 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Charlett Wenig verfolgt sowohl einen praxisorientierten als auch einen
-                      wissenschaftlichen Ansatz bei der Arbeit mit meist unterschätzten Biomaterialien.
-                      Sie promovierte an der TU Berlin in Werkstofftechnik zum Thema Charakterisierung
-                      und nachhaltige Nutzung lokaler Baumrindenarten durch die Verbindung von Wissenschaft
-                      und Design. In der Forschungsgruppe Adaptive Fasermaterialien am Max-Planck-Institut
-                      für Kolloid- und Grenzflächenforschung untersucht sie potenzielle Anwendungsfelder
-                      und Verarbeitungsmethoden für die hochwertige Nutzung lokaler Pflanzenarten (z.&nbsp;B.
-                      Paludikulturen) unter Berücksichtigung ihrer Forschungsergebnisse zu Struktur,
-                      Eigenschaften und Funktionen. Für die Ausstellung <em>Swamp Things</em> entwickelte
-                      sie mit Hilfe der Wulstwickeltechnik temporäre architektonische Installationen und
-                      erste Sumpfinseln.
+                      Charlett verfolgt sowohl einen praxisorientierten als auch einen wissenschaftlichen
+                      Ansatz bei der Arbeit mit meist unterschätzten Biomaterialien. Sie promovierte an
+                      der TU Berlin in Werkstofftechnik zum Thema Charakterisierung und nachhaltige Nutzung
+                      lokaler Baumrindenarten durch die Verbindung von Wissenschaft und Design. In der
+                      Forschungsgruppe Adaptive Fasermaterialien am Max-Planck-Institut für Kolloid und
+                      Grenzflächenforschung untersucht sie potenzielle Anwendungsfelder und
+                      Verarbeitungsmethoden für die hochwertige Nutzung lokaler Pflanzenarten (z.&nbsp;B.
+                      Paludi-kulturen) unter Berücksichtigung ihrer Forschungsergebnisse zu Struktur,
+                      Eigenschaften und Funktionen. Für die Ausstellung
+                      <a
+                        href="https://www.matters-of-activity.de/en/activities/16081/swamp-things-the-liveliness-of-peatland-plants"
+                        ><em>Swamp Things</em></a
+                      >
+                      entwickelte sie mit Hilfe der Wulstwickeltechnik temporäre architektonische
+                      Installationen und erste Sumpfinseln.
                     </p>
                   </div>
                 </details>
@@ -547,7 +560,7 @@
                       <span class="team-member__name">Anna Luz Pueyo</span>
                       <span class="team-member__meta type-body-small">
                         <span class="team-member__age">29</span>
-                        — Französisch-Irisch — Künstlerin und Gärtnerin
+                        — Künstlerin und Gärtnerin
                       </span>
                     </span>
                     <span
@@ -558,11 +571,16 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Anna Luz Pueyo arbeitet in ortsspezifischen Projekten mit Pflanzen als Basis für
+                      Anna Luz arbeitet in orts-spezifischen
+                      <a href="https://annaluzworks.com/">Projekten</a> mit Pflanzen als Basis für
                       resiliente, niedrigschwellige und nachhaltige Systeme: im Baskenland erforscht sie
-                      mit einer Schulklasse die Farben von Überbleibseln aus der Forstwirtschaft, in
-                      Brüssel legt sie zurzeit auf einer brachliegenden Fläche einen gemeinschaftlichen
-                      Garten mit der Nachbarschaft an, eine von ihr entworfene Werkstatt im Wald erlaubt ein
+                      mit einer Schulklasse die
+                      <a href="https://annaluzworks.com/Forest-Colors-workshop"
+                        >Farben von Überbleibseln aus der Forstwirtschaft</a
+                      >, in Brüssel legt sie zurzeit auf einer brachliegenden Fläche einen
+                      <a href="https://annaluzworks.com/tazio">gemeinschaftlichen Garten</a> mit der
+                      Nachbarschaft an, eine von ihr entworfene
+                      <a href="https://annaluzworks.com/La-Clairiere">Werkstatt im Wald</a> erlaubt ein
                       ganzheitliches und traditionsreiches Nutzen von Bäumen. Momentan macht sie eine
                       Weiterbildung zur Permakulturgärtnerin und Agroforstwirtin.
                     </p>
@@ -596,12 +614,13 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Uta Berghöfer lebt und arbeitet in der Mecklenburgischen Schweiz. Sie forscht zu
+                      Uta lebt und arbeitet in der Mecklenburgischen Schweiz. Sie forscht zu
                       gesellschaftlichen Naturverhältnissen sowie an der Schnittstelle von Wissenschaft und
-                      Kunst. 2015 hat sie das Moortheater ins Leben gerufen. Sie ist Gründungsmitglied und
-                      Vorständin des Wasserwerks der Zukunft e.V. und arbeitet aktuell im Projekt
-                      MOOReturn. Gemeinsam mit den anderen Moorbäuer:innen pflegt und belebt sie den
-                      Moorbauern.
+                      Kunst. 2015 hat sie das
+                      <a href="https://www.moortheater.de/">Moortheater</a> ins Leben gerufen. Sie ist
+                      Gründungsmitglied und Vorständin des Wasserwerks der Zukunft e.V. und arbeitet
+                      aktuell im Projekt MOOReturn. Gemeinsam mit den anderen Moorbäuer:innen pflegt und
+                      belebt sie den Moorbauern.
                     </p>
                   </div>
                 </details>
@@ -615,8 +634,8 @@
                     <span class="team-member__summary-text">
                       <span class="team-member__name">Ferdinand Sorg</span>
                       <span class="team-member__meta type-body-small">
-                        <span class="team-member__age">31</span>
-                        — Westdeutsch sozialisiert — Gestalter und Programmierer
+                        <span class="team-member__age">32</span>
+                        — Gestalter und Programmierer
                       </span>
                     </span>
                     <span
@@ -627,10 +646,10 @@
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
-                      Ferdinand Sorg lebt und arbeitet in Leipzig. Neben der digitalen Gestaltung erlebt er
-                      gerne die Natur durch sportliche Aktivitäten. Ferdinand entwickelt für uns eine
-                      Website, die ethisch durchdacht und gleichzeitig performativ, zeitgemäß und
-                      nutzerfreundlich ist.
+                      Ferdinand lebt und arbeitet in Leipzig. Neben der
+                      <a href="http://ferdinands.org">digitalen Gestaltung</a> erlebt er gerne die Natur
+                      durch sportliche Aktivitäten. Ferdinand entwickelt für uns eine Website, die ethisch
+                      durchdacht und gleichzeitig performativ, zeitgemäß und nutzerfreundlich ist.
                     </p>
                   </div>
                 </details>
@@ -744,6 +763,7 @@
     <script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=6" defer></script>
     <script src="../js/text-scale.js" defer></script>
+    <script src="../js/media-lightbox.js" defer></script>
     <script src="../js/team-member.js" defer></script>
     <script src="../js/site-status.js" defer></script>
     <script src="../js/site-hours.js" defer></script>

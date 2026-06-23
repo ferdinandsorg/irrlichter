@@ -85,5 +85,57 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", initTeamMemberDetails);
+  function initTeamPhotoLightbox() {
+    if (!document.body.classList.contains("page-ueber")) {
+      return;
+    }
+    if (!window.irrMediaLightbox) {
+      return;
+    }
+    window.irrMediaLightbox.init();
+
+    document
+      .querySelectorAll(".team-member__media:not(.team-member__media--fallback)")
+      .forEach(function (media) {
+        var img = media.querySelector(".team-member__photo");
+        if (!img || !img.getAttribute("src")) {
+          return;
+        }
+
+        var nameEl = media.closest(".team-member");
+        nameEl = nameEl && nameEl.querySelector(".team-member__name");
+        var name = (nameEl && nameEl.textContent.trim()) || "Teamfoto";
+        if (!img.getAttribute("alt") || !img.getAttribute("alt").trim()) {
+          img.setAttribute("alt", "Porträt von " + name);
+        }
+
+        media.setAttribute("role", "button");
+        media.setAttribute("tabindex", "0");
+        media.setAttribute("aria-label", name + " vergrößern");
+
+        function openPhoto(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          window.irrMediaLightbox.open({
+            kind: "image",
+            src: img.currentSrc || img.src,
+            alt: img.getAttribute("alt") || ""
+          });
+        }
+
+        media.addEventListener("click", openPhoto);
+        media.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            openPhoto(e);
+          }
+        });
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initTeamMemberDetails();
+    initTeamPhotoLightbox();
+  });
 })();

@@ -494,11 +494,17 @@
         }
         var target = document.querySelector(id);
         if (!target) return;
+        if (id === "#anfahrt") {
+          var heading = document.getElementById("anfahrt-heading");
+          if (heading) target = heading;
+        }
         if (
           id === "#termine" &&
           typeof window.irrScrollToTermine === "function"
         ) {
           window.irrScrollToTermine(target);
+        } else if (typeof window.irrScrollToAnchor === "function") {
+          window.irrScrollToAnchor(target);
         } else {
           var reduced =
             window.matchMedia &&
