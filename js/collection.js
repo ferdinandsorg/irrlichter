@@ -53,11 +53,12 @@
   }
 
   function rectsCollide(a, b, gapX, gapY) {
+    var padY = Math.max(a.h, b.h) * 0.06;
     return !(
       a.x + a.w + gapX <= b.x ||
       b.x + b.w + gapX <= a.x ||
-      a.y + a.h + gapY <= b.y ||
-      b.y + b.h + gapY <= a.y
+      a.y + a.h + gapY + padY <= b.y ||
+      b.y + b.h + gapY + padY <= a.y
     );
   }
 
@@ -167,7 +168,7 @@
     var mobile = containerWidth < 640;
     var cardWidth = mobile ? containerWidth : Math.min(438, containerWidth);
     var minGapX = lerp(mobile ? 32 : 48, 16, layoutDensity);
-    var minGapY = lerp(mobile ? 48 : 64, 16, layoutDensity);
+    var minGapY = lerp(mobile ? 48 : 72, 20, layoutDensity);
     var xSpread = mobile ? 0.2 : 1;
 
     var sizes = [];
@@ -178,6 +179,7 @@
       card.style.width = cardWidth + "px";
       card.style.left = "0";
       card.style.top = "0";
+      card.style.contentVisibility = "visible";
       grid.appendChild(card);
       var seedStr =
         card.getAttribute("data-item-id") ||
@@ -189,6 +191,7 @@
         h: card.offsetHeight,
         seed: hashSeed(seedStr)
       });
+      card.style.contentVisibility = "";
     }
 
     var placed = [];
@@ -240,7 +243,10 @@
       item.card.style.top = placedRect.y + "px";
       item.card.style.setProperty("--card-stack", String(i));
       placed.push(placedRect);
-      chronoMinY = placedRect.y;
+      chronoMinY = Math.max(
+        chronoMinY,
+        placedRect.y + placedRect.h + minGapY
+      );
     }
 
     var totalH = SCATTER_PADDING;
@@ -1031,6 +1037,17 @@
     });
   }
 
+  function selectHasOption(select, value) {
+    if (!select || !value) return false;
+    var i;
+    for (i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function wireSearchGlyph(searchInput) {
     var control = searchInput.closest(".collection-toolbar__control");
     var glyphBtn =
@@ -1253,18 +1270,10 @@
       if (!tagBtn || !grid.contains(tagBtn)) return;
       e.preventDefault();
       var tagVal = tagBtn.getAttribute("data-tag") || "";
-      if (!tagSelect || !tagVal) return;
-      var hasOption = false;
-      for (var i = 0; i < tagSelect.options.length; i++) {
-        if (tagSelect.options[i].value === tagVal) {
-          hasOption = true;
-          break;
-        }
-      }
-      if (!hasOption) return;
-      tagSelect.value = tagVal;
+      if (!tagSelect || !tagVal || !selectHasOption(tagSelect, tagVal)) return;
+
+      tagSelect.value = tagSelect.value === tagVal ? "all" : tagVal;
       run();
-      tagSelect.focus();
     });
 
     scheduleCollectionScatter(grid, true);

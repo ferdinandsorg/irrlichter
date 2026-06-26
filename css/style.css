@@ -2110,6 +2110,12 @@ body.page-home main#content > .inner {
   box-sizing: border-box;
 }
 
+@media (max-width: 639px) {
+  body.page-home main#content > .inner {
+    padding-inline: var(--layout-inline-gutter);
+  }
+}
+
 body.page-home .section--collection,
 body.page-home .collection-grid {
   width: 100%;
@@ -3485,7 +3491,7 @@ textarea {
   max-width: 438px;
   margin: 0;
   content-visibility: auto;
-  contain-intrinsic-size: auto 420px;
+  contain-intrinsic-size: auto 520px;
   box-sizing: border-box;
   isolation: isolate;
   z-index: calc(10 + var(--card-stack, 0));
