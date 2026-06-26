@@ -9,34 +9,43 @@ ErrorDocument 404 404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Redirect-Ziele: / am Root, /beta/ in Staging (Hetzner: keine rein relativen Pfade)
+  RewriteRule ^ - [E=IRR_PREFIX:/]
+  RewriteCond %{REQUEST_URI} ^/beta(/|$) [NC]
+  RewriteRule ^ - [E=IRR_PREFIX:/beta/]
+
   # HTTP → HTTPS (Zertifikat irrlichter.net aktiv; zusätzlich ggf. Server-Redirect in KonsoleH)
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-  # Umbenannte Seiten (301) — relative Ziele (funktioniert in /beta/ und am Root)
-  RewriteRule ^das-projekt/?$ ueber [R=301,L]
+  # 404-Seite: keine *.html-Umschreibung
+  RewriteRule ^404\.html$ - [L]
+
+  # Umbenannte Seiten (301)
+  RewriteRule ^das-projekt/?$ %{ENV:IRR_PREFIX}ueber [R=301,L]
 
   # Legacy-Pfade
-  RewriteRule ^events/?$ veranstaltungen [R=301,L]
-  RewriteRule ^info/?$ ueber [R=301,L]
-  RewriteRule ^anfahrt/?$ ueber#anfahrt [R=301,L,NE]
+  RewriteRule ^events/?$ %{ENV:IRR_PREFIX}veranstaltungen [R=301,L]
+  RewriteRule ^info/?$ %{ENV:IRR_PREFIX}ueber [R=301,L]
+  RewriteRule ^anfahrt/?$ %{ENV:IRR_PREFIX}ueber#anfahrt [R=301,L,NE]
 
-  # Alte *.html → Ordner-URLs (relativ zum aktuellen Verzeichnis)
+  # Alte *.html → Ordner-URLs
   RewriteCond %{THE_REQUEST} \s[^\s]*/index\.html[\s?] [NC]
-  RewriteRule ^index\.html$ ./ [R=301,L]
+  RewriteRule ^index\.html$ %{ENV:IRR_PREFIX} [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/das-projekt\.html[\s?] [NC]
-  RewriteRule ^das-projekt\.html$ ueber [R=301,L]
+  RewriteRule ^das-projekt\.html$ %{ENV:IRR_PREFIX}ueber [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/impressum\.html[\s?] [NC]
-  RewriteRule ^impressum\.html$ impressum [R=301,L]
+  RewriteRule ^impressum\.html$ %{ENV:IRR_PREFIX}impressum [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/datenschutz\.html[\s?] [NC]
-  RewriteRule ^datenschutz\.html$ datenschutz [R=301,L]
+  RewriteRule ^datenschutz\.html$ %{ENV:IRR_PREFIX}datenschutz [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/admin(?:\.html)?[\s?] [NC]
-  RewriteRule ^admin(?:\.html)?$ ./ [R=301,L]
+  RewriteRule ^admin(?:\.html)?$ %{ENV:IRR_PREFIX} [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/([^/\s]+)\.html[\s?] [NC]
-  RewriteRule ^([^/]+)\.html$ $1 [R=301,L]
+  RewriteCond %1 !^404$ [NC]
+  RewriteRule ^([^/]+)\.html$ %{ENV:IRR_PREFIX}$1 [R=301,L]
 </IfModule>
