@@ -34,10 +34,15 @@
       name="twitter:description"
       content="Datenschutzerklärung der Website Irrlichter."
     />
+<link rel="preload" href="../font/Fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../css/style.css" as="style" />
+    <link rel="preload" href="../files/icons.svg" as="image" type="image/svg+xml" />
+    <link rel="dns-prefetch" href="https://api.open-meteo.com" />
 <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/fonts-italic.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="../css/fonts-italic.css" /></noscript>
   </head>
   <body class="page-legal">
-    <script src="../js/site-icons.js"></script>
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -73,11 +78,11 @@
                 >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
               >
             </p>
-            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
+            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="../files/icons.svg#expand_more_outline"/></svg>
           </div>
           <a href="../" class="info-card__collection-cta"
             >Zur Startseite
-            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="#arrow_forward"/></svg></a>
+            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="../files/icons.svg#arrow_forward"/></svg></a>
         </div>
         <div
           class="control-bar__meta"
@@ -131,7 +136,7 @@
             class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
             <span class="ui-button__label">Zu den Terminen</span>
-            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#arrow_forward"/></svg>
+            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="../files/icons.svg#arrow_forward"/></svg>
           </a>
         </div>
       </div>
@@ -242,6 +247,7 @@
       </div>
     </footer>
 <script src="../js/site-base.js" defer></script>
+    <script src="../js/site-icons.js" defer></script>
     <script src="../js/main.js?v=6" defer></script>
     <script src="../js/text-scale.js" defer></script>
     <script src="../js/site-status.js" defer></script>

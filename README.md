@@ -23,16 +23,21 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 ```
 /
 ├── index.html          Startseite (Hero + Sammlung mit Filter)
+├── 404.html            Fehlerseite (Apache ErrorDocument; mit &lt;base&gt; für beliebige URLs)
+├── favicon.ico         Browser-Favicon (zusätzlich files/favicon.png)
 ├── veranstaltungen/index.html
 ├── ueber/index.html
 ├── impressum/index.html
 ├── datenschutz/index.html
 ├── css/
-│   └── style.css
+│   ├── style.css
+│   └── fonts-italic.css   Fraunces Italic (async nachgeladen)
 ├── js/
-│   ├── main.js         Aktive Nav-Markierung
-│   ├── collection.js   Laedt collection.json, rendert Karten, Filter
-│   └── events.js       Laedt events.json, rendert Liste
+│   ├── site-base.js    Site-Root, irrDataUrl, Scroll-Helfer
+│   ├── site-icons.js   SVG-Icons (Sprite: files/icons.svg)
+│   ├── main.js         Nav, Irrlicht, Scroll-Ambient
+│   ├── collection.js   Sammlung aus collection.json
+│   └── events.js       Termine aus events.json
 ├── data/
 │   ├── collection.json Archiv-/Logbuch-Eintraege
 │   └── events.json     Eventdaten
@@ -42,9 +47,14 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 │   └── video/
 ├── files/              Website-Dateien (Icons, Favicon, Logos, UI-Bilder)
 │   ├── icons.svg
+│   ├── irrlicht.webp
 │   └── icons/_parts/   Quell-SVGs für build-icon-sprite.sh
 └── scripts/
-    └── deploy-ftp.sh   Optionales FTP-Deploy-Skript
+    ├── deploy-ftp.sh           FTP-Deploy (Basis)
+    ├── deploy-ftp-production.sh
+    ├── deploy-ftp-beta.sh
+    ├── smoke-test-live.sh      HTTP-Checks nach Deploy
+    └── dev-server.py           Lokaler Server mit Kurz-URLs + 404.html
 ```
 
 ## Lokale Entwicklung
@@ -82,13 +92,14 @@ Seiten liegen in **Ordnern** (`veranstaltungen/index.html` → URL `/veranstaltu
 funktioniert auf Apache **auch ohne** `mod_rewrite` (per `DirectoryIndex`).
 
 Zusaetzlich leitet `.htaccess` alte Pfade um (`/das-projekt` → `/ueber`, `/events` → `/veranstaltungen`, …).
+Unbekannte URLs liefern die gestaltete **404-Seite** (`ErrorDocument 404 404.html`).
 Beim FTP-Deploy **`.htaccess` mit hochladen** (versteckte Dateien einblenden).
 
 Voraussetzungen Live-Server:
 
-- Document Root = Ordner mit `index.html`, `veranstaltungen/`, `ueber/`, `.htaccess`
-- Optional: `mod_rewrite` + `AllowOverride` fuer Legacy-Redirects
-- Unterordner-Deploy (z. B. `/beta/`): `RewriteBase /beta/` in `.htaccess`
+- Document Root = Ordner mit `index.html`, `404.html`, `veranstaltungen/`, `ueber/`, `.htaccess`
+- Optional: `mod_rewrite` + `AllowOverride` fuer Legacy-Redirects und Cache-Header
+- Unterordner-Deploy (z. B. `/beta/`): dieselbe `.htaccess` — Redirect-Ziele nutzen automatisch `/` bzw. `/beta/` (`IRR_PREFIX`)
 
 VS Code-Nutzer koennen alternativ die Erweiterung **Live Server** verwenden.
 
@@ -98,10 +109,10 @@ Zwei Umgebungen auf demselben Server:
 
 | Umgebung | Zielverzeichnis | URL | Skript / CI |
 |----------|-----------------|-----|-------------|
-| Production | `.` (Document Root) | `https://irrlichter.net/` | Push `main` oder `scripts/deploy-ftp-production.sh` |
-| Staging | `beta/` | `https://irrlichter.net/beta/` | GitHub Actions → workflow `beta` oder `scripts/deploy-ftp-beta.sh` |
+| Production | `.` (Document Root) | `https://irrlichter.net/` | **Push auf `main`** (automatisch) oder `scripts/deploy-ftp-production.sh` |
+| Staging | `beta/` | `https://irrlichter.net/beta/` | GitHub Actions → **Run workflow** → Target `beta` oder `scripts/deploy-ftp-beta.sh` |
 
-Workflow: Auf **beta** testen (manueller Workflow), dann auf `main` mergen/pushen → Production.
+**Workflow:** Auf `main` entwickeln → optional Staging per manuellem Workflow testen → Push auf `main` = Production.
 
 Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 
@@ -110,7 +121,7 @@ Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 1. FTP-Client oeffnen und mit dem Server verbinden
 2. Zielordner waehlen (haeufig `public_html/` oder `www/`)
 3. Folgendes hochladen:
-   - `index.html`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`, `.htaccess`
+   - `index.html`, `404.html`, `favicon.ico`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`, `.htaccess`
    - `css/`, `js/`, `data/`, `assets/`, `files/`
 4. Nicht hochladen: `.git/`, `scripts/`, `README.md`, `.cursor/`, `.vscode/`
 5. Seite im Browser pruefen: `/`, `/ueber`, `/veranstaltungen` (ohne `.html`; siehe `.htaccess`)
@@ -146,13 +157,15 @@ Was das Skript macht:
 3. Spiegelt den Projekt-Root in das Zielverzeichnis (`mirror -R --delete`), wobei
    `.git/`, `scripts/`, `README.md`, `node_modules/` ausgeschlossen sind
 
-### Production Go-Live (einmalig)
+### Production Go-Live
 
-1. GitHub → **Actions** → **Deploy to Hetzner FTP** → **Run workflow** → Target: **production**
-2. Oder lokal: `.env` mit `FTP_REMOTE_DIR=.` → `bash scripts/deploy-ftp-production.sh`
-3. Prüfen: `bash scripts/smoke-test-live.sh` (Root) und `bash scripts/smoke-test-live.sh https://irrlichter.net/beta`
+- **Automatisch:** Jeder Push auf `main` triggert GitHub Actions → FTP Production.
+- **Manuell:** GitHub → **Actions** → **Deploy to Hetzner FTP** → Target `production` oder lokal `bash scripts/deploy-ftp-production.sh`
+- **Nach Deploy prüfen:** `bash scripts/smoke-test-live.sh` (Root) und `bash scripts/smoke-test-live.sh https://irrlichter.net/beta` (Staging)
 
 `FTP_REMOTE_DIR` für Production: `.` (Hetzner-FTP liegt oft schon im Document Root).
+
+GitHub Secrets: `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD` (optional `FTP_REMOTE_DIR`).
 
 ## Contentpflege
 
@@ -201,13 +214,16 @@ Optional:
 
 ## Performance-Hinweise
 
-- Bilder in sinnvollen Zielgroessen ablegen
+- Bilder in sinnvollen Zielgroessen ablegen (größter Hebel für PageSpeed)
 - Moderne Formate bevorzugen (WebP/AVIF), wenn verfuegbar
 - Audio/Video mit `preload="metadata"` (so im Renderer eingestellt)
-- Nur notwendige Skripte beibehalten
+- Sammlungsbilder: `loading="lazy"`; erste Karten mit `fetchpriority="high"`
+- Fraunces Regular per `preload`; Italic in `css/fonts-italic.css` async
+- `.htaccess`: gzip + Cache-Control für statische Assets
+- Wetter-API (Open-Meteo) erst nach `requestIdleCallback`
 
 ## Hinweis zu JavaScript
 
 Da Inhalte client-seitig aus JSON geladen werden, benoetigt die Seite aktives
-JavaScript, um Sammlung und Mitmach-Termine anzuzeigen. Header, Footer, Navigation und
+JavaScript, um Sammlung und Veranstaltungen anzuzeigen. Header, Footer, Navigation und
 Projekt-Texte funktionieren auch ohne JavaScript.

@@ -15,15 +15,9 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("../font/Fraunces-Italic.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
+/* Italic: css/fonts-italic.css (async, nach style.css) */
 
-/* Material Symbols Sharp → SVG (js/site-icons.js, files/icons.svg)
+/* Material Symbols Sharp → SVG (files/icons.svg, js/site-icons.js für dynamische Icons)
    Ursprünglich .material-symbols-sharp: FILL 1, GRAD 25, wght 400, opsz 24
    FILL 0 (outline): Chevrons, UI-Button-Icons, Toolbar — Symbol-IDs mit _outline */
 
@@ -3247,11 +3241,39 @@ body.page-legal .section--plain p {
 }
 
 .section--404__glow {
-  display: block;
+  position: relative;
   width: clamp(4.5rem, 14vw, 5.5rem);
-  height: auto;
+  height: clamp(5rem, 16vw, 6.25rem);
   margin: 0 0 clamp(1rem, 3vw, 1.5rem);
-  opacity: 0.72;
+}
+
+.section--404__glow .irrlicht-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: opacity;
+  transform: scale(var(--irrlicht-scale, 1));
+  transform-origin: center bottom;
+}
+
+.section--404__glow .irrlicht-light__img-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.section--404__glow .irrlicht-light img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section--404__glow {
+    display: none;
+  }
 }
 
 .section--404__actions {
@@ -3462,6 +3484,8 @@ textarea {
   width: min(438px, 100%);
   max-width: 438px;
   margin: 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
   box-sizing: border-box;
   isolation: isolate;
   z-index: calc(10 + var(--card-stack, 0));

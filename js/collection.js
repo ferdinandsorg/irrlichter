@@ -666,20 +666,25 @@
     return "";
   }
 
-  function buildMedia(item) {
+  function buildMedia(item, mediaIndex) {
     var media = item.media || {};
     var alt = media.alt || "";
     var src = media.src || "";
+    var eager = typeof mediaIndex === "number" && mediaIndex < 2;
 
     if (item.type === "image" && src) {
+      var imgAttrs = {
+        class: "card-media__img",
+        src: src,
+        alt: alt,
+        loading: eager ? "eager" : "lazy",
+        decoding: "async"
+      };
+      if (eager) {
+        imgAttrs.fetchPriority = "high";
+      }
       return el("div", { class: "card-media card-media--image" }, [
-        el("img", {
-          class: "card-media__img",
-          src: src,
-          alt: alt,
-          loading: "lazy",
-          decoding: "async"
-        })
+        el("img", imgAttrs)
       ]);
     }
     if (item.type === "video" && src) {
@@ -804,12 +809,12 @@
     }));
   }
 
-  function buildCard(item) {
+  function buildCard(item, cardIndex) {
     var tagsAttr = (item.tags || []).join(",");
     var t = item.type || "";
     var mod = t ? " card--" + t : "";
     var children = [];
-    var mediaBlock = buildMedia(item);
+    var mediaBlock = buildMedia(item, cardIndex);
 
     if (t === "text") {
       children.push(mediaBlock);
@@ -1208,8 +1213,8 @@
       return String(kb).localeCompare(String(ka));
     });
 
-    sorted.forEach(function (item) {
-      grid.appendChild(buildCard(item));
+    sorted.forEach(function (item, index) {
+      grid.appendChild(buildCard(item, index));
     });
 
     grid.querySelectorAll(".card--audio").forEach(wireAudioCard);

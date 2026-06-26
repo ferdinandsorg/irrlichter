@@ -68,11 +68,18 @@
   }
 
   function markActiveNav() {
+    var links = document.querySelectorAll(".nav-links a[data-nav]");
+    if (document.body && document.body.classList.contains("page-404")) {
+      links.forEach(function (link) {
+        link.removeAttribute("aria-current");
+      });
+      updateNavCurrentLabel();
+      return;
+    }
     var key =
       typeof irrPageKey === "function"
         ? irrPageKey(window.location.pathname || "")
         : "index";
-    var links = document.querySelectorAll(".nav-links a[data-nav]");
     links.forEach(function (link) {
       if (link.getAttribute("data-nav") === key) {
         link.setAttribute("aria-current", "page");
@@ -87,6 +94,10 @@
     var label = document.querySelector("[data-nav-current]");
     if (!label) return;
     var current = document.querySelector(".nav-links a[aria-current='page']");
+    if (document.body && document.body.classList.contains("page-404")) {
+      label.textContent = "";
+      return;
+    }
     label.textContent = current ? current.textContent.trim() : "Sammlung";
   }
 
@@ -503,6 +514,34 @@
     }, waitMs);
   }
 
+  function init404Page() {
+    if (!document.body || !document.body.classList.contains("page-404")) {
+      return;
+    }
+
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    var slot = document.querySelector("[data-404-irrlicht]");
+    var light = slot && slot.querySelector(".irrlicht-light");
+    if (!light) return;
+
+    randomizeIrrlichtScale(light);
+
+    var waitMs = Math.round(randomBetween(500, 2400));
+    var fadeInMs = Math.round(randomBetween(200, 1800));
+    var holdMs = Math.round(randomBetween(250, 2200));
+    var fadeOutMs = Math.round(randomBetween(400, 3000));
+
+    window.setTimeout(function () {
+      flareIrrlicht(light, fadeInMs, holdMs, fadeOutMs);
+    }, waitMs);
+  }
+
   function initInPageSectionScroll() {
     var links = document.querySelectorAll(
       "a[data-scroll-to-section][href^='#']"
@@ -834,6 +873,7 @@
     updateTextMode();
     document.addEventListener("irrlichter:collection-rendered", updateTextMode);
     initIrrlichtLights();
+    init404Page();
     initUeberStoryLeadIrrlicht();
     initCopyTextButtons();
     initInPageSectionScroll();

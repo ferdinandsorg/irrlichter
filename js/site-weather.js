@@ -91,7 +91,7 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function startWeather() {
     if (!document.querySelector("[data-site-weather]")) {
       return;
     }
@@ -118,5 +118,19 @@
       .catch(function () {
         clearWeather();
       });
-  });
+  }
+
+  function scheduleWeather() {
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(startWeather, { timeout: 4000 });
+    } else {
+      window.setTimeout(startWeather, 1);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scheduleWeather);
+  } else {
+    scheduleWeather();
+  }
 })();

@@ -1,0 +1,8 @@
+/* Fraunces Italic — nachgeladen, damit der erste Paint nur die Regular-Datei braucht */
+@font-face {
+  font-family: "Fraunces";
+  src: url("../font/Fraunces-Italic.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
