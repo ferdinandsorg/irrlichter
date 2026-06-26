@@ -4,7 +4,7 @@
 
 Options -MultiViews
 DirectoryIndex index.html
-ErrorDocument 404 404.html
+ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
