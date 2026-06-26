@@ -16,8 +16,7 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 
 - Reines HTML, CSS und JavaScript (Vanilla, ohne Framework)
 - Inhalte aus JSON werden zur Laufzeit per `fetch` geladen und client-seitig gerendert
-- Lokale Assets in `assets/`
-- Optionaler Browser-Editor (`admin/`) fuer das Bearbeiten der JSON-Dateien
+- Inhaltsmedien (Sammlung) in `assets/`; Website-Dateien (Icons, Favicon, Logos) in `files/`
 
 ## Projektstruktur
 
@@ -28,21 +27,22 @@ Leichtgewichtige, statische Website fuer das Moor-Kunst- und Umweltprojekt **Irr
 ├── ueber/index.html
 ├── impressum/index.html
 ├── datenschutz/index.html
-├── admin/index.html    Browser-Editor (optional, nicht im Standard-Deploy)
 ├── css/
 │   └── style.css
 ├── js/
 │   ├── main.js         Aktive Nav-Markierung
 │   ├── collection.js   Laedt collection.json, rendert Karten, Filter
-│   ├── events.js       Laedt events.json, rendert Liste
-│   └── admin.js        Editor-Logik (Laden, Bearbeiten, Export)
+│   └── events.js       Laedt events.json, rendert Liste
 ├── data/
 │   ├── collection.json Archiv-/Logbuch-Eintraege
 │   └── events.json     Eventdaten
-├── assets/
+├── assets/             Inhaltsmedien (Sammlung: images/, audio/, video/)
 │   ├── images/
 │   ├── audio/
 │   └── video/
+├── files/              Website-Dateien (Icons, Favicon, Logos, UI-Bilder)
+│   ├── icons.svg
+│   └── icons/_parts/   Quell-SVGs für build-icon-sprite.sh
 └── scripts/
     └── deploy-ftp.sh   Optionales FTP-Deploy-Skript
 ```
@@ -94,6 +94,15 @@ VS Code-Nutzer koennen alternativ die Erweiterung **Live Server** verwenden.
 
 ## FTP-Deployment
 
+Zwei Umgebungen auf demselben Server:
+
+| Umgebung | Zielverzeichnis | URL | Skript / CI |
+|----------|-----------------|-----|-------------|
+| Production | `.` (Document Root) | `https://irrlichter.net/` | Push `main` oder `scripts/deploy-ftp-production.sh` |
+| Staging | `beta/` | `https://irrlichter.net/beta/` | GitHub Actions → workflow `beta` oder `scripts/deploy-ftp-beta.sh` |
+
+Workflow: Auf **beta** testen (manueller Workflow), dann auf `main` mergen/pushen → Production.
+
 Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 
 ### Variante A: Per FTP-Client (FileZilla, Cyberduck, Transmit)
@@ -102,8 +111,7 @@ Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 2. Zielordner waehlen (haeufig `public_html/` oder `www/`)
 3. Folgendes hochladen:
    - `index.html`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`, `.htaccess`
-   - optional `admin/` (siehe Hinweis unten)
-   - `css/`, `js/`, `data/`, `assets/`
+   - `css/`, `js/`, `data/`, `assets/`, `files/`
 4. Nicht hochladen: `.git/`, `scripts/`, `README.md`, `.cursor/`, `.vscode/`
 5. Seite im Browser pruefen: `/`, `/ueber`, `/veranstaltungen` (ohne `.html`; siehe `.htaccess`)
 
@@ -114,22 +122,21 @@ Voraussetzung: `lftp` (macOS: `brew install lftp`)
 Umgebungsvariablen setzen:
 
 ```bash
+# Staging
+bash scripts/deploy-ftp-beta.sh
+
+# Production (Document Root)
+bash scripts/deploy-ftp-production.sh
+```
+
+Alternativ mit Umgebungsvariablen:
+
+```bash
 export FTP_HOST="ftp.dein-host.tld"
 export FTP_USER="dein-user"
 export FTP_PASSWORD="dein-passwort"
-export FTP_REMOTE_DIR="/public_html"
-```
-
-Deploy ausfuehren:
-
-```bash
+export FTP_REMOTE_DIR="."   # Production; für Staging: beta
 bash scripts/deploy-ftp.sh
-```
-
-Falls `admin/` und `js/admin.js` nicht auf den Server sollen:
-
-```bash
-INCLUDE_ADMIN=0 bash scripts/deploy-ftp.sh
 ```
 
 Was das Skript macht:
@@ -137,42 +144,20 @@ Was das Skript macht:
 1. Prueft, ob `lftp` verfuegbar ist
 2. Prueft, ob `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD` gesetzt sind
 3. Spiegelt den Projekt-Root in das Zielverzeichnis (`mirror -R --delete`), wobei
-   `.git/`, `scripts/`, `README.md`, `node_modules/` und Editor-Ordner
-   ausgeschlossen sind
+   `.git/`, `scripts/`, `README.md`, `node_modules/` ausgeschlossen sind
+
+### Production Go-Live (einmalig)
+
+1. GitHub → **Actions** → **Deploy to Hetzner FTP** → **Run workflow** → Target: **production**
+2. Oder lokal: `.env` mit `FTP_REMOTE_DIR=.` → `bash scripts/deploy-ftp-production.sh`
+3. Prüfen: `bash scripts/smoke-test-live.sh` (Root) und `bash scripts/smoke-test-live.sh https://irrlichter.net/beta`
+
+`FTP_REMOTE_DIR` für Production: `.` (Hetzner-FTP liegt oft schon im Document Root).
 
 ## Contentpflege
 
-Es gibt zwei Wege, Inhalte zu pflegen.
-
-### Variante 1: JSON direkt bearbeiten
-
-`data/collection.json` und `data/events.json` lassen sich mit jedem Texteditor
-oeffnen, bearbeiten und anschliessend per FTP wieder in den `data/`-Ordner auf
-dem Server hochladen.
-
-### Variante 2: Browser-Editor `admin/`
-
-`admin/` ist ein einfacher Editor, der vollstaendig im Browser laeuft.
-
-Ablauf:
-
-1. `/admin` oeffnen (lokal ueber den dev-Server oder live auf dem Server)
-2. Datensatz waehlen: **Sammlung** oder **Veranstaltungen**
-3. Daten laden:
-   - „Vom Server laden" - liest die aktuelle `collection.json` bzw.
-     `events.json` ueber `fetch`
-   - „Datei hochladen" - liest eine lokale JSON-Datei (z. B. fuer Offline-Nutzung
-     via `file://`)
-4. Eintraege ueber das Formular hinzufuegen, bearbeiten oder loeschen
-5. Auf **JSON herunterladen** klicken - es wird `collection.json` bzw.
-   `events.json` als Download erzeugt
-6. Die heruntergeladene Datei per FTP nach `data/` auf dem Server hochladen,
-   um die Live-Seite zu aktualisieren
-
-> Hinweis: Der Editor schreibt nichts direkt auf den Server. Er hilft nur beim
-> komfortablen Erzeugen einer neuen `.json`-Datei. Wenn `/admin` oeffentlich
-> liegen soll, empfiehlt sich ein Schutz per `.htaccess` (Basic Auth). Alternativ
-> mit `INCLUDE_ADMIN=0` vom Deploy ausschliessen und nur lokal verwenden.
+`data/collection.json` und `data/events.json` direkt im Editor bearbeiten und
+per FTP in den `data/`-Ordner auf dem Server hochladen.
 
 ## JSON-Schema
 
@@ -195,7 +180,6 @@ Optionale Felder:
 - `media.poster` (z. B. fuer Videos)
 - `location`
 - `coordinates` (z. B. `"53.501, 8.702"`)
-- `status` (`published` oder `draft`)
 
 ### Veranstaltungen (`data/events.json`)
 
@@ -209,7 +193,11 @@ Pflichtfelder pro Eintrag:
 
 Optional:
 
-- `link`
+- `time` (z. B. `"17:00"`)
+- `dateLabel` (Anzeige bei mehrtaegigen Terminen, z. B. `"3.–5. Juli"`)
+- `hours` (z. B. `"täglich 12–20 Uhr"` oder `"Den ganzen Tag"`)
+- `with` (z. B. `"Mit …"`)
+- `link`, `linkLabel`
 
 ## Performance-Hinweise
 

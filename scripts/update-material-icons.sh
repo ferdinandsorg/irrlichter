@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# Download Material Symbols Sharp (variable WOFF2) into font/MaterialSymbolsSharp.woff2.
-# Icons use rlig ligatures — do not subset with --glyphs/--liga only (breaks rendering).
-set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="$ROOT/font/MaterialSymbolsSharp.woff2"
-
-curl -sL -o "$OUT" "https://unpkg.com/material-symbols@latest/material-symbols-sharp.woff2"
-ls -lh "$OUT"
+# Veraltet: Icons sind SVG-Sprites (scripts/build-icon-sprite.sh).
+# Dieses Skript bleibt nur als Referenz — Material-Font wird nicht mehr eingesetzt.
+echo "Hinweis: Material Symbols Font wird nicht mehr genutzt."
+echo "Icons aktualisieren: bash scripts/build-icon-sprite.sh"
+echo "Danach SPRITE-String in js/site-icons.js aus files/icons.svg übernehmen."
+exit 0

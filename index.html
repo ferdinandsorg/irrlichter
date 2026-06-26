@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Irrlichter GbR" />
     <meta name="theme-color" content="#2a261d" />
-    <link rel="icon" href="assets/images/light-front.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="assets/images/260519_reading_fb.png" />
+    <link rel="icon" href="files/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="files/favicon-180.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Irrlichter" />
     <meta property="og:locale" content="de_DE" />
@@ -56,16 +56,10 @@
         }
       }
     </script>
-    <link
-      rel="preload"
-      href="font/MaterialSymbolsSharp.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="page-home">
+    <script src="js/site-icons.js"></script>
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -101,23 +95,14 @@
                 >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
               >
             </p>
-            <span
-              class="material-symbols-sharp info-card__logo-chevron"
-              aria-hidden="true"
-              >expand_more</span
-            >
+            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
           </div>
           <a
             href="#sammlung"
             class="info-card__collection-cta"
             data-scroll-to-collection
             >Zur Sammlung
-            <span
-              class="material-symbols-sharp info-card__collection-cta-icon"
-              aria-hidden="true"
-              >south</span
-            ></a
-          >
+            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="#south"/></svg></a>
           <form
             class="collection-toolbar"
             aria-label="Sammlungsfilter"
@@ -138,11 +123,7 @@
                   >
                     <option value="all">Alle Typen</option>
                   </select>
-                  <span
-                    class="material-symbols-sharp collection-toolbar__glyph"
-                    aria-hidden="true"
-                    >expand_more</span
-                  >
+                  <svg class="irr-icon collection-toolbar__glyph" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                 </span>
               </label>
             </div>
@@ -154,11 +135,7 @@
                   <select id="filter-tag" data-filter-tag aria-label="Tags">
                     <option value="all">Alle Tags</option>
                   </select>
-                  <span
-                    class="material-symbols-sharp collection-toolbar__glyph"
-                    aria-hidden="true"
-                    >expand_more</span
-                  >
+                  <svg class="irr-icon collection-toolbar__glyph" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                 </span>
               </label>
             </div>
@@ -182,11 +159,7 @@
                     data-search-glyph-btn
                     aria-label="Suche"
                   >
-                    <span
-                      class="material-symbols-sharp collection-toolbar__glyph"
-                      aria-hidden="true"
-                      >search</span
-                    >
+                    <svg class="irr-icon collection-toolbar__glyph" aria-hidden="true"><use href="#search_outline"/></svg>
                   </button>
                 </span>
               </div>
@@ -245,11 +218,7 @@
             class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
             <span class="ui-button__label">Zu den Terminen</span>
-            <span
-              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-              aria-hidden="true"
-              >arrow_forward</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#arrow_forward"/></svg>
           </a>
         </div>
       </div>
@@ -306,7 +275,7 @@
         </p>
       </div>
     </footer>
-    <script src="js/site-base.js" defer></script>
+<script src="js/site-base.js" defer></script>
     <script src="js/main.js?v=6" defer></script>
     <script src="js/text-scale.js" defer></script>
     <script src="js/home-intro.js" defer></script>

@@ -22,17 +22,13 @@ def env(name: str, default: str = "") -> str:
     return value
 
 
-def should_skip(rel: Path, include_admin: bool) -> bool:
+def should_skip(rel: Path) -> bool:
     parts = rel.parts
     if parts and parts[0] in SKIP_DIRS:
         return True
     if rel.name in SKIP_FILES:
         return True
     if rel.name.startswith(".git"):
-        return True
-    if not include_admin and rel.parts and rel.parts[0] == "admin":
-        return True
-    if not include_admin and rel.as_posix() == "js/admin.js":
         return True
     return False
 
@@ -51,11 +47,11 @@ def ensure_remote_dir(ftp: FTP_TLS, path: str) -> None:
                 raise
 
 
-def upload_tree(ftp: FTP_TLS, local_root: Path, remote_root: str, include_admin: bool) -> None:
+def upload_tree(ftp: FTP_TLS, local_root: Path, remote_root: str) -> None:
     remote_root = remote_root.rstrip("/")
     for path in sorted(local_root.rglob("*")):
         rel = path.relative_to(local_root)
-        if should_skip(rel, include_admin):
+        if should_skip(rel):
             continue
         remote = f"{remote_root}/{rel.as_posix()}".replace("//", "/")
         if path.is_dir():
@@ -78,7 +74,6 @@ def main() -> None:
     user = env("FTP_USER")
     password = env("FTP_PASSWORD")
     remote_dir = os.environ.get("FTP_REMOTE_DIR", "beta").strip()
-    include_admin = os.environ.get("INCLUDE_ADMIN", "0") == "1"
 
     ftp = FTP_TLS()
     ftp.connect(host, 21, timeout=120)
@@ -86,7 +81,7 @@ def main() -> None:
     ftp.prot_p()
 
     ensure_remote_dir(ftp, remote_dir.strip("/"))
-    upload_tree(ftp, ROOT, remote_dir, include_admin)
+    upload_tree(ftp, ROOT, remote_dir)
     ftp.quit()
     print(f"Deploy completed to {remote_dir}")
 

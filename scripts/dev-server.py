@@ -21,7 +21,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PAGES = ("veranstaltungen", "ueber", "impressum", "datenschutz", "admin")
+PAGES = ("veranstaltungen", "ueber", "impressum", "datenschutz")
 
 LEGACY = {
     "events": "/veranstaltungen",
@@ -37,7 +37,6 @@ HTML_REDIRECTS = {
     "das-projekt.html": "/ueber",
     "impressum.html": "/impressum",
     "datenschutz.html": "/datenschutz",
-    "admin.html": "/admin",
 }
 
 

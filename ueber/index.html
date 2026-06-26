@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Irrlichter GbR" />
     <meta name="theme-color" content="#2a261d" />
-    <link rel="icon" href="../assets/images/light-front.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="../assets/images/260519_reading_fb.png" />
+    <link rel="icon" href="../files/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../files/favicon-180.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Irrlichter" />
     <meta property="og:locale" content="de_DE" />
@@ -56,16 +56,10 @@
         }
       }
     </script>
-    <link
-      rel="preload"
-      href="../font/MaterialSymbolsSharp.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/style.css" />
   </head>
   <body class="page-ueber">
+    <script src="../js/site-icons.js"></script>
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -101,23 +95,16 @@
                 >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
               >
             </p>
-            <span
-              class="material-symbols-sharp info-card__logo-chevron"
-              aria-hidden="true"
-              >expand_more</span
-            >
+            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
           </div>
           <a
             href="#anfahrt"
             class="info-card__collection-cta"
             data-scroll-to-section
-            >Anfahrt
-            <span
-              class="material-symbols-sharp info-card__collection-cta-icon"
-              aria-hidden="true"
-              >south</span
-            ></a
           >
+            <span class="info-card__collection-cta-label">Anfahrt</span>
+            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="#south"/></svg>
+          </a>
         </div>
         <div
           class="control-bar__meta"
@@ -172,11 +159,7 @@
             class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
             <span class="ui-button__label">Zu den Terminen</span>
-            <span
-              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-              aria-hidden="true"
-              >arrow_forward</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#arrow_forward"/></svg>
           </a>
         </div>
       </div>
@@ -187,24 +170,13 @@
           <div class="ueber-story">
             <div class="ueber-story__lead-wrap" tabindex="0">
               <div class="ueber-story-irrlicht" aria-hidden="true">
-                <div class="irrlicht-light irrlicht-light--back">
+                <div class="irrlicht-light">
                   <div class="irrlicht-light__img-wrap">
                     <img
-                      src="../assets/images/light-back.svg"
+                      src="../files/irrlicht.webp"
                       alt=""
-                      width="264"
-                      height="1160"
-                      decoding="async"
-                    />
-                  </div>
-                </div>
-                <div class="irrlicht-light irrlicht-light--front">
-                  <div class="irrlicht-light__img-wrap">
-                    <img
-                      src="../assets/images/light-front.svg"
-                      alt=""
-                      width="149"
-                      height="655"
+                      width="220"
+                      height="248"
                       decoding="async"
                     />
                   </div>
@@ -323,7 +295,7 @@
           >
             <img
               class="ueber-moorbauer-cta__image"
-              src="../assets/images/moorbauer-cta.jpg"
+              src="../files/moorbauer-cta.jpg"
               alt=""
               width="1600"
               height="1066"
@@ -340,11 +312,7 @@
                 class="ui-button ui-button--ghost ui-button--icon-trailing ueber-moorbauer-cta__action"
               >
                 <span class="ui-button__label">Zum Moorbauer</span>
-                <span
-                  class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-                  aria-hidden="true"
-                  >north_east</span
-                >
+                <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#north_east"/></svg>
               </span>
             </div>
           </a>
@@ -388,11 +356,7 @@
                         — Journalistin
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -436,11 +400,7 @@
                         — Kuratorin
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -485,11 +445,7 @@
                         — Politikwissenschaftler &amp; Gastwirt
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -523,11 +479,7 @@
                         Materialwissenschaftlerin &amp; Produktdesignerin
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -563,11 +515,7 @@
                         — Künstlerin und Gärtnerin
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -600,11 +548,7 @@
                         — Geographin und promovierte Landschaftsökologin
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -632,11 +576,7 @@
                         — Gestalter und Programmierer
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -662,11 +602,7 @@
                         transdisziplinäres Künstlerkollektiv
                       </span>
                     </span>
-                    <span
-                      class="material-symbols-sharp team-member__chevron"
-                      aria-hidden="true"
-                      >expand_more</span
-                    >
+                    <svg class="irr-icon team-member__chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
                   </summary>
                   <div class="team-member__body">
                     <p class="team-member__bio type-body">
@@ -703,11 +639,7 @@
             data-copy-text="53.767631, 12.779701"
             aria-label="Koordinaten kopieren"
           >
-            <span
-              class="material-symbols-sharp ui-button__icon ui-button__icon--lead"
-              aria-hidden="true"
-              >content_copy</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--lead" aria-hidden="true"><use href="#content_copy"/></svg>
             <span class="ui-button__label">Dorfstraße 123, 17139 Malchin</span>
           </button>
         </section>
@@ -723,9 +655,7 @@
             immer es ist, schreib uns!
           </p>
           <a class="ui-button ui-button--icon-leading ueber-contact__cta" href="mailto:info@irrlichter.net">
-            <span class="material-symbols-sharp ui-button__icon ui-button__icon--lead" aria-hidden="true"
-              >mail</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--lead" aria-hidden="true"><use href="#mail"/></svg>
             <span class="ui-button__label">Kontaktiere uns</span>
           </a>
         </section>
@@ -762,11 +692,7 @@
                 aria-label="Zur Stiftung"
               >
                 <span class="ui-button__label">Zur Stiftung</span>
-                <span
-                  class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-                  aria-hidden="true"
-                  >north_east</span
-                >
+                <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#north_east"/></svg>
               </a>
             </div>
           </div>
@@ -789,7 +715,7 @@
         </p>
       </div>
     </footer>
-    <script src="../js/site-base.js" defer></script>
+<script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=6" defer></script>
     <script src="../js/text-scale.js" defer></script>
     <script src="../js/media-lightbox.js" defer></script>

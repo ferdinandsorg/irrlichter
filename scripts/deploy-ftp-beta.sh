@@ -15,6 +15,5 @@ if [[ -f "$ROOT_DIR/.env" ]]; then
 fi
 
 export FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-beta}"
-export INCLUDE_ADMIN="${INCLUDE_ADMIN:-0}"
 
 exec bash "$SCRIPT_DIR/deploy-ftp.sh"

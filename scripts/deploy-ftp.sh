@@ -14,12 +14,10 @@ set -euo pipefail
 # FTP_PASSWORD   required
 # FTP_REMOTE_DIR optional (default: . — Hetzner-FTP liegt oft schon in public_html)
 # SOURCE_DIR     optional (default: project root, the parent of this script)
-# INCLUDE_ADMIN  optional (default: 1; set to 0 to skip admin/ / js/admin.js)
 
 FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_DIR="${SOURCE_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
-INCLUDE_ADMIN="${INCLUDE_ADMIN:-1}"
 
 if ! command -v lftp >/dev/null 2>&1; then
   echo "Error: lftp is required but not installed."
@@ -49,13 +47,9 @@ EXCLUDES=(
   --exclude-glob "node_modules/"
   --exclude-glob ".cursor/"
   --exclude-glob ".vscode/"
+  --exclude-glob "files/icons/_parts/"
+  --exclude-glob "font/MaterialSymbolsSharp.woff2"
 )
-
-if [[ "$INCLUDE_ADMIN" != "1" ]]; then
-  EXCLUDES+=(--exclude-glob "admin/")
-  EXCLUDES+=(--exclude-glob "js/admin.js")
-  echo "Note: admin/ and js/admin.js are excluded from this deploy."
-fi
 
 echo "Deploying '$SOURCE_DIR/' to '$FTP_HOST:$FTP_REMOTE_DIR'..."
 

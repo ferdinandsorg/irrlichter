@@ -8,7 +8,6 @@
     }
     return (window.IRR_SITE_ROOT || "") + "/data/collection.json";
   }
-  var COLLECTION_PREVIEW_KEY = "irrlichter:collection:preview";
   var SCATTER_DEBOUNCE_MS = 120;
   var SCATTER_DENSITY_EPS = 0.01;
   var SCATTER_MAX_ATTEMPTS = 80;
@@ -98,6 +97,20 @@
     });
   }
 
+  function collectionSortKey(item) {
+    var raw = String(item.date || "").trim();
+    if (!raw) return 0;
+    var match = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+    if (match) {
+      return new Date(
+        parseInt(match[1], 10),
+        parseInt(match[2], 10) - 1,
+        parseInt(match[3], 10)
+      ).getTime();
+    }
+    return raw;
+  }
+
   function relayoutCollectionScatter(grid) {
     if (!grid || !grid.hasAttribute("data-collection-grid")) return;
 
@@ -155,7 +168,6 @@
     var cardWidth = mobile ? containerWidth : Math.min(438, containerWidth);
     var minGapX = lerp(mobile ? 32 : 48, 16, layoutDensity);
     var minGapY = lerp(mobile ? 48 : 64, 16, layoutDensity);
-    var maxBandTop = lerp(0.35, 1.0, layoutDensity);
     var xSpread = mobile ? 0.2 : 1;
 
     var sizes = [];
@@ -179,13 +191,8 @@
       });
     }
 
-    var estHeight = SCATTER_PADDING;
-    for (i = 0; i < sizes.length; i++) {
-      estHeight += sizes[i].h + minGapY;
-    }
-    var bandHeight = Math.max(sizes[0].h, estHeight * maxBandTop);
-
     var placed = [];
+    var chronoMinY = SCATTER_PADDING;
 
     for (i = 0; i < sizes.length; i++) {
       var item = sizes[i];
@@ -204,8 +211,7 @@
           x = rng() * maxX;
         }
         x = Math.max(0, Math.min(maxX, x));
-        var maxY = Math.max(0, bandHeight - h);
-        var y = rng() * maxY;
+        var y = chronoMinY + (attempt > 0 ? minGapY * attempt : 0);
         var rect = { x: x, y: y, w: w, h: h };
         if (!collidesAny(rect, placed, minGapX, minGapY)) {
           placedRect = rect;
@@ -214,18 +220,13 @@
       }
 
       if (!placedRect) {
-        var maxBottom = 0;
-        var j;
-        for (j = 0; j < placed.length; j++) {
-          maxBottom = Math.max(maxBottom, placed[j].y + placed[j].h);
-        }
         var fx = mobile
           ? Math.max(0, (containerWidth - w) * 0.5)
           : rng() * maxX;
         fx = Math.max(0, Math.min(maxX, fx));
         placedRect = {
           x: fx,
-          y: maxBottom + (placed.length ? minGapY : 0),
+          y: chronoMinY,
           w: w,
           h: h
         };
@@ -239,6 +240,7 @@
       item.card.style.top = placedRect.y + "px";
       item.card.style.setProperty("--card-stack", String(i));
       placed.push(placedRect);
+      chronoMinY = placedRect.y;
     }
 
     var totalH = SCATTER_PADDING;
@@ -391,7 +393,7 @@
       var videoLabel = (titleEl && titleEl.textContent.trim()) || "Video";
       videoWrap.setAttribute("role", "button");
       videoWrap.setAttribute("tabindex", "0");
-      videoWrap.setAttribute("aria-label", videoLabel + " in Vollbild öffnen");
+      videoWrap.setAttribute("aria-label", videoLabel + " in Vollbild abspielen");
 
       function openVideo() {
         openLightbox({
@@ -691,20 +693,29 @@
       if (media.poster) {
         videoAttrs.poster = media.poster;
       }
+      var playGlyph =
+        typeof irrIcon === "function"
+          ? irrIcon("play_arrow", "card-media__play-icon")
+          : el("span", {
+              class: "irr-icon card-media__play-icon",
+              "aria-hidden": "true"
+            }, ["▶"]);
       return el("div", { class: "card-media card-media--video" }, [
         el("video", videoAttrs, [
           el("source", { src: src, type: mediaMimeType(src, "video") }),
           document.createTextNode(alt)
+        ]),
+        el("span", { class: "card-media__play", "aria-hidden": "true" }, [
+          el("span", { class: "card-media__play-btn" }, [playGlyph])
         ])
       ]);
     }
     if (item.type === "audio" && src) {
       var playLabel = (item.title || "Audio") + ": abspielen";
-      var playGlyph = el(
-        "span",
-        { class: "material-symbols-sharp", "aria-hidden": "true" },
-        ["play_arrow"]
-      );
+      var playGlyph =
+        typeof irrIcon === "function"
+          ? irrIcon("play_arrow")
+          : el("span", { class: "irr-icon", "aria-hidden": "true" }, ["▶"]);
       return el("div", { class: "card-audio-player" }, [
         el("div", { class: "card-audio-player__ui" }, [
           el(
@@ -848,9 +859,9 @@
 
     function setPlayUi(playing) {
       if (!btn) return;
-      var glyph = btn.querySelector(".material-symbols-sharp");
-      if (glyph) {
-        text(glyph, playing ? "pause" : "play_arrow");
+      var glyph = btn.querySelector(".irr-icon");
+      if (glyph && typeof irrSetIconName === "function") {
+        irrSetIconName(glyph, playing ? "pause" : "play_arrow");
       }
       btn.setAttribute(
         "aria-label",
@@ -1024,7 +1035,9 @@
 
     function syncGlyph() {
       var hasQuery = searchInput.value.trim().length > 0;
-      glyph.textContent = hasQuery ? "close" : "search";
+      if (typeof irrSetIconName === "function") {
+        irrSetIconName(glyph, hasQuery ? "close" : "search", { outline: true });
+      }
       glyphBtn.setAttribute("aria-label", hasQuery ? "Suche leeren" : "Suche");
     }
 
@@ -1187,7 +1200,12 @@
     }
 
     var sorted = items.slice().sort(function (a, b) {
-      return String(b.date || "").localeCompare(String(a.date || ""));
+      var ka = collectionSortKey(a);
+      var kb = collectionSortKey(b);
+      if (typeof ka === "number" && typeof kb === "number") {
+        return kb - ka;
+      }
+      return String(kb).localeCompare(String(ka));
     });
 
     sorted.forEach(function (item) {
@@ -1260,40 +1278,11 @@
     notifyCollectionSurfacesChanged();
   }
 
-  function readCollectionPreview() {
-    try {
-      var raw = sessionStorage.getItem(COLLECTION_PREVIEW_KEY);
-      if (!raw) return null;
-      var data = JSON.parse(raw);
-      return Array.isArray(data) ? data : null;
-    } catch (err) {
-      return null;
-    }
-  }
-
-  function showPreviewNote(grid) {
-    if (!grid) return;
-    var note = el("p", { class: "meta preview-note" }, [
-      "Anzeige: Vorschau aus der Admin-Sitzung (nicht die Datei auf dem Server). " +
-        "Dauerhaft: JSON im Admin herunterladen und als data/collection.json ablegen. " +
-        "Tab schliessen setzt die Vorschau zurueck."
-    ]);
-    grid.insertBefore(note, grid.firstChild);
-    scheduleCollectionScatter(grid, true);
-  }
-
   document.addEventListener("DOMContentLoaded", function () {
     if (window.irrMediaLightbox) {
       window.irrMediaLightbox.init();
     }
     initCollectionToolbarReveal();
-    var preview = readCollectionPreview();
-    if (preview) {
-      var grid = document.querySelector("[data-collection-grid]");
-      render(preview);
-      showPreviewNote(grid);
-      return;
-    }
 
     fetch(collectionDataUrl(), { cache: "no-cache" })
       .then(function (res) {

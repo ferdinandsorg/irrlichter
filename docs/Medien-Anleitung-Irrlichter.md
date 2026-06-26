@@ -191,13 +191,12 @@ Filestash ist ein Dateimanager im Browser — damit greifst du per FTP auf den W
     "alt": "Kurze Beschreibung des Bildes für Barrierefreiheit"
   },
   "location": "optional",
-  "coordinates": "optional",
-  "status": "published"
+  "coordinates": "optional"
 }
 ```
 
 4. **Typen:** `image`, `video`, `audio` oder `text`
-5. **Status:** `published` = sichtbar auf der Website, `draft` = Entwurf (unsichtbar)
+5. **Tags:** Kleinbuchstaben, mehrere möglich
 6. Bei **Video** optional `"poster": "assets/images/poster.jpg"` unter `media` ergänzen
 7. Bei **Text** kann `media.src` leer bleiben (`""`)
 8. Speichern — Änderung ist nach kurzer Zeit auf der Website sichtbar

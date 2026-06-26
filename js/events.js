@@ -113,13 +113,20 @@
     );
   }
 
+  function looksLikeDescriptionDateLabel(text) {
+    var label = (text || "").trim();
+    if (!label || label.length > 40) return false;
+    if (/^Den ganzen Tag$/i.test(label)) return true;
+    return /^\d{1,2}[./\s–-]/.test(label);
+  }
+
   function formatEventDateDisplay(event, dt) {
     if (event.dateLabel) {
       return String(event.dateLabel);
     }
     var desc = (event.description || "").trim();
     var prefix = /^([^—\n]+)\s*—/.exec(desc);
-    if (prefix && prefix[1] && /\d/.test(prefix[1])) {
+    if (prefix && prefix[1] && looksLikeDescriptionDateLabel(prefix[1])) {
       return prefix[1].trim();
     }
     if (!dt) {
@@ -138,9 +145,6 @@
     var desc = (event.description || "").trim();
     if (/^Den ganzen Tag/i.test(desc)) {
       return "Den ganzen Tag";
-    }
-    if (event.category === "Pfadwerkstatt") {
-      return "täglich 12–20 Uhr";
     }
     return "";
   }
@@ -168,72 +172,85 @@
     return !!(event.description || event.link);
   }
 
-  function buildDateColumn(event) {
+  function buildSummaryFields(event) {
     var dt = parseEventDate(event);
-    if (!dt) {
-      return el("div", { class: "event-calendar__date-col" }, [
-        el("time", { datetime: event.date || "" }, [event.date || ""])
-      ]);
+    var timeLabel = formatEventTimeDisplay(event);
+    var withLabel = formatEventWithLabel(event);
+    var fields = [];
+
+    if (dt) {
+      fields.push(
+        el("span", { class: "event-calendar__weekday" }, [
+          WEEKDAYS_FULL[dt.getDay()]
+        ])
+      );
+    } else {
+      fields.push(
+        el("span", {
+          class: "event-calendar__weekday event-calendar__weekday--empty",
+          "aria-hidden": "true"
+        }, ["\u00a0"])
+      );
     }
 
-    var dateChildren = [
-      el("span", { class: "event-calendar__weekday" }, [
-        WEEKDAYS_FULL[dt.getDay()]
-      ]),
+    if (timeLabel) {
+      fields.push(
+        el("span", { class: "event-calendar__time" }, [timeLabel])
+      );
+    }
+
+    fields.push(
       el(
         "time",
         {
           class: "event-calendar__when",
           datetime: buildDatetimeAttr(event)
         },
-        [formatEventDateDisplay(event, dt)]
+        [dt ? formatEventDateDisplay(event, dt) : event.date || ""]
       )
-    ];
+    );
 
-    return el("div", { class: "event-calendar__date-col" }, dateChildren);
-  }
-
-  function buildSummaryMain(event) {
-    var mainChildren = [];
-    var timeLabel = formatEventTimeDisplay(event);
-    var withLabel = formatEventWithLabel(event);
-
-    if (timeLabel) {
-      mainChildren.push(
-        el("span", { class: "event-calendar__time type-body" }, [timeLabel])
-      );
-    }
-
-    mainChildren.push(
+    fields.push(
       el("h3", { class: "event-calendar__title" }, [event.title || ""])
     );
 
     if (withLabel) {
-      mainChildren.push(
+      fields.push(
         el("p", { class: "event-calendar__with type-body-small" }, [withLabel])
       );
     } else if (event.location) {
-      mainChildren.push(
+      fields.push(
         el("p", { class: "event-calendar__location" }, [event.location])
       );
     }
 
-    return el("div", { class: "event-calendar__summary-text" }, mainChildren);
+    return { fields: fields, hasTime: !!timeLabel };
+  }
+
+  function summaryClassName(event, extra) {
+    var built = buildSummaryFields(event);
+    var className = "event-calendar__summary";
+    if (extra) className += " " + extra;
+    if (!built.hasTime) className += " event-calendar__summary--no-time";
+    return { className: className, fields: built.fields };
   }
 
   function buildSummary(event) {
-    var summaryChildren = [buildDateColumn(event), buildSummaryMain(event)];
+    var summary = summaryClassName(event);
+    var summaryChildren = summary.fields.slice();
 
     if (hasExpandableContent(event)) {
       summaryChildren.push(
-        el("span", {
-          class: "material-symbols-sharp event-calendar__chevron",
-          "aria-hidden": "true"
-        }, ["expand_more"])
+        typeof irrIcon === "function"
+          ? irrIcon("expand_more", "event-calendar__chevron", { outline: true })
+          : el("span", {
+              class: "irr-icon event-calendar__chevron",
+              "aria-hidden": "true"
+            }, ["▾"])
       );
     }
 
-    return el("summary", { class: "event-calendar__summary" }, summaryChildren);
+    return el("summary", { class: summary.className }, summaryChildren);
   }
 
   function buildExpandableBody(event) {
@@ -261,10 +278,14 @@
             },
             [
               linkLabel,
-              el("span", {
-                class: "material-symbols-sharp event-calendar__more-icon",
-                "aria-hidden": "true"
-              }, ["arrow_forward"])
+              typeof irrIcon === "function"
+                ? irrIcon("arrow_forward", "event-calendar__more-icon", {
+                    outline: true
+                  })
+                : el("span", {
+                    class: "irr-icon event-calendar__more-icon",
+                    "aria-hidden": "true"
+                  }, ["→"])
             ]
           )
         ])
@@ -288,12 +309,10 @@
         ])
       ];
     } else {
+      var staticSummary = summaryClassName(event, "event-calendar__summary--static");
       articleChildren = [
         el("div", { class: "event-calendar__details event-calendar__details--static" }, [
-          el("div", { class: "event-calendar__summary event-calendar__summary--static" }, [
-            buildDateColumn(event),
-            buildSummaryMain(event)
-          ])
+          el("div", { class: staticSummary.className }, staticSummary.fields)
         ])
       ];
     }

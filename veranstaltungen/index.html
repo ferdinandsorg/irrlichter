@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Irrlichter GbR" />
     <meta name="theme-color" content="#2a261d" />
-    <link rel="icon" href="../assets/images/light-front.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="../assets/images/260519_reading_fb.png" />
+    <link rel="icon" href="../files/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../files/favicon-180.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Irrlichter" />
     <meta property="og:locale" content="de_DE" />
@@ -41,16 +41,10 @@
       name="twitter:image"
       content="https://irrlichter.net/assets/images/260519_reading_fb.png"
     />
-    <link
-      rel="preload"
-      href="../font/MaterialSymbolsSharp.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/style.css" />
   </head>
   <body class="page-veranstaltungen">
+    <script src="../js/site-icons.js"></script>
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -86,23 +80,14 @@
                 >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
               >
             </p>
-            <span
-              class="material-symbols-sharp info-card__logo-chevron"
-              aria-hidden="true"
-              >expand_more</span
-            >
+            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
           </div>
           <a
             href="#termine"
             class="info-card__collection-cta"
             data-scroll-to-section
             >Termine
-            <span
-              class="material-symbols-sharp info-card__collection-cta-icon"
-              aria-hidden="true"
-              >south</span
-            ></a
-          >
+            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="#south"/></svg></a>
         </div>
         <div
           class="control-bar__meta"
@@ -157,11 +142,7 @@
             data-scroll-to-section
           >
             <span class="ui-button__label">Zu den Terminen</span>
-            <span
-              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-              aria-hidden="true"
-              >arrow_forward</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#arrow_forward"/></svg>
           </a>
         </div>
       </div>
@@ -216,7 +197,7 @@
         </p>
       </div>
     </footer>
-    <script src="../js/site-base.js" defer></script>
+<script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=6" defer></script>
     <script src="../js/text-scale.js" defer></script>
     <script src="../js/site-status.js" defer></script>

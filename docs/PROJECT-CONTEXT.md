@@ -10,18 +10,19 @@ Durable product/tech decisions. **Line numbers:** [CODE-MAP.md](CODE-MAP.md).
 | `/veranstaltungen` | `veranstaltungen/index.html` | Intro + `events.js` |
 | `/ueber` | `ueber/index.html` | Story, team, Anfahrt, Kontakt, funding |
 | `/impressum`, `/datenschutz` | respective folders | Legal |
-| `/admin` | `admin/index.html` | JSON editor (optional on FTP) |
 
-**Redirects** (`.htaccess`): `mitmachen` → `veranstaltungen`, `das-projekt` → `ueber`.
+**Redirects** (`.htaccess`): `mitmachen` → `veranstaltungen`, `das-projekt` → `ueber`, `admin` → `/`.
 
-**Staging:** `http://irrlichter.net/beta/` — root is `/beta`.
+**Staging:** `https://irrlichter.net/beta/` — `IRR_SITE_ROOT` = `/beta`.
+
+**Production:** `https://irrlichter.net/` — `IRR_SITE_ROOT` = `` (leer). Deploy: GitHub Actions workflow `production` oder `scripts/deploy-ftp-production.sh`.
 
 ## Data loading
 
 - Files: `data/events.json`, `data/collection.json`, `data/open.json`
 - API: `irrDataUrl("events.json")` in `js/site-base.js` (L84–88)
 - Consumers resolve URL **at fetch time** (`events.js` L4–10, `collection.js` L4–10, `site-status.js` L4–10)
-- **Wrong:** `/beta/veranstaltungen/data/events.json` → **Right:** `/beta/data/events.json`
+- **Wrong:** `/veranstaltungen/data/events.json` → **Right:** `/data/events.json` (production) or `/beta/data/events.json` (staging)
 
 ## Typography (`css/style.css`)
 
@@ -56,7 +57,7 @@ Durable product/tech decisions. **Line numbers:** [CODE-MAP.md](CODE-MAP.md).
 | Section | HTML / CSS | Notes |
 |---------|------------|--------|
 | Story lead | `ueber-story-irrlicht`, main.js ~374 | Hover irrlicht |
-| Moorbauer CTA | CSS ~2390, `moorbauer-cta.jpg`, ratio 1600/1066 | Panel text `#040403` fixed |
+| Moorbauer CTA | CSS ~2390, `files/moorbauer-cta.jpg`, ratio 1600/1066 | Panel text `#040403` fixed |
 | Team | CSS ~2580, `team-member.js` | Title „Das Team“; labels `type-body-small`; no borders; hover+open ~L2715–2723 |
 | Anfahrt | `#anfahrt` | Route text + copy address button |
 | Kontakt / Funding | end of `ueber/index.html` | See buttons above |
@@ -73,9 +74,13 @@ Durable product/tech decisions. **Line numbers:** [CODE-MAP.md](CODE-MAP.md).
 
 | Path | Note |
 |------|------|
-| `assets/images/moorbauer-cta.jpg` | Live CTA image |
-| `files/AvB_Logo.svg` | Funding logo in HTML |
-| `assets/images/team/` | Photos referenced; may be `.gitkeep` only |
+| `assets/images/`, `assets/audio/`, `assets/video/` | Sammlungsmedien (`collection.json`) |
+| `assets/images/team/` | Team-Fotos (Seite „Über“) |
+| `files/icons.svg`, `files/icons/_parts/` | UI-Icons (Sprite in `js/site-icons.js`) |
+| `files/irrlicht.webp` | Irrlicht-Glow (Figma-Raster) |
+| `files/favicon.png`, `files/favicon-180.png` | Favicon / Apple Touch Icon |
+| `files/moorbauer-cta.jpg` | Moorbauer-CTA auf Über |
+| `files/AvB_Logo.svg` | Förderlogo in HTML |
 
 ## Workflow
 

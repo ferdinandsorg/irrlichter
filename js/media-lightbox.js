@@ -59,14 +59,9 @@
         "aria-label": "Schließen"
       },
       [
-        el(
-          "span",
-          {
-            class: "material-symbols-sharp ui-button__icon ui-button__icon--lead",
-            "aria-hidden": "true"
-          },
-          ["close"]
-        ),
+        typeof irrIcon === "function"
+          ? irrIcon("close", "ui-button__icon ui-button__icon--lead")
+          : el("span", { class: "irr-icon ui-button__icon ui-button__icon--lead", "aria-hidden": "true" }, ["×"]),
         el("span", { class: "ui-button__label" }, ["Schließen"])
       ]
     );
@@ -95,6 +90,13 @@
       e.preventDefault();
       closeMediaLightbox();
     });
+  }
+
+  function startLightboxVideoPlayback() {
+    var playPromise = lightboxVideo.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(function () {});
+    }
   }
 
   function openMediaLightbox(payload) {
@@ -128,6 +130,16 @@
     lightboxOpen = true;
     document.body.classList.add("collection-lightbox-open");
     lightboxCloseBtn.focus();
+
+    if (payload.kind === "video") {
+      if (lightboxVideo.readyState >= 2) {
+        startLightboxVideoPlayback();
+      } else {
+        lightboxVideo.addEventListener("canplay", startLightboxVideoPlayback, {
+          once: true
+        });
+      }
+    }
   }
 
   function closeMediaLightbox() {

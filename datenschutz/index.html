@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Irrlichter GbR" />
     <meta name="theme-color" content="#2a261d" />
-    <link rel="icon" href="../assets/images/light-front.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="../assets/images/260519_reading_fb.png" />
+    <link rel="icon" href="../files/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../files/favicon-180.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Irrlichter" />
     <meta property="og:locale" content="de_DE" />
@@ -33,16 +33,10 @@
       name="twitter:description"
       content="Datenschutzerklärung der Website Irrlichter."
     />
-    <link
-      rel="preload"
-      href="../font/MaterialSymbolsSharp.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/style.css" />
   </head>
   <body class="page-legal">
+    <script src="../js/site-icons.js"></script>
     <a class="skip-link" href="#content">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="inner site-header__bar">
@@ -78,20 +72,11 @@
                 >, blaue Flämmchen im Moor. In alten Geschichten bringen sie Menschen von ihrem geplanten Weg ab. Ähnlich wie Irrlichter laden wir dazu ein, sich abseits von ausgetretenen Wegen und etablierten Positionen, tiefer ins Moor zu wagen.</span
               >
             </p>
-            <span
-              class="material-symbols-sharp info-card__logo-chevron"
-              aria-hidden="true"
-              >expand_more</span
-            >
+            <svg class="irr-icon info-card__logo-chevron" aria-hidden="true"><use href="#expand_more_outline"/></svg>
           </div>
           <a href="../" class="info-card__collection-cta"
             >Zur Startseite
-            <span
-              class="material-symbols-sharp info-card__collection-cta-icon"
-              aria-hidden="true"
-              >arrow_forward</span
-            ></a
-          >
+            <svg class="irr-icon info-card__collection-cta-icon" aria-hidden="true"><use href="#arrow_forward"/></svg></a>
         </div>
         <div
           class="control-bar__meta"
@@ -145,11 +130,7 @@
             class="ui-button ui-button--ghost ui-button--icon-trailing control-bar__hours-cta"
           >
             <span class="ui-button__label">Zu den Terminen</span>
-            <span
-              class="material-symbols-sharp ui-button__icon ui-button__icon--trail"
-              aria-hidden="true"
-              >arrow_forward</span
-            >
+            <svg class="irr-icon ui-button__icon ui-button__icon--trail" aria-hidden="true"><use href="#arrow_forward"/></svg>
           </a>
         </div>
       </div>
@@ -193,11 +174,28 @@
             Die Logdaten werden nach Ablauf der beim Hoster üblichen Fristen gelöscht.
           </p>
 
-          <h2>Schriftarten</h2>
+          <h2>Schriftarten und Symbole</h2>
           <p>
-            Text- und Symbolschriftarten (Fraunces, Material Symbols) werden lokal von
+            Text- und Symbolschriftarten (Fraunces, UI-Symbole als SVG) werden lokal von
             unserem Webserver ausgeliefert. Beim Laden dieser Dateien können IP-Adresse und
             Zeitpunkt des Zugriffs in Server-Logdateien anfallen (siehe oben).
+          </p>
+
+          <h2>Wetteranzeige (Open-Meteo)</h2>
+          <p>
+            In der Kopfzeile kann eine kurze Wetterangabe für die Umgebung Malchin erscheinen.
+            Dafür ruft Ihr Browser beim ersten Besuch (bzw. nach Ablauf eines kurzen
+            Zwischenspeichers im Browser) die API von
+            <a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo</a>
+            auf. Übermittelt werden dabei die abgefragten Koordinaten sowie technische Daten
+            (IP-Adresse, Browsertyp) an Open-Meteo bzw. deren Infrastruktur. Es werden keine
+            Cookies gesetzt; die Antwort wird nur kurz im
+            sessionStorage Ihres Browsers zwischengespeichert.
+          </p>
+          <p>
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
+            unaufdringlichen, nutzerfreundlichen Wetterinformation vor Ort). Wenn die Abfrage
+            fehlschlägt, entfällt die Anzeige — die Website bleibt voll nutzbar.
           </p>
 
           <h2>Lokale Inhalte und Medien</h2>
@@ -242,7 +240,7 @@
         </p>
       </div>
     </footer>
-    <script src="../js/site-base.js" defer></script>
+<script src="../js/site-base.js" defer></script>
     <script src="../js/main.js?v=6" defer></script>
     <script src="../js/text-scale.js" defer></script>
     <script src="../js/site-status.js" defer></script>

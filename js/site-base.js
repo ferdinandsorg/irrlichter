@@ -16,8 +16,7 @@
     "veranstaltungen",
     "ueber",
     "impressum",
-    "datenschutz",
-    "admin"
+    "datenschutz"
   ];
 
   var SITE_BASE_SCRIPT_RE = /\/js\/site-base\.js(\?|#|$)/i;

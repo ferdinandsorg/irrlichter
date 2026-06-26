@@ -81,9 +81,19 @@
     btn.className = "text-scale-toggle";
     btn.setAttribute("data-text-scale-toggle", "");
     btn.setAttribute("aria-pressed", "false");
-    btn.innerHTML =
-      '<span class="material-symbols-sharp text-scale-toggle__icon" aria-hidden="true">text_increase</span>' +
-      '<span class="text-scale-toggle__label">Text vergrößern</span>';
+    if (typeof irrIcon === "function") {
+      btn.appendChild(irrIcon("text_increase", "text-scale-toggle__icon"));
+    } else {
+      var icon = document.createElement("span");
+      icon.className = "irr-icon text-scale-toggle__icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = "A+";
+      btn.appendChild(icon);
+    }
+    var label = document.createElement("span");
+    label.className = "text-scale-toggle__label";
+    label.textContent = "Text vergrößern";
+    btn.appendChild(label);
 
     footer.appendChild(btn);
     nav.appendChild(footer);

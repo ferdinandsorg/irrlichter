@@ -9,9 +9,8 @@ from ftplib import FTP_TLS, error_perm
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRS = {".git", ".github", ".cursor", ".vscode", "scripts", "node_modules", "admin"}
+SKIP_DIRS = {".git", ".github", ".cursor", ".vscode", "scripts", "node_modules"}
 SKIP_FILES = {".DS_Store", ".env", ".env.example", "README.md"}
-SKIP_PATHS = {"js/admin.js"}
 
 
 def env(name: str) -> str:
@@ -34,8 +33,6 @@ def should_skip(rel: Path) -> bool:
     if rel.parts and rel.parts[0] in SKIP_DIRS:
         return True
     if rel.name in SKIP_FILES:
-        return True
-    if rel.as_posix() in SKIP_PATHS:
         return True
     if rel.name.startswith(".git"):
         return True

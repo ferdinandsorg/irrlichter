@@ -13,7 +13,7 @@ Static Moor art/environment site: vanilla HTML/CSS/JS, no build step, FTP deploy
 
 ## Stack
 
-- **Pages:** `index.html`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`, optional `admin/`
+- **Pages:** `index.html`, `veranstaltungen/`, `ueber/`, `impressum/`, `datenschutz/`
 - **Data:** `data/*.json` via `irrDataUrl("…")` from `js/site-base.js` (needs HTTP server)
 - **Styles:** `css/style.css` — tokens in `:root`, `html { font-size: 18px }`
 - **Script order:** `site-base.js` → then `main.js` → page scripts (`events.js`, etc.)
@@ -21,7 +21,7 @@ Static Moor art/environment site: vanilla HTML/CSS/JS, no build step, FTP deploy
 ## Critical: JSON paths
 
 ```javascript
-fetch(irrDataUrl("events.json")); // → /beta/data/events.json on staging
+fetch(irrDataUrl("events.json")); // → /data/events.json (production) or /beta/data/… (staging)
 ```
 
 Never use page-relative `data/…` or root-only `/data/…` without `irrSiteUrl` / `irrDataUrl`.
@@ -42,8 +42,14 @@ Buttons use `--ui-button-fg`, not `--ambient-fg`, on white backgrounds. Details:
 
 ## Deploy & git
 
-- Push `main` → GitHub Actions FTP to `http://irrlichter.net/beta/`
-- Upload `.htaccess`, page folders, `css/`, `js/`, `data/`, `assets/`
+| Ziel | URL | Auslöser |
+|------|-----|----------|
+| **Production** | `https://irrlichter.net/` | Push auf `main` |
+| **Staging** | `https://irrlichter.net/beta/` | GitHub Actions → Run workflow → `beta` |
+
+Lokal: `bash scripts/deploy-ftp-beta.sh` bzw. `bash scripts/deploy-ftp-production.sh` (siehe `.env.example`).
+
+- Upload `.htaccess`, page folders, `css/`, `js/`, `data/`, `assets/`, `files/`
 - **Do not commit/push** unless the user asks
 
 ## When editing
