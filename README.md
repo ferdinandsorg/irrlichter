@@ -81,7 +81,7 @@ Schraegstrich haengt vom Server ab (Dev-Server oben ist sicherer).
 Seiten liegen in **Ordnern** (`veranstaltungen/index.html` → URL `/veranstaltungen/`). Das
 funktioniert auf Apache **auch ohne** `mod_rewrite` (per `DirectoryIndex`).
 
-Zusaetzlich leitet `.htaccess` alte Pfade um (`/mitmachen` → `/veranstaltungen`, `/das-projekt` → `/ueber`, …).
+Zusaetzlich leitet `.htaccess` alte Pfade um (`/das-projekt` → `/ueber`, `/events` → `/veranstaltungen`, …).
 Beim FTP-Deploy **`.htaccess` mit hochladen** (versteckte Dateien einblenden).
 
 Voraussetzungen Live-Server:

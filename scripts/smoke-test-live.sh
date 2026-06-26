@@ -40,16 +40,16 @@ optional_check() {
   fi
 }
 
-optional_check "$BASE/files/favicon.png"
-optional_check "$BASE/files/irrlicht.webp"
-
-# Legacy redirect (relative .htaccess)
-loc="$(curl -sI "$BASE/mitmachen" | tr -d '\r' | awk -F': ' 'tolower($1)=="location"{print $2; exit}')"
-if [[ "$loc" == *"veranstaltungen"* ]]; then
-  echo "OK  redirect  $BASE/mitmachen → $loc"
+code="$(curl -sL -o /dev/null -w "%{http_code}" "$BASE/diese-seite-gibt-es-nicht" || true)"
+if [[ "$code" == "404" ]]; then
+  echo "OK  404  $BASE/diese-seite-gibt-es-nicht"
 else
-  echo "FAIL redirect mitmachen (got: ${loc:-none})"
+  echo "FAIL expected 404 got $code  $BASE/diese-seite-gibt-es-nicht"
   fail=1
 fi
+
+optional_check "$BASE/favicon.ico"
+optional_check "$BASE/files/favicon.png"
+optional_check "$BASE/files/irrlicht.webp"
 
 exit "$fail"

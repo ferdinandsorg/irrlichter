@@ -3246,6 +3246,21 @@ body.page-legal .section--plain p {
   max-width: none;
 }
 
+.section--404__glow {
+  display: block;
+  width: clamp(4.5rem, 14vw, 5.5rem);
+  height: auto;
+  margin: 0 0 clamp(1rem, 3vw, 1.5rem);
+  opacity: 0.72;
+}
+
+.section--404__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.25rem, 4vw, 2rem);
+}
+
 .section--collection .loading-note,
 .section--collection .error-note {
   max-width: 72ch;

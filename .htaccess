@@ -4,6 +4,7 @@
 
 Options -MultiViews
 DirectoryIndex index.html
+ErrorDocument 404 404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -13,7 +14,6 @@ DirectoryIndex index.html
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
   # Umbenannte Seiten (301) — relative Ziele (funktioniert in /beta/ und am Root)
-  RewriteRule ^mitmachen/?$ veranstaltungen [R=301,L]
   RewriteRule ^das-projekt/?$ ueber [R=301,L]
 
   # Legacy-Pfade
@@ -24,9 +24,6 @@ DirectoryIndex index.html
   # Alte *.html → Ordner-URLs (relativ zum aktuellen Verzeichnis)
   RewriteCond %{THE_REQUEST} \s[^\s]*/index\.html[\s?] [NC]
   RewriteRule ^index\.html$ ./ [R=301,L]
-
-  RewriteCond %{THE_REQUEST} \s[^\s]*/mitmachen\.html[\s?] [NC]
-  RewriteRule ^mitmachen\.html$ veranstaltungen [R=301,L]
 
   RewriteCond %{THE_REQUEST} \s[^\s]*/das-projekt\.html[\s?] [NC]
   RewriteRule ^das-projekt\.html$ ueber [R=301,L]

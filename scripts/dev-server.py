@@ -8,7 +8,6 @@ Lokaler Dev-Server — Kurz-URLs wie auf dem Live-Server (Ordner + Legacy-Redire
 Hoert auf allen Interfaces (0.0.0.0) — im gleichen WLAN auch vom Handy/Tablet erreichbar.
 Funktioniert wie python3 -m http.server, plus:
   /veranstaltungen  → veranstaltungen/index.html
-  /mitmachen        → Redirect nach /veranstaltungen
 """
 from __future__ import annotations
 
@@ -27,13 +26,11 @@ LEGACY = {
     "events": "/veranstaltungen",
     "info": "/ueber",
     "anfahrt": "/ueber#anfahrt",
-    "mitmachen": "/veranstaltungen",
     "das-projekt": "/ueber",
 }
 
 HTML_REDIRECTS = {
     "index.html": "/",
-    "mitmachen.html": "/veranstaltungen",
     "das-projekt.html": "/ueber",
     "impressum.html": "/impressum",
     "datenschutz.html": "/datenschutz",
@@ -71,6 +68,32 @@ class IrrlichterHandler(SimpleHTTPRequestHandler):
                 return SimpleHTTPRequestHandler.do_GET(self)
 
         return SimpleHTTPRequestHandler.do_GET(self)
+
+    def send_error(self, code, message=None, explain=None):
+        if code == 404:
+            self._serve_404()
+            return
+        super().send_error(code, message, explain)
+
+    def _serve_404(self) -> None:
+        path = os.path.join(ROOT, "404.html")
+        if not os.path.isfile(path):
+            super().send_error(404, "Not Found")
+            return
+        try:
+            with open(path, "rb") as fh:
+                body = fh.read()
+        except OSError:
+            super().send_error(404, "Not Found")
+            return
+        self.send_response(404)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        try:
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def _redirect(self, location: str) -> None:
         self.send_response(301)
@@ -129,7 +152,7 @@ def _print_startup_urls(port: int) -> None:
             "(gleiches WLAN? macOS: ipconfig getifaddr en0)"
         )
     print("Kurz-URLs: /veranstaltungen, /ueber, … (Ordnerstruktur)")
-    print("Legacy: /mitmachen → /veranstaltungen, /das-projekt → /ueber")
+    print("Legacy: /das-projekt → /ueber, /events → /veranstaltungen, …")
 
 
 def main():

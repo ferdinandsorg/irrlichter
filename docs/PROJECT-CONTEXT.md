@@ -11,7 +11,7 @@ Durable product/tech decisions. **Line numbers:** [CODE-MAP.md](CODE-MAP.md).
 | `/ueber` | `ueber/index.html` | Story, team, Anfahrt, Kontakt, funding |
 | `/impressum`, `/datenschutz` | respective folders | Legal |
 
-**Redirects** (`.htaccess`): `mitmachen` → `veranstaltungen`, `das-projekt` → `ueber`, `admin` → `/`.
+**Redirects** (`.htaccess`): `das-projekt` → `ueber`, `events` → `veranstaltungen`, `admin` → `/`.
 
 **Staging:** `https://irrlichter.net/beta/` — `IRR_SITE_ROOT` = `/beta`.
 
@@ -78,7 +78,7 @@ Durable product/tech decisions. **Line numbers:** [CODE-MAP.md](CODE-MAP.md).
 | `assets/images/team/` | Team-Fotos (Seite „Über“) |
 | `files/icons.svg`, `files/icons/_parts/` | UI-Icons (Sprite in `js/site-icons.js`) |
 | `files/irrlicht.webp` | Irrlicht-Glow (Figma-Raster) |
-| `files/favicon.png`, `files/favicon-180.png` | Favicon / Apple Touch Icon |
+| `favicon.ico`, `files/favicon.png`, `files/favicon-180.png` | Favicon / Apple Touch Icon (aus `irrlicht.webp`) |
 | `files/moorbauer-cta.jpg` | Moorbauer-CTA auf Über |
 | `files/AvB_Logo.svg` | Förderlogo in HTML |
 
