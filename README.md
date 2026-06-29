@@ -116,6 +116,8 @@ Zwei Umgebungen auf demselben Server:
 
 Da kein Build-Schritt noetig ist, wird der Projekt-Inhalt direkt hochgeladen.
 
+**Production vs. Inhalte:** Im Repo liegen Mock-Daten in `data/` und `assets/`; auf dem Live-Server stehen die echten Inhalte (Pflege per Filestash/FTP). Production-Deploys (Push auf `main`, `deploy-ftp-production.sh`, Workflow-Target `production`) setzen `FTP_SKIP_CONTENT=1` — `assets/` und `data/` werden nicht gespiegelt und auf dem Server nicht gelöscht. Staging (`beta`) lädt weiterhin alles inkl. Mock-Inhalte.
+
 ### Variante A: Per FTP-Client (FileZilla, Cyberduck, Transmit)
 
 1. FTP-Client oeffnen und mit dem Server verbinden
@@ -155,7 +157,8 @@ Was das Skript macht:
 1. Prueft, ob `lftp` verfuegbar ist
 2. Prueft, ob `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD` gesetzt sind
 3. Spiegelt den Projekt-Root in das Zielverzeichnis (`mirror -R --delete`), wobei
-   `.git/`, `scripts/`, `README.md`, `node_modules/` ausgeschlossen sind
+   `.git/`, `scripts/`, `README.md`, `node_modules/` ausgeschlossen sind.
+   Mit `FTP_SKIP_CONTENT=1` (Production-Standard) zusätzlich `assets/` und `data/`.
 
 ### Production Go-Live
 

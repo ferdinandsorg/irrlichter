@@ -1,5 +1,50 @@
 [
   {
+    "id": "260508-video-technobird-ub",
+    "title": "Technobird-Imitation",
+    "date": "2026-05-08",
+    "type": "video",
+    "tags": ["grounding", "technobird", "vogel"],
+    "summary": "",
+    "media": {
+      "src": "assets/video/260508_Grounding_ub_technobirdimitation.mp4",
+      "alt": "Video: Technobird-Imitation beim Grounding."
+    },
+    "location": "Dickicht am Moorbauern",
+    "status": "published"
+  },
+
+  {
+    "id": "260508-audio-technobird-sw",
+    "title": "Technobird",
+    "date": "2026-05-08",
+    "type": "audio",
+    "tags": ["grounding", "technobird", "vogel"],
+    "summary": "",
+    "media": {
+      "src": "assets/audio/260508_Grounding_sw_technobird.m4a",
+      "alt": "Audioaufnahme: Technobird beim Grounding."
+    },
+    "location": "Dickicht am Moorbauern",
+    "status": "published"
+  },
+
+  {
+    "id": "260508-audio-bog-bean",
+    "title": "Bog Bean Soundscape",
+    "date": "2026-05-08",
+    "type": "audio",
+    "tags": ["soundscape", "moor", "fieberklee"],
+    "summary": "",
+    "media": {
+      "src": "assets/audio/Bog_Bean_Soundscape.mp3",
+      "alt": "Klanglandschaft: Bog Bean im Moor."
+    },
+    "location": "Moorbauer",
+    "status": "published"
+  },
+
+  {
     "id": "260623-2214-fb",
     "date": "2026-06-23  ",
     "type": "image",

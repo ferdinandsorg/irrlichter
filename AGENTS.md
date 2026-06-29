@@ -49,7 +49,8 @@ Buttons use `--ui-button-fg`, not `--ambient-fg`, on white backgrounds. Details:
 
 Lokal: `bash scripts/deploy-ftp-beta.sh` bzw. `bash scripts/deploy-ftp-production.sh` (siehe `.env.example`).
 
-- Upload `.htaccess`, page folders, `css/`, `js/`, `data/`, `assets/`, `files/`
+- Production-Deploy: Code + `files/` etc.; **nicht** `assets/` / `data/` (echte Inhalte nur auf dem Server)
+- Staging (`beta`): voller Mirror inkl. Mock-`data/` und `assets/`
 - **Do not commit/push** unless the user asks
 
 ## When editing

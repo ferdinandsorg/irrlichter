@@ -59,9 +59,11 @@
         "aria-label": "Schließen"
       },
       [
-        typeof irrIcon === "function"
-          ? irrIcon("close", "ui-button__icon ui-button__icon--lead")
-          : el("span", { class: "irr-icon ui-button__icon ui-button__icon--lead", "aria-hidden": "true" }, ["×"]),
+        typeof irrInlineIcon === "function"
+          ? irrInlineIcon("close", "ui-button__icon ui-button__icon--lead irr-icon--control")
+          : typeof irrIcon === "function"
+            ? irrIcon("close", "ui-button__icon ui-button__icon--lead")
+            : el("span", { class: "irr-icon ui-button__icon ui-button__icon--lead", "aria-hidden": "true" }, ["×"]),
         el("span", { class: "ui-button__label" }, ["Schließen"])
       ]
     );

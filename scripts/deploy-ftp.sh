@@ -13,6 +13,8 @@ set -euo pipefail
 # FTP_USER       required
 # FTP_PASSWORD   required
 # FTP_REMOTE_DIR optional (default: . — Hetzner-FTP liegt oft schon in public_html)
+# FTP_SKIP_CONTENT optional (1/true: assets/ und data/ nicht spiegeln — Production
+#                     hat echte Inhalte auf dem Server; Repo enthält Mock-Daten)
 # SOURCE_DIR     optional (default: project root, the parent of this script)
 
 FTP_REMOTE_DIR="${FTP_REMOTE_DIR:-.}"
@@ -50,6 +52,16 @@ EXCLUDES=(
   --exclude-glob "files/icons/_parts/"
   --exclude-glob "font/MaterialSymbolsSharp.woff2"
 )
+
+case "${FTP_SKIP_CONTENT:-}" in
+  1|true|yes|on)
+    EXCLUDES+=(
+      --exclude-glob "assets/"
+      --exclude-glob "data/"
+    )
+    echo "Content dirs excluded from mirror: assets/, data/ (FTP_SKIP_CONTENT)."
+    ;;
+esac
 
 echo "Deploying '$SOURCE_DIR/' to '$FTP_HOST:$FTP_REMOTE_DIR'..."
 

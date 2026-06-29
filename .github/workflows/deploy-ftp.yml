@@ -2,6 +2,7 @@ name: Deploy to Hetzner FTP
 
 # Push to main → automatisch Production (Document Root)
 # Staging (/beta/): Actions → Run workflow → target „beta“
+# Production: assets/ und data/ bleiben auf dem Server (Repo = Mock-Inhalte)
 # Secrets: FTP_HOST, FTP_USER, FTP_PASSWORD
 # Optional: FTP_REMOTE_DIR (Production, Standard: .)
 on:
@@ -33,4 +34,5 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_DIR: ${{ github.event_name == 'workflow_dispatch' && inputs.target == 'beta' && 'beta' || (secrets.FTP_REMOTE_DIR || '.') }}
+          FTP_SKIP_CONTENT: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'beta') && '0' || '1' }}
         run: bash scripts/deploy-ftp.sh
