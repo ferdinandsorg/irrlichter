@@ -210,6 +210,7 @@ Pflichtfelder pro Eintrag:
 Optional:
 
 - `time` (z. B. `"17:00"`)
+- `endDate` (ISO `YYYY-MM-DD`, letzter Tag bei mehrtaegigen Terminen — steuert „vergangen“)
 - `dateLabel` (Anzeige bei mehrtaegigen Terminen, z. B. `"3.–5. Juli"`)
 - `hours` (z. B. `"täglich 12–20 Uhr"` oder `"Den ganzen Tag"`)
 - `with` (z. B. `"Mit …"`)

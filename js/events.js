@@ -80,13 +80,35 @@
     return new Date(y, m, d, h, min);
   }
 
+  function parseIsoDateEnd(dateStr) {
+    var match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || "");
+    if (!match) return null;
+    return new Date(
+      parseInt(match[1], 10),
+      parseInt(match[2], 10) - 1,
+      parseInt(match[3], 10),
+      23,
+      59,
+      59,
+      999
+    );
+  }
+
+  function parseEventEndDate(event) {
+    if (event.endDate) {
+      return parseIsoDateEnd(event.endDate);
+    }
+    return null;
+  }
+
   function eventSortKey(event) {
     var dt = parseEventDate(event);
     return dt ? dt.getTime() : 0;
   }
 
   function isPastEvent(event) {
-    var dt = parseEventDate(event);
+    var endDt = parseEventEndDate(event);
+    var dt = endDt || parseEventDate(event);
     if (!dt) return false;
     return dt.getTime() < Date.now();
   }
@@ -164,7 +186,13 @@
   function buildDatetimeAttr(event) {
     var date = event.date || "";
     if (!date) return "";
-    if (event.time) return date + "T" + event.time;
+    var end = event.endDate || "";
+    if (event.time) {
+      return date + "T" + event.time;
+    }
+    if (end) {
+      return date + "/" + end;
+    }
     return date;
   }
 

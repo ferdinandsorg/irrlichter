@@ -558,12 +558,17 @@
     }
 
     var updateCollectionToolbarLayout = bindCollectionToolbarLayout(toolbar);
-    var scrollToCollectionPending = false;
+    var scrollToCollectionTimer = null;
+
+    function isPageBottomMode() {
+      return !!(cta && cta.classList.contains("info-card__collection-cta--to-top"));
+    }
 
     function setCollectionChromeInView(inView) {
+      var showToolbar = inView && !isPageBottomMode();
       card.classList.toggle("info-card--collection-in-view", inView);
-      toolbar.hidden = !inView;
-      toolbar.setAttribute("aria-hidden", inView ? "false" : "true");
+      toolbar.hidden = !showToolbar;
+      toolbar.setAttribute("aria-hidden", showToolbar ? "false" : "true");
       if (cta) {
         if (cta.classList.contains("info-card__collection-cta--to-top")) {
           /* Sichtbarkeit bei Seitenende — main.js */
@@ -585,6 +590,20 @@
       );
     }
 
+    function syncCollectionChromeFromViewport() {
+      var rect = section.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var inView = rect.top < vh * 0.92 && rect.bottom > vh * 0.05;
+      setCollectionChromeInView(inView);
+    }
+
+    function clearScrollToCollectionPending() {
+      if (scrollToCollectionTimer) {
+        window.clearTimeout(scrollToCollectionTimer);
+        scrollToCollectionTimer = null;
+      }
+    }
+
     if (cta) {
       cta.addEventListener("click", function (e) {
         if (cta.classList.contains("info-card__collection-cta--to-top")) {
@@ -596,7 +615,10 @@
           return;
         }
         e.preventDefault();
-        scrollToCollectionPending = true;
+        if (scrollToCollectionTimer) {
+          window.clearTimeout(scrollToCollectionTimer);
+        }
+        scrollToCollectionTimer = window.setTimeout(clearScrollToCollectionPending, 1500);
         setCollectionChromeInView(true);
         var reduced =
           window.matchMedia &&
@@ -620,18 +642,31 @@
             return;
           }
           if (entry.isIntersecting) {
-            scrollToCollectionPending = false;
+            clearScrollToCollectionPending();
             setCollectionChromeInView(true);
             return;
           }
-          if (!scrollToCollectionPending) {
-            setCollectionChromeInView(false);
-          }
+          clearScrollToCollectionPending();
+          setCollectionChromeInView(false);
         });
       },
-      { threshold: 0.02, rootMargin: "0px 0px -4% 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -2% 0px" }
     );
     observer.observe(section);
+
+    document.addEventListener(
+      "irrlichter:info-card-toolbar-chrome",
+      function () {
+        if (card.classList.contains("info-card--collection-in-view")) {
+          setCollectionChromeInView(true);
+        }
+      }
+    );
+
+    syncCollectionChromeFromViewport();
+    window.addEventListener("resize", syncCollectionChromeFromViewport, {
+      passive: true
+    });
   }
 
   function text(node, value) {

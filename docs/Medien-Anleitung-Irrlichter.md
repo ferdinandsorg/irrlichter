@@ -2,6 +2,8 @@
 
 Kurzanleitung: Dateien vorbereiten, hochladen und in der Sammlung verknüpfen.
 
+**Übersicht JSON vs. HTML:** [Contentpflege-Kurz.md](Contentpflege-Kurz.md)
+
 ---
 
 ## So funktioniert es in zwei Schritten
