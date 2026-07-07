@@ -109,7 +109,7 @@ Kleine **quadratische** Porträts (ca. **72×72 px** Anzeige).
 | **Größe** | **400×400 px** (quadratisch) |
 | **Dateigröße** | **unter 100 KB** |
 | **Ordner** | `assets/images/team/` |
-| **Dateiname** | z. B. `vorname-nachname.jpg` |
+| **Dateiname** | z. B. `Uta_Berghoefer.jpg` — **ohne Umlaute** (`oe`, `ae`, `ue` statt ö, ä, ü) |
 
 Diese Fotos werden **nicht** über die Sammlung eingetragen, sondern direkt auf der Über-Seite verknüpft (technische Pflege durch die Projektleitung).
 
