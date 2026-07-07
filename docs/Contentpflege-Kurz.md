@@ -12,6 +12,7 @@ Welche Inhalte ihr selbst pflegen könnt und wo sie liegen.
 | Veranstaltungen / Termine | Ja | `data/events.json` |
 | Öffnungszeiten | Ja | `data/open.json` |
 | Team (Alter, Texte, Fotos) | Aktuell **HTML** | `ueber/index.html` + `assets/images/team/` |
+| Video-Poster | Automatisch (erster Frame) | optional `media.poster` in `collection.json` |
 
 ---
 

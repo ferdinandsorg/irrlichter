@@ -193,7 +193,7 @@ Pflichtfelder pro Eintrag:
 
 Optionale Felder:
 
-- `media.poster` (z. B. fuer Videos)
+- `media.poster` (optionales eigenes Video-Vorschaubild; sonst erster Frame automatisch)
 - `location`
 - `coordinates` (z. B. `"53.501, 8.702"`)
 
@@ -219,8 +219,9 @@ Optional:
 ## Performance-Hinweise
 
 - Bilder in sinnvollen Zielgroessen ablegen (größter Hebel für PageSpeed)
-- Moderne Formate bevorzugen (WebP/AVIF), wenn verfuegbar
-- Audio/Video mit `preload="metadata"` (so im Renderer eingestellt)
+- Video-Poster wird automatisch aus dem ersten Frame erzeugt (sichtbare Karten); optional `media.poster`
+- Videos/Audio laden erst bei Abspielen; Poster erst bei sichtbarer Karte
+- Sammlung lädt initial 20 Einträge, weitere beim Scrollen
 - Sammlungsbilder: `loading="lazy"`; erste Karten mit `fetchpriority="high"`
 - Fraunces Regular per `preload`; Italic in `css/fonts-italic.css` async
 - `.htaccess`: gzip + Cache-Control für statische Assets

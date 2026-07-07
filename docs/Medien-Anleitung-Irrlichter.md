@@ -73,10 +73,12 @@ Die Website lädt Medien aus dem Ordner `assets/` auf dem Server. Texte, Pfade u
 
 ### Optional: Vorschaubild (Poster)
 
-Feld `media.poster` in `collection.json`, z. B. `assets/images/mein-video-poster.jpg`
+Standard: die Website erzeugt das Vorschaubild **automatisch** aus dem ersten Frame — aber erst, wenn die Karte sichtbar wird (kein Massenladen aller Videos).
+
+Optional eigenes Bild: Feld `media.poster` in `collection.json`, z. B. `assets/images/mein-video-poster.jpg`
 
 - JPG, ca. **800 px** breit, unter **200 KB**
-- Wenn leer, nimmt die Website automatisch das erste Bild aus dem Video
+- Das Video selbst lädt erst beim Abspielen
 
 ---
 
