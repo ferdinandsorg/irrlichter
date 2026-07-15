@@ -955,7 +955,7 @@
       return !!(cta && cta.classList.contains("info-card__collection-cta--to-top"));
     }
 
-    function setCollectionChromeInView(inView) {
+    function applyCollectionChromeInView(inView) {
       var showToolbar = inView && !isPageBottomMode();
       card.classList.toggle("info-card--collection-in-view", inView);
       toolbar.hidden = !showToolbar;
@@ -974,6 +974,10 @@
         }
       }
       updateCollectionToolbarLayout();
+    }
+
+    function setCollectionChromeInView(inView) {
+      applyCollectionChromeInView(inView);
       document.dispatchEvent(
         new CustomEvent("irrlichter:info-card-toolbar-chrome", {
           detail: { collectionInView: inView }
@@ -1038,11 +1042,15 @@
       });
     }
 
+    /*
+     * Extern (z. B. „Nach oben“ in main.js): Toolbar neu ableiten,
+     * ohne erneut zu dispatchen — sonst synchrone Rekursion / call stack.
+     */
     document.addEventListener(
       "irrlichter:info-card-toolbar-chrome",
       function () {
         if (card.classList.contains("info-card--collection-in-view")) {
-          setCollectionChromeInView(true);
+          applyCollectionChromeInView(true);
         }
       }
     );
