@@ -77,7 +77,9 @@
   var lastScatterDensity = null;
   var COLLECTION_INITIAL_BATCH = 20;
   var COLLECTION_LOAD_MORE_BATCH = 20;
-  var COLLECTION_MEDIA_ROOT_MARGIN = "200px 0px";
+  /* Gross genug, damit Medien beim Runterscrollen vor dem Viewport laden */
+  var COLLECTION_MEDIA_ROOT_MARGIN = "720px 0px";
+  var SCATTER_MEDIA_RELAYOUT_PX = 48;
   var collectionStore = null;
   var collectionMediaObserver = null;
   var collectionLoadObserver = null;
@@ -191,35 +193,103 @@
     }
   }
 
-  function finishCollectionScatter(grid, fromLoadMore) {
-    var anchor = captureCollectionScrollAnchor(grid);
-    relayoutCollectionScatter(grid);
+  function finishCollectionScatter(grid, opts) {
+    opts = opts || {};
+    var fromLoadMore = !!opts.fromLoadMore;
+    var appendOnly = !!opts.appendOnly;
+    var anchor = appendOnly ? null : captureCollectionScrollAnchor(grid);
+    relayoutCollectionScatter(grid, { appendOnly: appendOnly });
     updateCollectionScatterDensity(grid, readScrollDensity());
-    restoreCollectionScrollAnchor(anchor);
+    if (anchor) restoreCollectionScrollAnchor(anchor);
     if (fromLoadMore && collectionStore && collectionStore.grid === grid) {
       onCollectionScatterSettled(collectionStore);
     }
   }
 
-  function scheduleCollectionScatter(grid, force) {
+  function scheduleCollectionScatter(grid, force, opts) {
     if (!grid) return;
+    opts = opts || {};
     if (scatterRaf !== null) {
       if (!force) return;
       cancelAnimationFrame(scatterRaf);
     }
     scatterRaf = requestAnimationFrame(function () {
       scatterRaf = null;
-      finishCollectionScatter(grid, false);
+      finishCollectionScatter(grid, opts);
     });
   }
 
-  function runCollectionScatterNow(grid, fromLoadMore) {
+  function runCollectionScatterNow(grid, opts) {
     if (!grid) return;
+    opts = typeof opts === "boolean" ? { fromLoadMore: opts } : opts || {};
     if (scatterRaf !== null) {
       cancelAnimationFrame(scatterRaf);
       scatterRaf = null;
     }
-    finishCollectionScatter(grid, !!fromLoadMore);
+    finishCollectionScatter(grid, opts);
+  }
+
+  function clearCollectionScatterLocks(grid) {
+    if (!grid) return;
+    grid.querySelectorAll(".card[data-scatter-placed]").forEach(function (card) {
+      card.removeAttribute("data-scatter-placed");
+      card.removeAttribute("data-scatter-h");
+    });
+  }
+
+  /**
+   * Medienhöhe geändert: Karten oberhalb bleiben, alles darunter nur vertikal
+   * verschieben — kein Full-Shuffle beim Hochscrollen.
+   */
+  function shiftScatterCardsBelow(card, grid, deltaY) {
+    if (!card || !grid || !deltaY) return;
+    var top = parseFloat(card.style.top);
+    if (isNaN(top)) return;
+    grid.querySelectorAll(".card").forEach(function (other) {
+      if (other === card || other.classList.contains("hidden-by-filter")) return;
+      if (other.getAttribute("data-scatter-placed") !== "1") return;
+      var otherTop = parseFloat(other.style.top);
+      if (isNaN(otherTop) || otherTop < top + 0.5) return;
+      other.style.top = otherTop + deltaY + "px";
+    });
+  }
+
+  function refreshCollectionGridExtent(grid) {
+    if (!grid) return;
+    var totalH = SCATTER_PADDING;
+    grid.querySelectorAll(".card").forEach(function (card) {
+      if (card.classList.contains("hidden-by-filter")) return;
+      if (card.classList.contains("card--layout-pending")) return;
+      var top = parseFloat(card.style.top);
+      if (isNaN(top)) return;
+      totalH = Math.max(totalH, top + card.offsetHeight + SCATTER_PADDING);
+    });
+    var sentinel = grid.querySelector("[data-collection-load-sentinel]");
+    var sentinelPad = sentinel && !sentinel.hidden ? 72 : 0;
+    grid.style.minHeight = totalH + sentinelPad + "px";
+    positionCollectionLoadSentinel(grid);
+  }
+
+  function noteScatterCardHeight(card) {
+    if (!card) return;
+    card.setAttribute("data-scatter-h", String(card.offsetHeight || 0));
+  }
+
+  function maybeRescatterAfterMediaSize(card, grid) {
+    if (!card || !grid) return;
+    var after = card.offsetHeight || 0;
+    var before = parseFloat(card.getAttribute("data-scatter-h") || "");
+    if (isNaN(before)) {
+      noteScatterCardHeight(card);
+      return;
+    }
+    var delta = after - before;
+    noteScatterCardHeight(card);
+    if (Math.abs(delta) < SCATTER_MEDIA_RELAYOUT_PX) {
+      return;
+    }
+    shiftScatterCardsBelow(card, grid, delta);
+    refreshCollectionGridExtent(grid);
   }
 
   function collectionSortKey(item) {
@@ -236,8 +306,10 @@
     return raw;
   }
 
-  function relayoutCollectionScatter(grid) {
+  function relayoutCollectionScatter(grid, opts) {
     if (!grid || !grid.hasAttribute("data-collection-grid")) return;
+    opts = opts || {};
+    var appendOnly = !!opts.appendOnly;
 
     var layoutDensity = SCATTER_LAYOUT_DENSITY;
 
@@ -267,12 +339,14 @@
     var visible = [];
     for (i = 0; i < allCards.length; i++) {
       var card = allCards[i];
-      card.style.position = "";
-      card.style.left = "";
-      card.style.top = "";
-      card.style.width = "";
-      card.style.visibility = "";
       if (card.classList.contains("hidden-by-filter")) {
+        card.style.position = "";
+        card.style.left = "";
+        card.style.top = "";
+        card.style.width = "";
+        card.style.visibility = "";
+        card.removeAttribute("data-scatter-placed");
+        card.removeAttribute("data-scatter-h");
         hiddenBin.appendChild(card);
       } else {
         visible.push(card);
@@ -295,9 +369,47 @@
     var minGapY = lerp(mobile ? 48 : 72, 20, layoutDensity);
     var xSpread = mobile ? 0.2 : 1;
 
-    var sizes = [];
+    var placed = [];
+    var chronoMinY = SCATTER_PADDING;
+    var toPlace = [];
+
     for (i = 0; i < visible.length; i++) {
       card = visible[i];
+      var keep =
+        appendOnly &&
+        card.getAttribute("data-scatter-placed") === "1" &&
+        card.style.left !== "" &&
+        card.style.top !== "";
+
+      if (keep) {
+        card.style.position = "absolute";
+        card.style.width = cardWidth + "px";
+        card.style.visibility = "";
+        card.removeAttribute("aria-hidden");
+        card.classList.remove("card--layout-pending");
+        card.style.contentVisibility = "";
+        grid.appendChild(card);
+        var keptRect = {
+          x: parseFloat(card.style.left) || 0,
+          y: parseFloat(card.style.top) || 0,
+          w: card.offsetWidth || cardWidth,
+          h: card.offsetHeight
+        };
+        placed.push(keptRect);
+        noteScatterCardHeight(card);
+        chronoMinY = Math.max(
+          chronoMinY,
+          keptRect.y + keptRect.h + minGapY
+        );
+      } else {
+        card.removeAttribute("data-scatter-placed");
+        toPlace.push(card);
+      }
+    }
+
+    var sizes = [];
+    for (i = 0; i < toPlace.length; i++) {
+      card = toPlace[i];
       card.style.position = "absolute";
       card.style.visibility = "hidden";
       card.style.width = cardWidth + "px";
@@ -317,9 +429,6 @@
       });
       card.style.contentVisibility = "";
     }
-
-    var placed = [];
-    var chronoMinY = SCATTER_PADDING;
 
     for (i = 0; i < sizes.length; i++) {
       var item = sizes[i];
@@ -367,7 +476,9 @@
       item.card.classList.remove("card--layout-pending");
       item.card.style.left = placedRect.x + "px";
       item.card.style.top = placedRect.y + "px";
-      item.card.style.setProperty("--card-stack", String(i));
+      item.card.style.setProperty("--card-stack", String(placed.length));
+      item.card.setAttribute("data-scatter-placed", "1");
+      noteScatterCardHeight(item.card);
       placed.push(placedRect);
       chronoMinY = Math.max(
         chronoMinY,
@@ -437,7 +548,8 @@
 
   function markVideoPosterReady(wrap, grid) {
     if (wrap) wrap.classList.add("card-media--has-poster");
-    if (grid) scheduleCollectionScatter(grid, true);
+    var card = wrap && wrap.closest(".card");
+    if (card && grid) maybeRescatterAfterMediaSize(card, grid);
   }
 
   function runVideoPosterCapture(video, grid, onDone) {
@@ -714,7 +826,10 @@
         if (wrap) wrap.classList.remove("card-media--has-poster");
         poster.remove();
         if (video) queueVideoPosterCapture(video, grid);
-        else if (grid) scheduleCollectionScatter(grid, true);
+        else if (grid) {
+          var card = wrap && wrap.closest(".card");
+          if (card) maybeRescatterAfterMediaSize(card, grid);
+        }
       },
       { once: true }
     );
@@ -723,6 +838,7 @@
       function () {
         var wrap = poster.closest(".card-media--video");
         var video = wrap && wrap.querySelector("video.card-media__video");
+        var card = wrap && wrap.closest(".card");
         if (video) video.dataset.posterCaptured = "1";
         if (wrap) wrap.classList.add("card-media--has-poster");
         if (poster.naturalWidth && poster.naturalHeight) {
@@ -732,7 +848,7 @@
             poster.naturalHeight
           );
         }
-        if (grid) scheduleCollectionScatter(grid, true);
+        if (card && grid) maybeRescatterAfterMediaSize(card, grid);
       },
       { once: true }
     );
@@ -745,24 +861,52 @@
           poster.naturalWidth,
           poster.naturalHeight
         );
-        if (grid) scheduleCollectionScatter(grid, true);
+        var eagerCard = poster.closest(".card");
+        if (eagerCard && grid) maybeRescatterAfterMediaSize(eagerCard, grid);
       }
       return;
     }
     observeCollectionLazyMedia(poster);
   }
 
+  function wireCollectionImage(img, grid) {
+    if (!img) return;
+    function onImgReady() {
+      var wrap = img.closest(".card-media--image") || img.closest(".card-media");
+      var card = img.closest(".card");
+      if (img.naturalWidth && img.naturalHeight) {
+        applyMediaWrapAspect(wrap, img.naturalWidth, img.naturalHeight);
+      }
+      if (card && grid) maybeRescatterAfterMediaSize(card, grid);
+    }
+    img.addEventListener("load", onImgReady, { once: true });
+    img.addEventListener(
+      "error",
+      function () {
+        var card = img.closest(".card");
+        if (card && grid) maybeRescatterAfterMediaSize(card, grid);
+      },
+      { once: true }
+    );
+    if (img.getAttribute("src") && img.complete && img.naturalWidth) {
+      onImgReady();
+      return;
+    }
+    if (img.dataset.mediaLoaded === "1") return;
+    if (img.getAttribute("data-src")) {
+      if (img.getAttribute("loading") === "eager") {
+        img.setAttribute("src", img.getAttribute("data-src"));
+        img.dataset.mediaLoaded = "1";
+        return;
+      }
+      observeCollectionLazyMedia(img);
+    }
+  }
+
   function wireCardMediaAspect(card, grid) {
     var img = card.querySelector("img.card-media__img");
     if (img) {
-      function onImgReady() {
-        if (grid) scheduleCollectionScatter(grid, true);
-      }
-      if (img.complete) {
-        onImgReady();
-      } else {
-        img.addEventListener("load", onImgReady, { once: true });
-      }
+      wireCollectionImage(img, grid);
     }
 
     var video = card.querySelector("video.card-media__video");
@@ -775,7 +919,7 @@
             video.videoHeight
           );
         }
-        if (grid) scheduleCollectionScatter(grid, true);
+        maybeRescatterAfterMediaSize(card, grid);
       }
       video.addEventListener("loadedmetadata", onVideoMeta, { once: true });
     }
@@ -819,9 +963,15 @@
       imgWrap.setAttribute("aria-label", imgLabel + " vergrößern");
 
       function openImage() {
+        var src =
+          img.currentSrc ||
+          img.src ||
+          img.getAttribute("data-src") ||
+          "";
+        if (!src) return;
         openLightbox({
           kind: "image",
-          src: img.currentSrc || img.src,
+          src: src,
           alt: img.alt || ""
         });
       }
@@ -858,7 +1008,10 @@
       clearTimeout(scatterResizeTimer);
       scatterResizeTimer = setTimeout(function () {
         var g = document.querySelector("[data-collection-grid]");
-        if (g) scheduleCollectionScatter(g, true);
+        if (g) {
+          clearCollectionScatterLocks(g);
+          scheduleCollectionScatter(g, true);
+        }
       }, SCATTER_DEBOUNCE_MS);
     });
   }
@@ -1147,13 +1300,16 @@
     if (item.type === "image" && src) {
       var imgAttrs = {
         class: "card-media__img",
-        src: src,
         alt: alt,
-        loading: eager ? "eager" : "lazy",
         decoding: "async"
       };
       if (eager) {
+        imgAttrs.src = src;
+        imgAttrs.loading = "eager";
         imgAttrs.fetchPriority = "high";
+      } else {
+        /* Nicht loading=lazy: bei absolutem Scatter unzuverlässig — IO über data-src */
+        imgAttrs["data-src"] = src;
       }
       return el("div", { class: "card-media card-media--image" }, [
         el("img", imgAttrs)
@@ -1836,6 +1992,7 @@
     });
 
     updateFilterEmptyState(grid, typeSelect, tagSelect, searchInput);
+    clearCollectionScatterLocks(grid);
     scheduleCollectionScatter(grid, true);
   }
 
@@ -2071,7 +2228,10 @@
     store.loadingMore = true;
     disconnectCollectionLoadSentinel(store);
     var added = appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
-    runCollectionScatterNow(store.grid, true);
+    runCollectionScatterNow(store.grid, {
+      fromLoadMore: true,
+      appendOnly: true
+    });
     notifyCollectionSurfacesChanged();
 
     if (!added && !hasMoreCollectionItems(store)) {
@@ -2086,7 +2246,8 @@
     while (hasMoreCollectionItems(store)) {
       appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
     }
-    runCollectionScatterNow(store.grid, true);
+    clearCollectionScatterLocks(store.grid);
+    runCollectionScatterNow(store.grid, { fromLoadMore: true });
     stopCollectionLoadMore(store);
     notifyCollectionSurfacesChanged();
   }
@@ -2139,7 +2300,7 @@
     store.loadingMore = true;
     store.loadComplete = false;
     appendCollectionCards(store, COLLECTION_INITIAL_BATCH);
-    runCollectionScatterNow(store.grid, true);
+    runCollectionScatterNow(store.grid, { fromLoadMore: true });
     notifyCollectionSurfacesChanged();
   }
 

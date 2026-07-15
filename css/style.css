@@ -3531,8 +3531,6 @@ textarea {
   width: min(438px, 100%);
   max-width: 438px;
   margin: 0;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 520px;
   box-sizing: border-box;
   isolation: isolate;
   z-index: calc(10 + var(--card-stack, 0));
@@ -3637,6 +3635,15 @@ textarea {
 
 .card-media--image {
   cursor: zoom-in;
+  /* Platzhalter bis echte Aspect-Ratio gesetzt — sonst zu kurze Karten vor dem Bild-Load */
+  aspect-ratio: 4 / 3;
+  min-height: 200px;
+}
+
+.card-media--image .card-media__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .card-media--video .card-media__play {
