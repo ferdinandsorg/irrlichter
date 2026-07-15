@@ -76,8 +76,8 @@
   var scatterScrollAttached = false;
   var lastScatterDensity = null;
   var COLLECTION_INITIAL_BATCH = 20;
-  var COLLECTION_LOAD_MORE_BATCH = 16;
-  var COLLECTION_MEDIA_ROOT_MARGIN = "280px 0px";
+  var COLLECTION_LOAD_MORE_BATCH = 20;
+  var COLLECTION_MEDIA_ROOT_MARGIN = "200px 0px";
   var collectionStore = null;
   var collectionMediaObserver = null;
   var collectionLoadObserver = null;
@@ -152,10 +152,10 @@
     grid.style.setProperty("--collection-density", String(density));
   }
 
-  function finishCollectionScatter(grid) {
+  function finishCollectionScatter(grid, fromLoadMore) {
     relayoutCollectionScatter(grid);
     updateCollectionScatterDensity(grid, readScrollDensity());
-    if (collectionStore && collectionStore.grid === grid) {
+    if (fromLoadMore && collectionStore && collectionStore.grid === grid) {
       onCollectionScatterSettled(collectionStore);
     }
   }
@@ -168,17 +168,17 @@
     }
     scatterRaf = requestAnimationFrame(function () {
       scatterRaf = null;
-      finishCollectionScatter(grid);
+      finishCollectionScatter(grid, false);
     });
   }
 
-  function runCollectionScatterNow(grid) {
+  function runCollectionScatterNow(grid, fromLoadMore) {
     if (!grid) return;
     if (scatterRaf !== null) {
       cancelAnimationFrame(scatterRaf);
       scatterRaf = null;
     }
-    finishCollectionScatter(grid);
+    finishCollectionScatter(grid, !!fromLoadMore);
   }
 
   function collectionSortKey(item) {
@@ -1917,56 +1917,73 @@
   }
 
   function disconnectCollectionLoadSentinel(store) {
-    if (!store || !store.grid || !collectionLoadObserver) return;
+    if (!collectionLoadObserver) return;
+    if (store && store.grid) {
+      var sentinel = store.grid.querySelector("[data-collection-load-sentinel]");
+      if (sentinel) collectionLoadObserver.unobserve(sentinel);
+    }
+  }
+
+  function stopCollectionLoadMore(store) {
+    if (!store || !store.grid) return;
+    store.loadComplete = true;
+    store.loadingMore = false;
+    disconnectCollectionLoadSentinel(store);
     var sentinel = store.grid.querySelector("[data-collection-load-sentinel]");
     if (sentinel) {
-      collectionLoadObserver.unobserve(sentinel);
+      sentinel.hidden = true;
+      sentinel.setAttribute("aria-hidden", "true");
     }
+  }
+
+  function hasMoreCollectionItems(store) {
+    return !!(store && store.nextIndex < store.sorted.length);
   }
 
   function updateCollectionLoadSentinel(store) {
     if (!store || !store.grid) return;
-    var sentinel = getOrCreateLoadSentinel(store.grid);
-    var allDone = store.renderedCount >= store.sorted.length;
-    var filtered = collectionFiltersActive(
-      store.typeSelect,
-      store.tagSelect,
-      store.searchInput
-    );
-    if (allDone || filtered || store.loadingMore) {
-      sentinel.hidden = true;
-      sentinel.setAttribute("aria-hidden", "true");
-      disconnectCollectionLoadSentinel(store);
-    } else {
-      sentinel.hidden = false;
-      sentinel.removeAttribute("aria-hidden");
-      positionCollectionLoadSentinel(store.grid);
-      observeCollectionLoadSentinel(store);
+    if (store.loadComplete || !hasMoreCollectionItems(store)) {
+      stopCollectionLoadMore(store);
+      return;
     }
-  }
-
-  function isCardAlreadyRendered(grid, itemId) {
-    if (!itemId || !grid) return false;
-    return !!grid.querySelector(
-      '.card[data-item-id="' +
-        String(itemId).replace(/\\/g, "\\\\").replace(/"/g, '\\"') +
-        '"]'
-    );
+    if (
+      store.loadingMore ||
+      collectionFiltersActive(
+        store.typeSelect,
+        store.tagSelect,
+        store.searchInput
+      )
+    ) {
+      disconnectCollectionLoadSentinel(store);
+      var busySentinel = getOrCreateLoadSentinel(store.grid);
+      busySentinel.hidden = true;
+      busySentinel.setAttribute("aria-hidden", "true");
+      return;
+    }
+    var sentinel = getOrCreateLoadSentinel(store.grid);
+    sentinel.hidden = false;
+    sentinel.removeAttribute("aria-hidden");
+    positionCollectionLoadSentinel(store.grid);
+    observeCollectionLoadSentinel(store);
   }
 
   function appendCollectionCards(store, count) {
-    var start = store.renderedCount;
-    var slice = store.sorted.slice(start, start + count);
-    if (!slice.length) return 0;
+    if (!store || count < 1) return 0;
+    if (store.nextIndex >= store.sorted.length) return 0;
+
+    var end = Math.min(store.nextIndex + count, store.sorted.length);
     var sentinel = store.grid.querySelector("[data-collection-load-sentinel]");
     var added = 0;
-    slice.forEach(function (item, i) {
-      var itemId = item && item.id ? String(item.id) : "";
-      if (itemId && isCardAlreadyRendered(store.grid, itemId)) {
-        return;
+    var i;
+
+    for (i = store.nextIndex; i < end; i++) {
+      var item = store.sorted[i];
+      var itemId = item && item.id != null ? String(item.id) : "idx-" + i;
+      if (store.renderedIds[itemId]) {
+        continue;
       }
-      var card = buildCard(item, start + i);
-      /* Bis Scatter-Layout unsichtbar — sonst stapeln sich neue Karten bei 0/0 über der ersten Charge */
+      store.renderedIds[itemId] = true;
+      var card = buildCard(item, i);
       card.classList.add("card--layout-pending");
       card.style.visibility = "hidden";
       card.setAttribute("aria-hidden", "true");
@@ -1977,14 +1994,19 @@
       }
       wireCollectionCard(card, store.grid);
       added++;
-    });
-    store.renderedCount = start + slice.length;
+    }
+
+    store.nextIndex = end;
+    store.renderedCount = store.nextIndex;
     return added;
   }
 
   function loadMoreCollectionBatch(store) {
-    if (!store || store.loadingMore) return;
-    if (store.renderedCount >= store.sorted.length) return;
+    if (!store || store.loadingMore || store.loadComplete) return;
+    if (!hasMoreCollectionItems(store)) {
+      stopCollectionLoadMore(store);
+      return;
+    }
     if (
       collectionFiltersActive(
         store.typeSelect,
@@ -1994,32 +2016,51 @@
     ) {
       return;
     }
+
     store.loadingMore = true;
     disconnectCollectionLoadSentinel(store);
-    appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
-    runCollectionScatterNow(store.grid);
+    var added = appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
+    runCollectionScatterNow(store.grid, true);
     notifyCollectionSurfacesChanged();
+
+    if (!added && !hasMoreCollectionItems(store)) {
+      stopCollectionLoadMore(store);
+    }
   }
 
   function ensureAllCollectionCards(store) {
-    if (!store) return;
+    if (!store || store.loadComplete) return;
     store.loadingMore = true;
     disconnectCollectionLoadSentinel(store);
-    while (store.renderedCount < store.sorted.length) {
+    while (hasMoreCollectionItems(store)) {
       appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
     }
-    runCollectionScatterNow(store.grid);
+    runCollectionScatterNow(store.grid, true);
+    stopCollectionLoadMore(store);
     notifyCollectionSurfacesChanged();
   }
 
   function onCollectionScatterSettled(store) {
     if (!store) return;
     store.loadingMore = false;
-    updateCollectionLoadSentinel(store);
+    if (!hasMoreCollectionItems(store)) {
+      stopCollectionLoadMore(store);
+      return;
+    }
+    /* Kurz warten, damit der Sentinel erst nach dem neuen Layout unter dem Fold landet */
+    window.requestAnimationFrame(function () {
+      if (!collectionStore || collectionStore !== store) return;
+      if (store.loadingMore || store.loadComplete) return;
+      updateCollectionLoadSentinel(store);
+    });
   }
 
   function observeCollectionLoadSentinel(store) {
-    if (!store || !store.grid || store.loadingMore) return;
+    if (!store || !store.grid || store.loadingMore || store.loadComplete) return;
+    if (!hasMoreCollectionItems(store)) {
+      stopCollectionLoadMore(store);
+      return;
+    }
     var sentinel = getOrCreateLoadSentinel(store.grid);
     if (typeof IntersectionObserver === "undefined") {
       loadMoreCollectionBatch(store);
@@ -2030,7 +2071,9 @@
         function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting || !collectionStore) return;
-            if (collectionStore.loadingMore) return;
+            if (collectionStore.loadingMore || collectionStore.loadComplete) {
+              return;
+            }
             loadMoreCollectionBatch(collectionStore);
           });
         },
@@ -2043,8 +2086,9 @@
 
   function initCollectionLoadMore(store) {
     store.loadingMore = true;
+    store.loadComplete = false;
     appendCollectionCards(store, COLLECTION_INITIAL_BATCH);
-    runCollectionScatterNow(store.grid);
+    runCollectionScatterNow(store.grid, true);
     notifyCollectionSurfacesChanged();
   }
 
@@ -2069,12 +2113,15 @@
 
     collectionStore = {
       sorted: sorted,
+      nextIndex: 0,
       renderedCount: 0,
+      renderedIds: Object.create(null),
       grid: grid,
       typeSelect: typeSelect,
       tagSelect: tagSelect,
       searchInput: searchInput,
-      loadingMore: false
+      loadingMore: false,
+      loadComplete: false
     };
 
     var types = unique(sorted.map(function (i) { return i.type; }));
