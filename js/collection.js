@@ -152,6 +152,14 @@
     grid.style.setProperty("--collection-density", String(density));
   }
 
+  function finishCollectionScatter(grid) {
+    relayoutCollectionScatter(grid);
+    updateCollectionScatterDensity(grid, readScrollDensity());
+    if (collectionStore && collectionStore.grid === grid) {
+      onCollectionScatterSettled(collectionStore);
+    }
+  }
+
   function scheduleCollectionScatter(grid, force) {
     if (!grid) return;
     if (scatterRaf !== null) {
@@ -160,9 +168,17 @@
     }
     scatterRaf = requestAnimationFrame(function () {
       scatterRaf = null;
-      relayoutCollectionScatter(grid);
-      updateCollectionScatterDensity(grid, readScrollDensity());
+      finishCollectionScatter(grid);
     });
+  }
+
+  function runCollectionScatterNow(grid) {
+    if (!grid) return;
+    if (scatterRaf !== null) {
+      cancelAnimationFrame(scatterRaf);
+      scatterRaf = null;
+    }
+    finishCollectionScatter(grid);
   }
 
   function collectionSortKey(item) {
@@ -306,6 +322,8 @@
       }
 
       item.card.style.visibility = "";
+      item.card.removeAttribute("aria-hidden");
+      item.card.classList.remove("card--layout-pending");
       item.card.style.left = placedRect.x + "px";
       item.card.style.top = placedRect.y + "px";
       item.card.style.setProperty("--card-stack", String(i));
@@ -320,7 +338,10 @@
     for (i = 0; i < placed.length; i++) {
       totalH = Math.max(totalH, placed[i].y + placed[i].h + SCATTER_PADDING);
     }
-    grid.style.minHeight = totalH + "px";
+    var sentinel = grid.querySelector("[data-collection-load-sentinel]");
+    var sentinelPad =
+      sentinel && !sentinel.hidden ? 72 : 0;
+    grid.style.minHeight = totalH + sentinelPad + "px";
     positionCollectionLoadSentinel(grid);
   }
 
@@ -334,7 +355,8 @@
     sentinel.style.position = "absolute";
     sentinel.style.left = "0";
     sentinel.style.width = "100%";
-    sentinel.style.top = Math.max(SCATTER_PADDING, minH - 72) + "px";
+    /* Unterhalb der letzten Karten — nicht überlappend, sonst feuert der Observer zu früh erneut */
+    sentinel.style.top = Math.max(SCATTER_PADDING, minH) + "px";
     sentinel.style.zIndex = "0";
   }
 
@@ -1894,6 +1916,14 @@
     return sentinel;
   }
 
+  function disconnectCollectionLoadSentinel(store) {
+    if (!store || !store.grid || !collectionLoadObserver) return;
+    var sentinel = store.grid.querySelector("[data-collection-load-sentinel]");
+    if (sentinel) {
+      collectionLoadObserver.unobserve(sentinel);
+    }
+  }
+
   function updateCollectionLoadSentinel(store) {
     if (!store || !store.grid) return;
     var sentinel = getOrCreateLoadSentinel(store.grid);
@@ -1903,17 +1933,25 @@
       store.tagSelect,
       store.searchInput
     );
-    if (allDone || filtered) {
+    if (allDone || filtered || store.loadingMore) {
       sentinel.hidden = true;
       sentinel.setAttribute("aria-hidden", "true");
-      if (collectionLoadObserver) {
-        collectionLoadObserver.unobserve(sentinel);
-      }
+      disconnectCollectionLoadSentinel(store);
     } else {
       sentinel.hidden = false;
       sentinel.removeAttribute("aria-hidden");
+      positionCollectionLoadSentinel(store.grid);
       observeCollectionLoadSentinel(store);
     }
+  }
+
+  function isCardAlreadyRendered(grid, itemId) {
+    if (!itemId || !grid) return false;
+    return !!grid.querySelector(
+      '.card[data-item-id="' +
+        String(itemId).replace(/\\/g, "\\\\").replace(/"/g, '\\"') +
+        '"]'
+    );
   }
 
   function appendCollectionCards(store, count) {
@@ -1921,17 +1959,27 @@
     var slice = store.sorted.slice(start, start + count);
     if (!slice.length) return 0;
     var sentinel = store.grid.querySelector("[data-collection-load-sentinel]");
+    var added = 0;
     slice.forEach(function (item, i) {
+      var itemId = item && item.id ? String(item.id) : "";
+      if (itemId && isCardAlreadyRendered(store.grid, itemId)) {
+        return;
+      }
       var card = buildCard(item, start + i);
+      /* Bis Scatter-Layout unsichtbar — sonst stapeln sich neue Karten bei 0/0 über der ersten Charge */
+      card.classList.add("card--layout-pending");
+      card.style.visibility = "hidden";
+      card.setAttribute("aria-hidden", "true");
       if (sentinel) {
         store.grid.insertBefore(card, sentinel);
       } else {
         store.grid.appendChild(card);
       }
       wireCollectionCard(card, store.grid);
+      added++;
     });
     store.renderedCount = start + slice.length;
-    return slice.length;
+    return added;
   }
 
   function loadMoreCollectionBatch(store) {
@@ -1947,25 +1995,31 @@
       return;
     }
     store.loadingMore = true;
+    disconnectCollectionLoadSentinel(store);
     appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
-    store.loadingMore = false;
-    updateCollectionLoadSentinel(store);
-    scheduleCollectionScatter(store.grid, true);
+    runCollectionScatterNow(store.grid);
     notifyCollectionSurfacesChanged();
   }
 
   function ensureAllCollectionCards(store) {
     if (!store) return;
+    store.loadingMore = true;
+    disconnectCollectionLoadSentinel(store);
     while (store.renderedCount < store.sorted.length) {
       appendCollectionCards(store, COLLECTION_LOAD_MORE_BATCH);
     }
-    updateCollectionLoadSentinel(store);
-    scheduleCollectionScatter(store.grid, true);
+    runCollectionScatterNow(store.grid);
     notifyCollectionSurfacesChanged();
   }
 
+  function onCollectionScatterSettled(store) {
+    if (!store) return;
+    store.loadingMore = false;
+    updateCollectionLoadSentinel(store);
+  }
+
   function observeCollectionLoadSentinel(store) {
-    if (!store || !store.grid) return;
+    if (!store || !store.grid || store.loadingMore) return;
     var sentinel = getOrCreateLoadSentinel(store.grid);
     if (typeof IntersectionObserver === "undefined") {
       loadMoreCollectionBatch(store);
@@ -1976,6 +2030,7 @@
         function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting || !collectionStore) return;
+            if (collectionStore.loadingMore) return;
             loadMoreCollectionBatch(collectionStore);
           });
         },
@@ -1987,9 +2042,9 @@
   }
 
   function initCollectionLoadMore(store) {
+    store.loadingMore = true;
     appendCollectionCards(store, COLLECTION_INITIAL_BATCH);
-    updateCollectionLoadSentinel(store);
-    scheduleCollectionScatter(store.grid, true);
+    runCollectionScatterNow(store.grid);
     notifyCollectionSurfacesChanged();
   }
 

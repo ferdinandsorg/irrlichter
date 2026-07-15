@@ -3538,6 +3538,13 @@ textarea {
   z-index: calc(10 + var(--card-stack, 0));
 }
 
+/* Neue Batches bis Scatter-Layout unsichtbar — sonst Überlagerung bei 0/0 */
+.collection-grid > .card.card--layout-pending {
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .collection-grid > .card {
     transform: scale(calc(0.92 + 0.08 * var(--collection-density, 0)));
