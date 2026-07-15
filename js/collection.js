@@ -152,9 +152,50 @@
     grid.style.setProperty("--collection-density", String(density));
   }
 
+  function captureCollectionScrollAnchor(grid) {
+    if (!grid) return null;
+    var mid = (window.innerHeight || document.documentElement.clientHeight) * 0.4;
+    var cards = grid.querySelectorAll(".card");
+    var i;
+    var best = null;
+    for (i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      if (card.classList.contains("hidden-by-filter")) continue;
+      if (card.classList.contains("card--layout-pending")) continue;
+      var rect = card.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > (window.innerHeight || 0)) continue;
+      var id = card.getAttribute("data-item-id");
+      if (!id) continue;
+      if (rect.top <= mid && rect.bottom >= mid) {
+        return { id: id, offset: rect.top };
+      }
+      if (!best) {
+        best = { id: id, offset: rect.top };
+      }
+    }
+    return best;
+  }
+
+  function restoreCollectionScrollAnchor(anchor) {
+    if (!anchor || !anchor.id) return;
+    var card = document.querySelector(
+      '.collection-grid > .card[data-item-id="' +
+        String(anchor.id).replace(/\\/g, "\\\\").replace(/"/g, '\\"') +
+        '"]'
+    );
+    if (!card) return;
+    var rect = card.getBoundingClientRect();
+    var delta = rect.top - anchor.offset;
+    if (Math.abs(delta) > 1) {
+      window.scrollBy(0, delta);
+    }
+  }
+
   function finishCollectionScatter(grid, fromLoadMore) {
+    var anchor = captureCollectionScrollAnchor(grid);
     relayoutCollectionScatter(grid);
     updateCollectionScatterDensity(grid, readScrollDensity());
+    restoreCollectionScrollAnchor(anchor);
     if (fromLoadMore && collectionStore && collectionStore.grid === grid) {
       onCollectionScatterSettled(collectionStore);
     }
@@ -908,6 +949,7 @@
 
     var updateCollectionToolbarLayout = bindCollectionToolbarLayout(toolbar);
     var scrollToCollectionTimer = null;
+    var chromeSyncRaf = null;
 
     function isPageBottomMode() {
       return !!(cta && cta.classList.contains("info-card__collection-cta--to-top"));
@@ -939,11 +981,28 @@
       );
     }
 
-    function syncCollectionChromeFromViewport() {
+    /*
+     * Pixel-Overlap statt IntersectionObserver-threshold:
+     * Bei 40.000px Abschnittshöhe ist threshold 0.05 = 2.000px Pflicht —
+     * ein Viewport reicht dann nicht mehr, Chrome fällt raus und „Zur Sammlung“
+     * springt wieder nach oben (fühlt sich wie Loop an).
+     */
+    function isCollectionOverlappingViewport() {
       var rect = section.getBoundingClientRect();
       var vh = window.innerHeight || document.documentElement.clientHeight;
-      var inView = rect.top < vh * 0.92 && rect.bottom > vh * 0.05;
-      setCollectionChromeInView(inView);
+      return rect.top < vh * 0.98 && rect.bottom > vh * 0.02;
+    }
+
+    function syncCollectionChromeFromViewport() {
+      setCollectionChromeInView(isCollectionOverlappingViewport());
+    }
+
+    function scheduleCollectionChromeSync() {
+      if (chromeSyncRaf !== null) return;
+      chromeSyncRaf = requestAnimationFrame(function () {
+        chromeSyncRaf = null;
+        syncCollectionChromeFromViewport();
+      });
     }
 
     function clearScrollToCollectionPending() {
@@ -979,30 +1038,6 @@
       });
     }
 
-    if (typeof IntersectionObserver === "undefined") {
-      setCollectionChromeInView(true);
-      return;
-    }
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.target !== section) {
-            return;
-          }
-          if (entry.isIntersecting) {
-            clearScrollToCollectionPending();
-            setCollectionChromeInView(true);
-            return;
-          }
-          clearScrollToCollectionPending();
-          setCollectionChromeInView(false);
-        });
-      },
-      { threshold: 0.05, rootMargin: "0px 0px -2% 0px" }
-    );
-    observer.observe(section);
-
     document.addEventListener(
       "irrlichter:info-card-toolbar-chrome",
       function () {
@@ -1012,8 +1047,16 @@
       }
     );
 
+    document.addEventListener(
+      "irrlichter:collection-rendered",
+      scheduleCollectionChromeSync
+    );
+
     syncCollectionChromeFromViewport();
-    window.addEventListener("resize", syncCollectionChromeFromViewport, {
+    window.addEventListener("scroll", scheduleCollectionChromeSync, {
+      passive: true
+    });
+    window.addEventListener("resize", scheduleCollectionChromeSync, {
       passive: true
     });
   }
